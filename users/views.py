@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,23 +11,36 @@ from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+    
+    def get(self, request):
+        # Render the registration page as an HTML template
+        return render(request, 'auth/register.html')
+
     def post(self, request):
+        # Handle the form submission for registration
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             refresh = RefreshToken.for_user(user)
             response = {
-                'status' : 201,
-                'success' : True,
-                'message' : 'User registered successfully',
+                'status': 201,
+                'success': True,
+                'message': 'User registered successfully',
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             }
-            return Response(response, status=status.HTTP_201_CREATED) 
+            # Redirect to the login page after successful registration
+            return redirect('login')  # Assuming 'login' is your login view name
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
 class LoginView(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self, request):   # Render the registration page as an HTML template
+        return render(request, 'auth/login.html')
+    
+    
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -102,3 +115,9 @@ class ChangePasswordView(APIView):
             }
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class BlogView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        # Render the blog.html template
+        return render(request, 'auth/blog.html')
