@@ -1,204 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bro'z Dashboard | Login</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <!-- Google Fonts (Cairo) -->
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;700;900&display=swap" rel="stylesheet" />
-    <!-- Custom CSS -->
+    <meta charset="UTF-8">
+    <title>Login - Iron Man</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #1a2a44;
-            font-family: 'Cairo', sans-serif;
-            color: #ffffff;
-            min-height: 100vh;
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: url('/static/images/iron-man.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .overlay {
+            background-color: rgba(15, 15, 15, 0.8);
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
         }
-        .form-container {
-            background-color: #2a3b5a;
-            border-radius: 8px;
-            padding: 2rem;
+
+        .ironman-container {
+            display: flex;
+            flex-wrap: wrap;
+            height: 100%;
+            width: 100%;
+        }
+
+        .left-panel, .right-panel {
+            flex: 1 1 50%;
+            padding: 40px;
+        }
+
+        .left-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffcc00;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 10px #000;
+        }
+
+        .login-box {
+            background-color: rgba(44, 44, 44, 0.9);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
             width: 100%;
             max-width: 400px;
+            color: #fff;
         }
-        .form-control {
-            background-color: #3a4b6a;
+
+        .btn-iron {
+            background-color: #c41e3a;
             border: none;
-            color: #ffffff;
-            border-radius: 5px;
         }
-        .form-control::placeholder {
-            color: #a0aec0;
+
+        .btn-iron:hover {
+            background-color: #ffcc00;
+            color: #000;
         }
-        .login-btn {
-            background-color: #00c4b4;
-            border: none;
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
+
+        h2 {
+            color: #ffcc00;
         }
-        .github-btn {
-            background-color: #1a202c;
-            border: none;
-            color: #ffffff;
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+
+        a {
+            color: #ffcc00;
         }
-        .or-divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: #a0aec0;
-            margin: 1rem 0;
-        }
-        .or-divider::before,
-        .or-divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #a0aec0;
-            margin: 0 10px;
-        }
-        .form-check-input {
-            background-color: #3a4b6a;
-            border: 1px solid #a0aec0;
-        }
-        .forgot-password a,
-        .register-link a {
-            color: #00c4b4;
-            text-decoration: none;
-        }
+
         .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
             display: none;
         }
-        @media (max-width: 576px) {
-            .form-container {
-                padding: 1.5rem;
+
+        @media (max-width: 768px) {
+            .left-panel {
+                display: none;
             }
-            h1 {
-                font-size: 1.5rem;
-            }
-            .form-control {
-                padding: 8px;
-            }
-            .login-btn,
-            .github-btn {
-                padding: 8px;
-                font-size: 0.9rem;
+
+            .right-panel {
+                flex: 1 1 100%;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 text-center mb-4">
-                <h1 class="fs-2 fw-bold">Bro'z</h1>
-            </div>
-            <!-- Login Form -->
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="form-container">
-                    <h2 class="text-center fs-4 mb-4">Login</h2>
-                    <!-- Error/Success Message -->
-                    <div id="message" class="alert alert-danger text-center"></div>
-                    <form id="loginForm">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <input type="email" class="form-control" name="email" placeholder="Email address" required />
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" class="form-control" name="password" placeholder="Password" required />
-                        </div>
-                        <!-- Remember Me Checkbox and Forgot Password Link -->
-                        <div class="mb-3 d-flex justify-content-between align-items-center">
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="remember" name="remember" />
-                                <label class="form-check-label" for="remember">Remember me</label>
-                            </div>
-                            <div class="forgot-password">
-                                <a href="#">Forgot Password?</a>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <button type="submit" class="btn login-btn">Login</button>
-                        </div>
-                    </form>
+<div class="alert alert-danger" id="errorAlert" role="alert"></div>
 
-                    <!-- OR Divider -->
-                    <div class="or-divider">OR</div>
+<div class="overlay">
+    <div class="ironman-container">
+        <div class="left-panel">
+            I Am Iron Man
+        </div>
 
-                    <!-- Register Link -->
-                    <div class="text-center register-link">
-                        Don’t have an account yet? <a href="{% url 'register' %}">Register</a>
+        <div class="right-panel d-flex align-items-center justify-content-center">
+            <div class="login-box">
+                <h2 class="text-center mb-4">Welcome Back, Hero</h2>
+                <form id="loginForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" name="email" id="email" required>
                     </div>
-                </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" required>
+                    </div>
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-iron" id="loginButton">Log In</button>
+                    </div>
+                    <p class="text-center">Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <!-- JavaScript to Handle Form Submission -->
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent default form submission
-
-            const form = event.target;
-            const formData = new FormData(form);
-            const data = {
-                email: formData.get('email'),
-                password: formData.get('password'),
-            };
-            const messageDiv = document.getElementById('message');
-
-            try {
-                const response = await fetch("{% url 'login' %}", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'), // Include CSRF token
-                    },
-                    body: JSON.stringify(data),
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    // Success: Store tokens and redirect
-                    localStorage.setItem('access_token', result.access);
-                    localStorage.setItem('refresh_token', result.refresh);
-                    messageDiv.classList.remove('alert-danger');
-                    messageDiv.classList.add('alert-success');
-                    messageDiv.textContent = result.message;
-                    messageDiv.style.display = 'block';
-                    // Redirect to dashboard (adjust URL as needed)
-                    setTimeout(() => {
-                        window.location.href = '{% url 'blog' %}/'; // Replace with your dashboard URL
-                    }, 1000);
-                } else {
-                    // Error: Display error message
-                    messageDiv.classList.remove('alert-success');
-                    messageDiv.classList.add('alert-danger');
-                    messageDiv.textContent = result.email || result.password || 'Invalid credentials';
-                    messageDiv.style.display = 'block';
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const formData = new FormData(form);
+        const loginButton = document.getElementById('loginButton');
+        const errorAlert = document.getElementById('errorAlert');
+        
+        // Show loading state
+        loginButton.disabled = true;
+        loginButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging in...';
+        errorAlert.style.display = 'none';
+        
+        try {
+            const response = await fetch('{% url "login" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
                 }
-            } catch (error) {
-                messageDiv.classList.remove('alert-success');
-                messageDiv.classList.add('alert-danger');
-                messageDiv.textContent = 'An error occurred. Please try again.';
-                messageDiv.style.display = 'block';
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Store tokens in localStorage or cookies
+                localStorage.setItem('access_token', data.access);
+                localStorage.setItem('refresh_token', data.refresh);
+                
+                // Redirect to movie blog page
+                window.location.href = "{% url 'movie_blog' %}";
+            } else {
+                // Show error message
+                errorAlert.textContent = data.message || data.detail || 'Invalid credentials';
+                errorAlert.style.display = 'block';
+                
+                // Hide error after 5 seconds
+                setTimeout(() => {
+                    errorAlert.style.display = 'none';
+                }, 5000);
             }
-        });
-    </script>
+        } catch (error) {
+            console.error('Error:', error);
+            errorAlert.textContent = 'An error occurred during login';
+            errorAlert.style.display = 'block';
+        } finally {
+            // Reset button state
+            loginButton.disabled = false;
+            loginButton.textContent = 'Log In';
+        }
+    });
+</script>
 </body>
 </html>

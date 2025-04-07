@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register - Iron Man</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body, html {
             height: 100%;
             margin: 0;
             font-family: 'Segoe UI', sans-serif;
-            background: url('/static/images/iron-man.png') no-repeat center center fixed;
+            background: url('https://wallpapercave.com/wp/wp2630453.jpg') no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -33,7 +35,7 @@
             padding: 40px;
         }
 
-        .right-panel {
+        .left-panel {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -71,12 +73,21 @@
             color: #ffcc00;
         }
 
+        .form-check-input {
+            background-color: #2c2c2c;
+            border: 1px solid #666;
+        }
+
+        .alert {
+            display: none;
+        }
+
         @media (max-width: 768px) {
-            .right-panel {
+            .left-panel {
                 display: none;
             }
 
-            .left-panel {
+            .right-panel {
                 flex: 1 1 100%;
             }
         }
@@ -85,27 +96,29 @@
 <body>
 <div class="overlay">
     <div class="ironman-container">
-        <!-- Register form on the LEFT -->
-        <div class="left-panel d-flex align-items-center justify-content-center">
+        <div class="left-panel">
+            Suit Up and Join Us
+        </div>
+
+        <div class="right-panel d-flex align-items-center justify-content-center">
             <div class="register-box">
-                <h2 class="text-center mb-4">Join The Avengers</h2>
-                <form id="registerForm" method="post">
+                <h2 class="text-center mb-4">Create Your Account</h2>
+
+                <div id="message" class="alert text-center"></div>
+
+                <form id="registerForm">
                     {% csrf_token %}
                     <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" name="username" id="username" required />
+                        <input type="text" class="form-control" name="username" placeholder="Username" required />
                     </div>
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" name="email" id="email" required />
+                        <input type="email" class="form-control" name="email" placeholder="Email address" required />
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" required />
+                        <input type="password" class="form-control" name="password" placeholder="Password" required />
                     </div>
                     <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" name="password_confirmation" id="password_confirmation" required />
+                        <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password" required />
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="terms" required />
@@ -116,22 +129,20 @@
                     <div class="d-grid mb-3">
                         <button type="submit" class="btn btn-iron">Register</button>
                     </div>
-                    <p class="text-center">Already have an account? <a href="{% url 'login' %}">Login</a></p>
-                    <div id="message" class="alert alert-danger text-center mt-3" style="display: none;"></div>
                 </form>
-            </div>
-        </div>
 
-        <!-- Right panel with Iron Man quote -->
-        <div class="right-panel">
-            Suit Up and Join Us
+                <p class="text-center">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.getElementById('registerForm').addEventListener('submit', async function (event) {
         event.preventDefault();
+
         const form = event.target;
         const formData = new FormData(form);
         const data = {
@@ -160,7 +171,7 @@
                 messageDiv.textContent = result.message;
                 messageDiv.style.display = 'block';
                 setTimeout(() => {
-                    window.location.href = '{% url "login" %}';
+                    window.location.href = '{% url "login" %}/';
                 }, 1000);
             } else {
                 messageDiv.classList.remove('alert-success');

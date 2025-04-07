@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .serializers import UserRegistrationSerializer, LoginSerializer, ChangePasswordSerializer
-from .models import User
+from .models import User, Movie
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
@@ -116,8 +116,11 @@ class ChangePasswordView(APIView):
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-class BlogView(APIView):
-    permission_classes = [AllowAny]
-    def get(self, request):
-        # Render the blog.html template
-        return render(request, 'auth/blog.html')
+    
+def index_view(request):
+    return render(request, 'auth/index.html')
+
+
+def movie_blog(request):
+    movies = Movie.objects.all()
+    return render(request, 'auth/movie_blog.html', {'movies': movies})

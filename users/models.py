@@ -33,3 +33,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return f"{self.email} - {self.username}"
+    
+    
+class Movie(models.Model):
+    title = models.CharField(max_length=255)
+    release_date = models.DateField()
+    runtime =models.PositiveIntegerField(help_text="Runtime in minutes")
+    image = models.ImageField(upload_to='movies/images/', blank=True, null=True)
+    description = models.TextField()
+    watch_link = models.URLField(max_length=255, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
