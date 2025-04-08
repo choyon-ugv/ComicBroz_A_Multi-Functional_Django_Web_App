@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     
     # my apps
     'users',
+    'edgecut',
 ]
 
 REST_FRAMEWORK = {
@@ -87,7 +88,7 @@ ROOT_URLCONF = 'choyon007.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -150,7 +151,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / "static",
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Directory where static files will be collected
 

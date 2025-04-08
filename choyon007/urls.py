@@ -5,7 +5,8 @@ from django.urls import path, include
 from users.views import index_view
 
 urlpatterns = [
-    path('', index_view, name='index'),
+    path('', include('edgecut.urls')),
+    path('index/', index_view, name='index'),
     path('admin/', admin.site.urls),
     path('api/', include('users.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
