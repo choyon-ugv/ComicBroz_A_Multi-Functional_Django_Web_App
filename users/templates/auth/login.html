@@ -153,7 +153,7 @@
                 localStorage.setItem('refresh_token', data.refresh);
                 
                 // Redirect to movie blog page
-                window.location.href = "{% url 'movie_blog' %}";
+                window.location.href = "{% url 'home' %}";
             } else {
                 // Show error message
                 errorAlert.textContent = data.message || data.detail || 'Invalid credentials';

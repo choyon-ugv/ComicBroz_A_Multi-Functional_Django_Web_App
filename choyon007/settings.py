@@ -164,3 +164,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Directory where files will be st
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+# LOGIN_URL = 'login'        # URL to redirect for login
+# LOGIN_REDIRECT_URL = 'home'   # URL to redirect after login (optional)
