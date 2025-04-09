@@ -208,8 +208,8 @@ a:focus {
 .quote_btn-container a span {
   margin-right: 5px;
 }
-
 /*end header section*/
+
 /* slider section */
 .slider_section {
   -webkit-box-flex: 1;
@@ -266,33 +266,33 @@ a:focus {
 .slider_section .detail-box .btn-box .btn1 {
   display: inline-block;
   padding: 10px 15px;
-  background-color: #f89646;
+  background-color: #f44336;
   color: #ffffff;
   border-radius: 0;
-  border: 1px solid #f89646;
+  border: 1px solid #f44336;
   -webkit-transition: all .2s;
   transition: all .2s;
 }
 
 .slider_section .detail-box .btn-box .btn1:hover {
   background-color: transparent;
-  color: #f89646;
+  color: #f44336;
 }
 
 .slider_section .detail-box .btn-box .btn2 {
   display: inline-block;
   padding: 10px 15px;
-  background-color: #6bb7be;
+  background-color: #f44336;
   color: #ffffff;
   border-radius: 0;
-  border: 1px solid #6bb7be;
+  border: 1px solid #f44336;
   -webkit-transition: all .2s;
   transition: all .2s;
 }
 
 .slider_section .detail-box .btn-box .btn2:hover {
   background-color: transparent;
-  color: #6bb7be;
+  color: #f44336;
 }
 
 .slider_section .img-box img {
@@ -312,7 +312,7 @@ a:focus {
 }
 
 .slider_section .carousel-indicators li {
-  background-color: #6bb7be;
+  background-color: #f44336;
   width: 12px;
   height: 12px;
   border-radius: 100%;
@@ -324,6 +324,8 @@ a:focus {
   height: 17px;
   background-color: #f89646;
 }
+
+
 
 .furniture_section .box {
   margin-top: 45px;
@@ -375,11 +377,11 @@ a:focus {
 }
 
 .furniture_section .box .detail-box .price_box .price_heading span {
-  color: #6bb7be;
+  color: #f44336;
 }
 
 .furniture_section .box .detail-box .price_box a {
-  color: #6bb7be;
+  color: #f44336;
   text-transform: uppercase;
   font-size: 15px;
 }
@@ -406,17 +408,17 @@ a:focus {
 .about_section .detail-box a {
   display: inline-block;
   padding: 10px 45px;
-  background-color: #6bb7be;
+  background-color: #f44336;
   color: #ffffff;
   border-radius: 0;
-  border: 1px solid #6bb7be;
+  border: 1px solid #f44336;
   -webkit-transition: all .2s;
   transition: all .2s;
 }
 
 .about_section .detail-box a:hover {
   background-color: transparent;
-  color: #6bb7be;
+  color: #f44336;
 }
 
 .blog_section .heading_container {
@@ -462,17 +464,17 @@ a:focus {
 .blog_section .box .detail-box a {
   display: inline-block;
   padding: 10px 30px;
-  background-color: #6bb7be;
+  background-color: #f44336;
   color: #ffffff;
   border-radius: 0;
-  border: 1px solid #6bb7be;
+  border: 1px solid #f44336;
   -webkit-transition: all .2s;
   transition: all .2s;
 }
 
 .blog_section .box .detail-box a:hover {
   background-color: transparent;
-  color: #6bb7be;
+  color: #f44336;
 }
 
 .client_section .heading_container {
@@ -496,7 +498,7 @@ a:focus {
 
 .client_section .box .img-box {
   border-radius: 100%;
-  border: 10px solid #6bb7be;
+  border: 10px solid #f44336;
   margin-right: 25px;
   min-width: 175px;
   max-width: 175px;
@@ -530,7 +532,7 @@ a:focus {
 }
 
 .client_section .box .detail-box .name h6 {
-  color: #6bb7be;
+  color: #f44336;
   font-size: 20px;
 }
 
@@ -553,7 +555,7 @@ a:focus {
   background-repeat: no-repeat;
   background-size: 12px;
   background-position: center;
-  background-color: #6bb7be;
+  background-color: #f44336;
   background-position: center;
   border-radius: 100%;
   margin: 0 2.5px;
@@ -620,17 +622,17 @@ a:focus {
   text-transform: uppercase;
   display: inline-block;
   padding: 12px 55px;
-  background-color: #6bb7be;
+  background-color: #f44336;
   color: #ffffff;
   border-radius: 0px;
-  border: 1px solid #6bb7be;
+  border: 1px solid #f44336;
   -webkit-transition: all .2s;
   transition: all .2s;
 }
 
 .contact_section .form_container button:hover {
   background-color: transparent;
-  color: #6bb7be;
+  color: #f44336;
 }
 
 .contact_section .map_container {
@@ -786,17 +788,17 @@ a:focus {
 .info_section .info_form button {
   display: inline-block;
   padding: 10px 45px;
-  background-color: #6bb7be;
+  background-color: #f44336;
   color: #ffffff;
   border-radius: 0px;
-  border: 1px solid #6bb7be;
+  border: 1px solid #f44336;
   -webkit-transition: all .2s;
   transition: all .2s;
 }
 
 .info_section .info_form button:hover {
   background-color: transparent;
-  color: #6bb7be;
+  color: #f44336;
 }
 
 .info_section .info_form .social_box {
@@ -820,8 +822,8 @@ a:focus {
   border-radius: 5px;
   width: 45px;
   height: 45px;
-  border: 1px solid #6bb7be;
-  color: #6bb7be;
+  border: 1px solid #f44336;
+  color: #f44336;
   font-size: 18px;
   margin-right: 10px;
 }

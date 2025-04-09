@@ -68,22 +68,23 @@
             </ul>
           </div>
           <div class="quote_btn-container">
-            <a href="">
+            <a href="{% url 'login' %}">
               <span>
                 Login
               </span>
               <i class="fa fa-user" aria-hidden="true"></i>
             </a>
             <form class="form-inline">
-              <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+              <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
                 <i class="fa fa-search" aria-hidden="true"></i>
               </button>
             </form>
-          </div>
+          </div>          
         </div>
       </nav>
     </header>
     <!-- end header section -->
+
     <!-- slider section -->
     <section class="slider_section long_section">
       <div id="customCarousel" class="carousel slide" data-ride="carousel">
@@ -109,7 +110,7 @@
                 </div>
                 <div class="col-md-7">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="">
+                    <img src="{% static 'edgecut/images/90.gif' %}" alt="">
                   </div>
                 </div>
               </div>
@@ -129,17 +130,14 @@
                     </p>
                     <div class="btn-box">
                       <a href="" class="btn1">
-                        Contact Us
-                      </a>
-                      <a href="" class="btn2">
-                        About Us
+                        Read Now
                       </a>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-7">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="">
+                    <img src="{% static 'edgecut/images/50.gif' %}" alt="">
                   </div>
                 </div>
               </div>
@@ -159,17 +157,14 @@
                     </p>
                     <div class="btn-box">
                       <a href="" class="btn1">
-                        Contact Us
-                      </a>
-                      <a href="" class="btn2">
-                        About Us
+                        Read Now
                       </a>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-7">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="">
+                    <img src="{% static 'edgecut/images/51.gif' %}" alt="">
                   </div>
                 </div>
               </div>
@@ -310,19 +305,17 @@
               <div class="col-md-11 col-lg-10 mx-auto">
                 <div class="box">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="" />
+                    <img src="{% static 'edgecut/images/profile.jpg' %}" alt="" />
                   </div>
                   <div class="detail-box">
                     <div class="name">
                       <i class="fa fa-quote-left" aria-hidden="true"></i>
                       <h6>
-                        Siaalya
+                        Iron Man
                       </h6>
                     </div>
                     <p>
-                      It is a long established fact that a reader will be
-                      distracted by the readable cIt is a long established fact
-                      that a reader will be distracted by the readable c
+                      Everybody wants a happy ending. Right. But it doesn't always roll that way. Maybe this time, I'm hoping it will pay this back. It's in celebration. I hope I'm not reunited. I hope we get it back.
                     </p>
                   </div>
                 </div>
@@ -334,19 +327,17 @@
               <div class="col-md-11 col-lg-10 mx-auto">
                 <div class="box">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="" />
+                    <img src="{% static 'edgecut/images/profile.jpg' %}" alt="" />
                   </div>
                   <div class="detail-box">
                     <div class="name">
                       <i class="fa fa-quote-left" aria-hidden="true"></i>
                       <h6>
-                        Siaalya
+                        Iron Man
                       </h6>
                     </div>
                     <p>
-                      It is a long established fact that a reader will be
-                      distracted by the readable cIt is a long established fact
-                      that a reader will be distracted by the readable c
+                      Everybody wants a happy ending. Right. But it doesn't always roll that way. Maybe this time, I'm hoping it will pay this back. It's in celebration. I hope I'm not reunited. I hope we get it back.
                     </p>
                   </div>
                 </div>
@@ -358,19 +349,17 @@
               <div class="col-md-11 col-lg-10 mx-auto">
                 <div class="box">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="" />
+                    <img src="{% static 'edgecut/images/profile.jpg' %}" alt="" />
                   </div>
                   <div class="detail-box">
                     <div class="name">
                       <i class="fa fa-quote-left" aria-hidden="true"></i>
                       <h6>
-                        Siaalya
+                        Iron Man
                       </h6>
                     </div>
                     <p>
-                      It is a long established fact that a reader will be
-                      distracted by the readable cIt is a long established fact
-                      that a reader will be distracted by the readable c
+                      Everybody wants a happy ending. Right. But it doesn't always roll that way. Maybe this time, I'm hoping it will pay this back. It's in celebration. I hope I'm not reunited. I hope we get it back.
                     </p>
                   </div>
                 </div>
@@ -471,11 +460,11 @@
                 QUICK LINKS
               </h4>
               <div class="info_links_menu">
-                <a class="" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                <a class="" href="{% url 'home' %}"> Home <span class="sr-only">(current)</span></a>
                 <a class="" href="{% url 'about' %}"> About</a>
-                <a class="" href="{% url 'comics' %}">Comics</a>
-                <a class="" href="{% url 'blog' %}">Blog</a>
-                <a class="" href="{% url 'contact' %}">Contact Us</a>
+                <a class="" href="{% url 'comics' %}"> Comics </a>
+                <a class="" href="{% url 'blog' %}"> Blog </a>
+                <a class="" href="{% url 'contact' %}"> Contact Us </a>
               </div>
             </div>
           </div>
