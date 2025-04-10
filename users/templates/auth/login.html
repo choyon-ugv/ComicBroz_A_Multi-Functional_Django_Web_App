@@ -137,8 +137,26 @@
                 localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
                 console.log('Stored tokens:', { access: data.access, refresh: data.refresh });
-                console.log('Redirecting to:', data.redirect);
-                window.location.href = data.redirect;  // Use redirect from response (/home/)
+                
+                // Fetch /home/ with token
+                const token = data.access;
+                console.log('Fetching /home/ with token:', token);
+                const homeResponse = await fetch('/home/', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                    }
+                });
+                
+                if (homeResponse.ok) {
+                    console.log('Home fetch successful, redirecting to /home/');
+                    window.location.href = '/home/';
+                } else {
+                    console.error('Home fetch failed:', homeResponse.status);
+                    errorAlert.textContent = 'Failed to load home page';
+                    errorAlert.style.display = 'block';
+                }
             } else {
                 errorAlert.textContent = data.message || 'Invalid credentials';
                 errorAlert.style.display = 'block';

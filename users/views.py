@@ -111,11 +111,11 @@ class ChangePasswordView(APIView):
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
 def index_view(request):
     return render(request, 'auth/index.html')
 
-@login_required(login_url='/login/')
+# @login_required(login_url='/login/')
 def movie_blog(request):
     movies = Movie.objects.all()
     return render(request, 'auth/movie_blog.html', {'movies': movies})
