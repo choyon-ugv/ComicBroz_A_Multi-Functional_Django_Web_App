@@ -849,3 +849,53 @@ a:focus {
   color: inherit;
 }
 /*# sourceMappingURL=style.css.map */
+
+/*Blog details*/
+.blog_details_section {
+  padding: 60px 0;
+}
+
+.blog_detail_box {
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.blog_detail_box:hover {
+  transform: translateY(-5px);
+}
+
+.blog-meta {
+  font-size: 0.9rem;
+}
+
+.comments_box {
+  background: #fff;
+  border: none;
+}
+
+.comment-item {
+  transition: all 0.3s ease;
+}
+
+.comment-avatar i {
+  font-size: 2rem;
+}
+
+.sidebar {
+  background: #fff;
+  border: none;
+}
+
+.recent-post:hover {
+  color: #007bff;
+}
+
+@media (max-width: 991px) {
+  .blog_details_section {
+      padding: 40px 0;
+  }
+  
+  .sidebar {
+      margin-top: 30px;
+  }
+}

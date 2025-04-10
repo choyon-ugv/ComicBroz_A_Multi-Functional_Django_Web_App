@@ -1,60 +1,36 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-
 <head>
-  <!-- Basic -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <!-- Site Metas -->
-  <link rel="icon" href="images/fevicon.png" type="image/gif" />
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-
+  <link rel="icon" href="{% static 'edgecut/images/png.png' %}" type="image/gif" />
   <title>Comic Bro'Z</title>
-
-
-<!-- bootstrap core css -->
-<link rel="stylesheet" type="text/css" href="{% static 'edgecut/css/bootstrap.css' %}" />
-
-<!-- fonts style -->
-<link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
-
-<!-- font awesome style -->
-<link href="{% static 'edgecut/css/font-awesome.min.css' %}" rel="stylesheet" />
-<!-- Custom styles for this template -->
-<link href="{% static 'edgecut/css/style.css' %}" rel="stylesheet" />
-<!-- responsive style -->
-<link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
-
+  <link rel="stylesheet" type="text/css" href="{% static 'edgecut/css/bootstrap.css' %}" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
+  <link href="{% static 'edgecut/css/font-awesome.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'edgecut/css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
 </head>
-
 <body class="sub_page">
-
   <div class="hero_area">
-    <!-- header section strats -->
     <header class="header_section long_section px-0">
       <nav class="navbar navbar-expand-lg custom_nav-container ">
-        <a class="navbar-brand" href="index.html">
-          <span>
-            Comic Bro'Z
-          </span>
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <span>Comic Bro'z</span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class=""> </span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
-            <ul class="navbar-nav  ">
-              <li class="nav-item active">
+            <ul class="navbar-nav">
+              <li class="nav-item">
                 <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}"> About</a>
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'about' %}">About</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'comics' %}">Comics</a>
@@ -68,14 +44,19 @@
             </ul>
           </div>
           <div class="quote_btn-container">
-            <a href="">
-              <span>
-                Login
-              </span>
-              <i class="fa fa-user" aria-hidden="true"></i>
-            </a>
+            {% if request.user.is_authenticated %}
+              <a href="#" id="logout-link">
+                <span>Logout</span>
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+              </a>
+            {% else %}
+              <a href="{% url 'login' %}">
+                <span>Login</span>
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+            {% endif %}
             <form class="form-inline">
-              <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+              <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
                 <i class="fa fa-search" aria-hidden="true"></i>
               </button>
             </form>
@@ -83,10 +64,7 @@
         </div>
       </nav>
     </header>
-    <!-- end header section -->
   </div>
-
-  <!-- about section -->
 
   <section class="about_section layout_padding long_section">
     <div class="container">
@@ -99,117 +77,64 @@
         <div class="col-md-6">
           <div class="detail-box">
             <div class="heading_container">
-              <h2>
-                About Us
-              </h2>
+              <h2>About Us</h2>
             </div>
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti dolorem eum consequuntur ipsam repellat dolor soluta aliquid laborum, eius odit consectetur vel quasi in quidem, eveniet ab est corporis tempore.
             </p>
-            <a href="">
-              Read More
-            </a>
+            <a href="">Read More</a>
           </div>
         </div>
       </div>
     </div>
   </section>
-  <!-- end about section -->
 
-
-  <!-- info section -->
   <section class="info_section long_section">
-
     <div class="container">
       <div class="contact_nav">
-        <a href="">
-          <i class="fa fa-phone" aria-hidden="true"></i>
-          <span>
-            Call : +01 123455678990
-          </span>
-        </a>
-        <a href="">
-          <i class="fa fa-envelope" aria-hidden="true"></i>
-          <span>
-            Email : comicbroz@gmail.com
-          </span>
-        </a>
-        <a href="">
-          <i class="fa fa-map-marker" aria-hidden="true"></i>
-          <span>
-            Location
-          </span>
-        </a>
+        <a href=""><i class="fa fa-phone" aria-hidden="true"></i><span>Call : +01 123455678990</span></a>
+        <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>Email : comicbroz@gmail.com</span></a>
+        <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i><span>Location</span></a>
       </div>
-
-      <div class="info_top ">
-        <div class="row ">
+      <div class="info_top">
+        <div class="row">
           <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="info_links">
-              <h4>
-                QUICK LINKS
-              </h4>
+              <h4>QUICK LINKS</h4>
               <div class="info_links_menu">
-                <a class="" href="{% url 'home' %}"> Home <span class="sr-only">(current)</span></a>
-                <a class="" href="{% url 'about' %}"> About</a>
-                <a class="" href="{% url 'comics' %}"> Comics </a>
-                <a class="" href="{% url 'blog' %}"> Blog </a>
-                <a class="" href="{% url 'contact' %}"> Contact Us </a>
+                <a class="" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                <a class="" href="{% url 'about' %}">About</a>
+                <a class="" href="{% url 'comics' %}">Comics</a>
+                <a class="" href="{% url 'blog' %}">Blog</a>
+                <a class="" href="{% url 'contact' %}">Contact Us</a>
               </div>
             </div>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3 mx-auto">
             <div class="info_post">
-              <h5>
-                INSTAGRAM FEEDS
-              </h5>
+              <h5>INSTAGRAM FEEDS</h5>
               <div class="post_box">
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/100.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/200.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/300.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/400.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/500.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/600.png' %}" alt="">
-                </div>
+                <div class="img-box"><img src="{% static 'edgecut/images/100.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/200.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/300.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/400.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/500.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/600.png' %}" alt=""></div>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="info_form">
-              <h4>
-                Read. Shop. Explore.
-                The Comic World Awaits You!
-              </h4>
+              <h4>Read. Shop. Explore. The Comic World Awaits You!</h4>
               <form action="">
                 <input type="text" placeholder="Enter Your Email" />
-                <button type="submit">
-                  Subscribe
-                </button>
+                <button type="submit">Subscribe</button>
               </form>
               <div class="social_box">
-                <a href="">
-                  <i class="fa fa-facebook" aria-hidden="true"></i>
-                </a>
-                <a href="">
-                  <i class="fa fa-twitter" aria-hidden="true"></i>
-                </a>
-                <a href="">
-                  <i class="fa fa-linkedin" aria-hidden="true"></i>
-                </a>
-                <a href="">
-                  <i class="fa fa-instagram" aria-hidden="true"></i>
-                </a>
+                <a href=""><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href=""><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                <a href=""><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                <a href=""><i class="fa fa-instagram" aria-hidden="true"></i></a>
               </div>
             </div>
           </div>
@@ -217,31 +142,9 @@
       </div>
     </div>
   </section>
-  <!-- end info_section -->
 
-
-  <!-- footer section -->
   <footer class="footer_section">
     <div class="container">
-      <p>
-        &copy; <span id="displayYear"></span> All Rights Reserved By
-        <a href="https://html.design/">Bro'z Comic</a>
-      </p>
+      <p>© <span id="displayYear"></span> All Rights Reserved By <a href="https://html.design/">Bro'z Comic</a></p>
     </div>
-  </footer>
-  <!-- footer section -->
-
-
-  <!-- jQery -->
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <!-- bootstrap js -->
-  <script src="js/bootstrap.js"></script>
-  <!-- custom js -->
-  <script src="js/custom.js"></script>
-  <!-- Google Map -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
-  <!-- End Google Map -->
-
-</body>
-
-</html>
+  </

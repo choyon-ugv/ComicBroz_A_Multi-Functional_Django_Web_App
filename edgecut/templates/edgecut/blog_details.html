@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <link rel="icon" href="{% static 'edgecut/images/png.png' %}" type="image/gif" />
-  <title>Comic Bro'z - Contact Us</title>
+  <title>Comic Comic - {{ blog.title }}</title>
   <link rel="stylesheet" type="text/css" href="{% static 'edgecut/css/bootstrap.css' %}" />
   <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
   <link href="{% static 'edgecut/css/font-awesome.min.css' %}" rel="stylesheet" />
@@ -35,10 +35,10 @@
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'comics' %}">Comics</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item active">
                 <a class="nav-link" href="{% url 'blog' %}">Blog</a>
               </li>
-              <li class="nav-item active">
+              <li class="nav-item">
                 <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
               </li>
             </ul>
@@ -66,30 +66,76 @@
     </header>
   </div>
 
-  <section class="contact_section layout_padding long_section">
+  <section class="blog_details_section layout_padding">
     <div class="container">
-      <div class="heading_container">
-        <h2>Contact Us</h2>
-      </div>
       <div class="row">
-        <div class="col-md-6">
-          <div class="form_container">
-            <form action="">
-              <div><input type="text" placeholder="Your Name" /></div>
-              <div><input type="text" placeholder="Phone Number" /></div>
-              <div><input type="email" placeholder="Email" /></div>
-              <div><input type="text" class="message-box" placeholder="Message" /></div>
-              <div class="btn_box">
-                <button>SEND</button>
+        <div class="col-lg-8">
+          <div class="blog_detail_box card shadow-sm mb-4">
+            <div class="card-body">
+              {% if blog.image %}
+                <img src="{{ blog.image.url }}" class="img-fluid rounded mb-4" alt="{{ blog.title }}">
+              {% endif %}
+              <h1 class="card-title mb-3">{{ blog.title }}</h1>
+              <div class="blog-meta mb-4 text-muted">
+                <i class="fa fa-heart"></i> {{ likes_count }} Likes
               </div>
-            </form>
+              <div class="blog-content">
+                {{ blog.content|linebreaks }}
+              </div>
+              <div class="mt-4">
+                <form method="POST" action="{% url 'like_blog' blog.id %}" class="d-inline like-form">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-outline-danger">
+                    <i class="fa fa-heart{% if user_liked %}-o{% endif %}"></i>
+                    {% if user_liked %}Unlike{% else %}Like{% endif %}
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="comments_box card shadow-sm">
+            <div class="card-body">
+              <h3 class="card-title mb-4">{{ comments.count }} Comments</h3>
+              <form method="POST" action="{% url 'add_comment' blog.id %}" class="mb-5 comment-form">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                  <textarea class="form-control" name="content" rows="4" placeholder="Write your comment..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Post Comment</button>
+              </form>
+              {% for comment in comments %}
+                <div class="comment-item mb-4 pb-4 border-bottom">
+                  <div class="d-flex align-items-start">
+                    <div class="comment-avatar me-3">
+                      <i class="fa fa-user-circle fa-2x text-muted"></i>
+                    </div>
+                    <div class="comment-body flex-grow-1">
+                      <h5 class="mb-1">
+                        {{ comment.user.username|default:comment.user.email }}
+                      </h5>
+                      <p class="text-muted small mb-2">{{ comment.created_at|date:"F d, Y H:i" }}</p>
+                      <p>{{ comment.content }}</p>
+                    </div>
+                  </div>
+                </div>
+              {% empty %}
+                <p class="text-muted">No comments yet. Be the first to comment!</p>
+              {% endfor %}
+            </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="map_container">
-            <div class="map">
-              <div id="googleMap"></div>
-            </div>
+
+        <div class="col-lg-4">
+          <div class="sidebar card shadow-sm p-4">
+            <h4 class="mb-4">Recent Posts</h4>
+            {% for recent_blog in recent_blogs %}
+              <div class="recent-post mb-3 pb-3 border-bottom">
+                <a href="{% url 'blog_detail' recent_blog.id %}" class="text-decoration-none">
+                  <h6>{{ recent_blog.title }}</h6>
+                </a>
+              </div>
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -100,7 +146,7 @@
     <div class="container">
       <div class="contact_nav">
         <a href=""><i class="fa fa-phone" aria-hidden="true"></i><span>Call : +01 123455678990</span></a>
-        <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>Email : comicbroz@gmail.com</span></a>
+        <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>Email : demo@gmail.com</span></a>
         <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i><span>Location</span></a>
       </div>
       <div class="info_top">
@@ -121,12 +167,12 @@
             <div class="info_post">
               <h5>INSTAGRAM FEEDS</h5>
               <div class="post_box">
-                <div class="img-box"><img src="{% static 'edgecut/images/100.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/200.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/300.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/400.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/500.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/600.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/f1.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/f2.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/f3.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/f4.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/f5.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/f6.png' %}" alt=""></div>
               </div>
             </div>
           </div>
@@ -152,7 +198,7 @@
 
   <footer class="footer_section">
     <div class="container">
-      <p>© <span id="displayYear"></span> All Rights Reserved By <a href="https://html.design/">Bro'z Comic</a></p>
+      <p>© <span id="displayYear"></span> All Rights Reserved By <a href="https://html.design/">Bro'Z Comic</a></p>
     </div>
   </footer>
 
@@ -161,6 +207,35 @@
   <script src="{% static 'edgecut/js/custom.js' %}"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
   <script>
+    function authFetch(url, options = {}) {
+      const token = localStorage.getItem('access_token');
+      console.log('Token being sent:', token);
+      if (!options.headers) {
+        options.headers = {};
+      }
+      if (token) {
+        options.headers['Authorization'] = `Bearer ${token}`;
+      }
+      options.headers['X-CSRFToken'] = '{{ csrf_token }}';
+      return fetch(url, options);
+    }
+
+    document.querySelector('.like-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      authFetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+      }).then(() => window.location.reload());
+    });
+
+    document.querySelector('.comment-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      authFetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+      }).then(() => window.location.reload());
+    });
+
     document.getElementById('logout-link').addEventListener('click', async function(e) {
       e.preventDefault();
       const refreshToken = localStorage.getItem('refresh_token');

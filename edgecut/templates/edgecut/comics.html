@@ -1,64 +1,36 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-
-<!DOCTYPE html>
-<html>
-
 <head>
-  <!-- Basic -->
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <!-- Site Metas -->
   <link rel="icon" href="{% static 'edgecut/images/png.png' %}" type="image/gif" />
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-
-  <title>Comic Bro'z</title>
-
-
-  <!-- bootstrap core css -->
+  <title>Comic Bro'z - Comics</title>
   <link rel="stylesheet" type="text/css" href="{% static 'edgecut/css/bootstrap.css' %}" />
-
-  <!-- fonts style -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
-
-  <!-- font awesome style -->
   <link href="{% static 'edgecut/css/font-awesome.min.css' %}" rel="stylesheet" />
-  <!-- Custom styles for this template -->
   <link href="{% static 'edgecut/css/style.css' %}" rel="stylesheet" />
-  <!-- responsive style -->
   <link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
-
 </head>
-
 <body class="sub_page">
-
   <div class="hero_area">
-    <!-- header section strats -->
     <header class="header_section long_section px-0">
       <nav class="navbar navbar-expand-lg custom_nav-container ">
-        <a class="navbar-brand" href="index.html">
-          <span>
-            Comic Bro'z
-          </span>
-        </a>
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <span>Comic Bro'z</span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class=""> </span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
-            <ul class="navbar-nav  ">
-              <li class="nav-item ">
+            <ul class="navbar-nav">
+              <li class="nav-item">
                 <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}"> About</a>
+                <a class="nav-link" href="{% url 'about' %}">About</a>
               </li>
               <li class="nav-item active">
                 <a class="nav-link" href="{% url 'comics' %}">Comics</a>
@@ -72,14 +44,19 @@
             </ul>
           </div>
           <div class="quote_btn-container">
-            <a href="">
-              <span>
-                Login
-              </span>
-              <i class="fa fa-user" aria-hidden="true"></i>
-            </a>
+            {% if request.user.is_authenticated %}
+              <a href="#" id="logout-link">
+                <span>Logout</span>
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+              </a>
+            {% else %}
+              <a href="{% url 'login' %}">
+                <span>Login</span>
+                <i class="fa fa-user" aria-hidden="true"></i>
+              </a>
+            {% endif %}
             <form class="form-inline">
-              <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
+              <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
                 <i class="fa fa-search" aria-hidden="true"></i>
               </button>
             </form>
@@ -87,151 +64,89 @@
         </div>
       </nav>
     </header>
-    <!-- end header section -->
   </div>
 
-  <!-- furniture section -->
   <section class="furniture_section layout_padding">
     <div class="container">
-        <div class="heading_container">
-            <h2>
-                Our Comics
-            </h2>
-            <p>
-                Discover our amazing collection of comics
-            </p>
-        </div>
-        <div class="row">
-            {% for comic in comics %}
-            <div class="col-md-6 col-lg-4">
-                <div class="box">
-                    <div class="img-box">
-                        {% if comic.image %}
-                            <img src="{{ comic.image.url }}" alt="{{ comic.title }}">
-                        {% else %}
-                            <img src="{% static 'edgecut/images/default.png' %}" alt="{{ comic.title }}">
-                        {% endif %}
-                    </div>
-                    <div class="detail-box">
-                        <h5>
-                            {{ comic.title }}
-                        </h5>
-                        <div class="price_box">
-                            <h6 class="price_heading">
-                                <span>$</span> {{ comic.price }}
-                            </h6>
-                            <a href="">
-                                Buy Now
-                            </a>
-                        </div>
-                    </div>
-                </div>
+      <div class="heading_container">
+        <h2>Our Comics</h2>
+        <p>Explore our amazing collection of comics</p>
+      </div>
+      <div class="row">
+        {% for comic in comics %}
+        <div class="col-md-6 col-lg-4">
+          <div class="box">
+            <div class="img-box">
+              {% if comic.image %}
+                <img src="{{ comic.image.url }}" alt="{{ comic.title }}">
+              {% else %}
+                <img src="{% static 'edgecut/images/default.png' %}" alt="{{ comic.title }}">
+              {% endif %}
             </div>
-            {% empty %}
-            <div class="col-12">
-                <p>No comics available at the moment.</p>
+            <div class="detail-box">
+              <h5>{{ comic.title }}</h5>
+              <div class="price_box">
+                <h6 class="price_heading"><span>$</span> {{ comic.price }}</h6>
+                <a href="#" class="btn btn-primary">Buy Now</a>
+              </div>
             </div>
-            {% endfor %}
+          </div>
         </div>
+        {% empty %}
+        <div class="col-12">
+          <p>No comics available at the moment.</p>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </section>
 
-
-  <!-- end furniture section -->
-
-  <!-- info section -->
   <section class="info_section long_section">
-
     <div class="container">
       <div class="contact_nav">
-        <a href="">
-          <i class="fa fa-phone" aria-hidden="true"></i>
-          <span>
-            Call : +01 123455678990
-          </span>
-        </a>
-        <a href="">
-          <i class="fa fa-envelope" aria-hidden="true"></i>
-          <span>
-            Email : demo@gmail.com
-          </span>
-        </a>
-        <a href="">
-          <i class="fa fa-map-marker" aria-hidden="true"></i>
-          <span>
-            Location
-          </span>
-        </a>
+        <a href=""><i class="fa fa-phone" aria-hidden="true"></i><span>Call : +01 123455678990</span></a>
+        <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>Email : comicbroz@gmail.com</span></a>
+        <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i><span>Location</span></a>
       </div>
-
-      <div class="info_top ">
-        <div class="row ">
+      <div class="info_top">
+        <div class="row">
           <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="info_links">
-              <h4>
-                QUICK LINKS
-              </h4>
+              <h4>QUICK LINKS</h4>
               <div class="info_links_menu">
-                <a class="" href="{% url 'home' %}"> Home </a>
-                <a class="" href="{% url 'about' %}"> About</a>
-                <a class="" href="{% url 'comics' %}"> Comics </a>
-                <a class="" href="{% url 'blog' %}"> Blog </a>
-                <a class="" href="{% url 'contact' %}"> Contact Us </a>
+                <a class="" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                <a class="" href="{% url 'about' %}">About</a>
+                <a class="" href="{% url 'comics' %}">Comics</a>
+                <a class="" href="{% url 'blog' %}">Blog</a>
+                <a class="" href="{% url 'contact' %}">Contact Us</a>
               </div>
             </div>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3 mx-auto">
             <div class="info_post">
-              <h5>
-                INSTAGRAM FEEDS
-              </h5>
+              <h5>INSTAGRAM FEEDS</h5>
               <div class="post_box">
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/f1.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/f2.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/f3.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/f4.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/f5.png' %}" alt="">
-                </div>
-                <div class="img-box">
-                  <img src="{% static 'edgecut/images/f6.png' %}" alt="">
-                </div>
+                <div class="img-box"><img src="{% static 'edgecut/images/100.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/200.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/300.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/400.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/500.png' %}" alt=""></div>
+                <div class="img-box"><img src="{% static 'edgecut/images/600.png' %}" alt=""></div>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="info_form">
-              <h4>
-                Read. Shop. Explore.
-                The Comic World Awaits You!
-              </h4>
+              <h4>Read. Shop. Explore. The Comic World Awaits You!</h4>
               <form action="">
                 <input type="text" placeholder="Enter Your Email" />
-                <button type="submit">
-                  Subscribe
-                </button>
+                <button type="submit">Subscribe</button>
               </form>
               <div class="social_box">
-                <a href="">
-                  <i class="fa fa-facebook" aria-hidden="true"></i>
-                </a>
-                <a href="">
-                  <i class="fa fa-twitter" aria-hidden="true"></i>
-                </a>
-                <a href="">
-                  <i class="fa fa-linkedin" aria-hidden="true"></i>
-                </a>
-                <a href="">
-                  <i class="fa fa-instagram" aria-hidden="true"></i>
-                </a>
+                <a href=""><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href=""><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                <a href=""><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                <a href=""><i class="fa fa-instagram" aria-hidden="true"></i></a>
               </div>
             </div>
           </div>
@@ -239,31 +154,37 @@
       </div>
     </div>
   </section>
-  <!-- end info_section -->
 
-
-  <!-- footer section -->
   <footer class="footer_section">
     <div class="container">
-      <p>
-        &copy; <span id="displayYear"></span> All Rights Reserved By
-        <a href="https://html.design/">Comic Bro'z</a>
-      </p>
+      <p>© <span id="displayYear"></span> All Rights Reserved By <a href="https://html.design/">Bro'z Comic</a></p>
     </div>
   </footer>
-  <!-- footer section -->
 
-
-  <!-- jQery -->
   <script src="{% static 'edgecut/js/jquery-3.4.1.min.js' %}"></script>
-  <!-- bootstrap js -->
   <script src="{% static 'edgecut/js/bootstrap.js' %}"></script>
-  <!-- custom js -->
   <script src="{% static 'edgecut/js/custom.js' %}"></script>
-  <!-- Google Map -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
-  <!-- End Google Map -->
-
+  <script>
+    document.getElementById('logout-link').addEventListener('click', async function(e) {
+      e.preventDefault();
+      const refreshToken = localStorage.getItem('refresh_token');
+      try {
+        await fetch('{% url "logout" %}', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          },
+          body: JSON.stringify({ refresh: refreshToken })
+        });
+      } finally {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '/login/';
+      }
+    });
+  </script>
 </body>
-
 </html>

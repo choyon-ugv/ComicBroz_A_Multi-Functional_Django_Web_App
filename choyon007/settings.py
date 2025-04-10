@@ -75,12 +75,15 @@ AUTH_USER_MODEL = 'users.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'users.middleware.JWTMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'users.middleware.JWTMiddleware',
+    # 'edgecut.middleware.JWTMiddleware',
 ]
 
 ROOT_URLCONF = 'choyon007.urls'
@@ -165,5 +168,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-# LOGIN_URL = 'login'        # URL to redirect for login
+LOGIN_URL = 'login'       # URL to redirect for login
 # LOGIN_REDIRECT_URL = 'home'   # URL to redirect after login (optional)
+
+# LOGOUT_REDIRECT_URL = 'login'      # URL to redirect after logout (optional)
