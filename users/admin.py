@@ -1,6 +1,9 @@
 from django.contrib import admin
-from .models import User, Movie
+from .models import User, Movie, Comic, Blog, Like, Comment
 
 admin.site.register(User)
 admin.site.register(Movie)
-
+admin.site.register(Comic)
+admin.site.register(Blog)
+admin.site.register(Like)
+admin.site.register(Comment)

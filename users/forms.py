@@ -1,0 +1,42 @@
+from django import forms
+from .models import User
+from django.core.exceptions import ValidationError
+
+# registration form
+class RegisterForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, label='Password')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, label='Confirm Password')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password', 'confirm_password']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        confirm_password = cleaned_data.get("confirm_password")
+
+        if password != confirm_password:
+            raise ValidationError("Passwords do not match.")
+
+        return cleaned_data
+    
+# login form
+class LoginForm(forms.Form):
+    email = forms.EmailField(label='Email')
+    password = forms.CharField(widget=forms.PasswordInput, label='Password')
+    conform_password = forms.CharField(widget=forms.PasswordInput, label='Confirm Password')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get("email")
+        password = cleaned_data.get("password")
+
+        if not User.objects.filter(email=email).exists():
+            raise ValidationError("Email does not exist.")
+
+        user = User.objects.get(email=email)
+        if not user.check_password(password):
+            raise ValidationError("Incorrect password.")
+
+        return cleaned_data

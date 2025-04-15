@@ -1,121 +1,147 @@
-from django.shortcuts import render, redirect
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.contrib.auth import authenticate
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from .serializers import UserRegistrationSerializer, ChangePasswordSerializer
-from .models import User, Movie
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from .forms import RegisterForm, LoginForm
+from .models import User, Movie, Comic, Blog, Comment, Like
 
-class RegisterView(APIView):
-    permission_classes = [AllowAny]
-    
-    def get(self, request):
-        return render(request, 'auth/register.html')
-
-    def post(self, request):
-        serializer = UserRegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            refresh = RefreshToken.for_user(user)
-            response = {
-                'status': 201,
-                'success': True,
-                'message': 'User registered successfully',
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-            }
-            return Response(response, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class LoginView(APIView):
-    permission_classes = [AllowAny]
-    
-    def get(self, request):
-        return render(request, 'auth/login.html')
-    
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        user = authenticate(request, email=email, password=password)
-        print(f"Login - Email: {email}, User: {user}")
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
-            print(f"Token for: {user.email}, ID: {user.id}")
-            return Response({
-                'status': 200,
-                'success': True,
-                'message': 'User logged in successfully',
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'redirect': '/home/',  # Redirect to home page
-            }, status=status.HTTP_200_OK)
-        return Response({
-            'status': 400,
-            'success': False,
-            'message': 'Invalid credentials'
-        }, status=status.HTTP_400_BAD_REQUEST)
-
-class LogoutView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        try:
-            refresh_token = request.data.get('refresh')
-            if not refresh_token:
-                return Response(
-                    {'error': 'Refresh token is required'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(
-                {'message': 'Successfully logged out'},
-                status=status.HTTP_205_RESET_CONTENT
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = User.objects.create_user(
+                email=form.cleaned_data['email'],
+                username=form.cleaned_data['username'],
+                password=form.cleaned_data['password']
             )
-        except InvalidToken:
-            return Response(
-                {'error': 'Invalid refresh token'},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
-        except TokenError as e:
-            return Response(
-                {'error': f'Token error: {str(e)}'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        except Exception as e:
-            return Response(
-                {'error': f'Logout failed: {str(e)}'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            messages.success(request, 'Registration successful! Please login.')
+            return redirect('login')
+    else:
+        form = RegisterForm()
+    return render(request, 'register.html', {'form': form})
 
-class ChangePasswordView(APIView):
-    permission_classes = [IsAuthenticated]
-    
-    def put(self, request):
-        serializer = ChangePasswordSerializer(data=request.data)
-        if serializer.is_valid():
-            user = request.user
-            if not user.check_password(serializer.validated_data['old_password']):
-                return Response({'old_password': 'Old password is not correct'}, status=status.HTTP_400_BAD_REQUEST)
-            user.set_password(serializer.validated_data['new_password'])
-            user.save()
-            response = {
-                'status': 200,
-                'success': True,
-                'message': 'Password updated successfully',
-            }
-            return Response(response, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                auth_login(request, user)
+                messages.success(request, 'Login successful!')
+                # Redirect to 'next' parameter if present, else home
+                next_url = request.GET.get('next', 'home')
+                return redirect(next_url)
+            else:
+                messages.error(request, 'Invalid credentials')
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
 
-# @login_required(login_url='/login/')
-def index_view(request):
-    return render(request, 'auth/index.html')
+def logout(request):
+    auth_logout(request)
+    messages.success(request, 'Logged out successfully!')
+    return redirect('login')
 
-# @login_required(login_url='/login/')
-def movie_blog(request):
+def home(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'home.html', {'username': request.user.username})
+
+def movies(request):
     movies = Movie.objects.all()
-    return render(request, 'auth/movie_blog.html', {'movies': movies})
+    return render(request, 'movies.html', {'movies': movies})
+
+def about(request):
+    return render(request, 'about.html')
+
+def comic(request):
+    comics = Comic.objects.all()
+    return render(request, 'comics.html', {'comics': comics})
+
+def blog(request):
+    blogs = Blog.objects.all()
+    return render(request, 'blogs.html', {'blogs': blogs})
+
+def blog_detail(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    comments = Comment.objects.filter(blog=blog).order_by('-created_at')
+    recent_blogs = Blog.objects.exclude(id=blog_id)[:5]
+    likes_count = Like.objects.filter(blog=blog).count()
+    user_liked = False
+    if request.user.is_authenticated:
+        user_liked = Like.objects.filter(blog=blog, user=request.user).exists()
+    
+    context = {
+        'blog': blog,
+        'comments': comments,
+        'recent_blogs': recent_blogs,
+        'likes_count': likes_count,
+        'user_liked': user_liked,
+    }
+    return render(request, 'blog_details.html', context)
+
+def like_blog(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    if request.method == 'POST' and request.user.is_authenticated:
+        like, created = Like.objects.get_or_create(user=request.user, blog=blog)
+        if not created:
+            like.delete()
+    return redirect('blog_detail', blog_id=blog_id)
+
+def add_comment(request, blog_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    if request.method == 'POST' and request.user.is_authenticated:
+        content = request.POST.get('content')
+        if content:
+            print(f"Commenting as: {request.user}, Authenticated: {request.user.is_authenticated}")
+            Comment.objects.create(
+                user=request.user,
+                blog=blog,
+                content=content
+            )
+    return redirect('blog_detail', blog_id=blog_id)
+
+@login_required
+def edit_comment(request, blog_id, comment_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    comment = get_object_or_404(Comment, id=comment_id, blog=blog)
+    
+    # Check if the user is the comment author
+    if comment.user != request.user:
+        messages.error(request, "You are not authorized to edit this comment.")
+        return redirect('blog_detail', blog_id=blog.id)
+    
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            comment.content = content
+            comment.save()
+            messages.success(request, "Comment updated successfully.")
+            return redirect('blog_detail', blog_id=blog.id)
+        else:
+            messages.error(request, "Comment content cannot be empty.")
+    
+    return redirect('blog_detail', blog_id=blog.id)
+
+@login_required
+def delete_comment(request, blog_id, comment_id):
+    blog = get_object_or_404(Blog, id=blog_id)
+    comment = get_object_or_404(Comment, id=comment_id, blog=blog)
+    
+    # Check if the user is the comment author
+    if comment.user != request.user:
+        messages.error(request, "You are not authorized to delete this comment.")
+        return redirect('blog_detail', blog_id=blog.id)
+    
+    if request.method == 'POST':
+        comment.delete()
+        messages.success(request, "Comment deleted successfully.")
+        return redirect('blog_detail', blog_id=blog.id)
+    
+    return redirect('blog_detail', blog_id=blog.id)
+
+def contact(request):
+    return render(request, 'contact.html')
+
