@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ comic.title }} - Comic Bro'Z</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
+    <link href="{% static 'edgecut/css/font-awesome.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'edgecut/css/click.css' %}" rel="stylesheet" />
+    <link href="{% static 'edgecut/css/slick_theme.css' %}" rel="stylesheet" />
+    <link href="{% static 'edgecut/css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="heading_container">
+            <h2>{{ comic.title|default:"Untitled Comic" }}</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="img-box">
+                    {% if comic.image %}
+                        <img src="{{ comic.image.url }}" alt="{{ comic.title }}" class="img-fluid">
+                    {% else %}
+                        <img src="{% static 'edgecut/images/default.png' %}" alt="{{ comic.title }}" class="img-fluid">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="detail-box">
+                    <p><strong>Price:</strong> ${{ comic.price|default:"0.00" }}</p>
+                    <p><strong>Description:</strong> {{ comic.description|default:"No description available." }}</p>
+                    <a href="{% url 'comics' %}" class="btn1">Back to Comics</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer_section">
+        <div class="container">
+            <p>
+                © <span id="displayYear"></span> All Rights Reserved By
+                <a href="https://html.design/">Comic Bro'Z</a>
+            </p>
+        </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="{% static 'edgecut/js/slick.min.js' %}"></script>
+    <script src="{% static 'edgecut/js/custom.js' %}"></script>
+    <script>
+        document.getElementById('displayYear').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

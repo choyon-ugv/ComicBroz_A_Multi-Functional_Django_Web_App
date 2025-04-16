@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import register, login, logout, home, movies, about, comic, blog, contact, like_blog, add_comment, blog_detail, edit_comment, delete_comment, change_password, profile_view, profile_update
+from .views import register, login, logout, home, movies, about, comic, blog, contact, like_blog, add_comment, blog_detail, edit_comment, delete_comment, change_password, profile_view, profile_update, comic_detail_view
 
 urlpatterns = [
     path('register/', register, name='register'),
@@ -10,6 +10,7 @@ urlpatterns = [
     path('movies/', movies, name='movies'),
     path('about/', about, name='about'),
     path('comics/', comic, name='comics'),
+    path('comics/<int:pk>/', comic_detail_view, name='comic_detail'),
     path('contact/', contact, name='contact'),
     path('blogs/', blog, name='blogs'),
     path('blogs/<int:blog_id>/', blog_detail, name='blog_detail'),

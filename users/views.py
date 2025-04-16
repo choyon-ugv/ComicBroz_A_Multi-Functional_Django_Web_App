@@ -69,6 +69,25 @@ def home(request):
     comics = Comic.objects.all()[:6]
     return render(request, 'home.html', {'username': request.user.username,'blogs': blogs, 'comics': comics})
 
+# def home(request):
+#     if not request.user.is_authenticated:
+#         return redirect('login')
+    
+#     blogs = Blog.objects.all()[:3]
+#     comics = Comic.objects.all()[:6]
+    
+#     return render(request, 'home.html', {
+#         # 'comics': Comic.objects.all(),
+#         'carousel_slides': [
+#             {'title': 'Comic Adventure', 'description': 'Join the fun!', 'image': 'slider-img.png'},
+#             {'title': 'Epic Stories', 'description': 'Dive into comics!', 'image': 'slider-img.png'},
+#         ],
+#         'testimonials': [
+#             {'name': 'Siaalya', 'text': 'Great comics!', 'image': 'client.jpg'},
+#             {'name': 'Fan', 'text': 'Love the variety!', 'image': 'client.jpg'},
+#         ]
+#     }, {'username': request.user.username,'blogs': blogs, 'comics': comics})
+
 def movies(request):
     movies = Movie.objects.all()
     return render(request, 'movies.html', {'movies': movies})
@@ -81,6 +100,9 @@ def comic(request):
     comics = Comic.objects.all()
     return render(request, 'comics.html', {'comics': comics})
 
+def comic_detail_view(request, pk):
+    comic = get_object_or_404(Comic, pk=pk)
+    return render(request, 'comic_detail.html', {'comic': comic})
 
 def blog(request):
     blogs = Blog.objects.all()
