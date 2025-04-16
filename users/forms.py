@@ -1,5 +1,5 @@
 from django import forms
-from .models import User
+from .models import User, Profile
 from django.contrib.auth.forms import PasswordChangeForm as DjangoPasswordChangeForm
 from django.core.exceptions import ValidationError
 
@@ -53,3 +53,14 @@ class PasswordChangeForm(DjangoPasswordChangeForm):
         self.fields['old_password'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
         self.fields['new_password1'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
         self.fields['new_password2'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
+        
+        
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'profile_image', 'favorite_quote']

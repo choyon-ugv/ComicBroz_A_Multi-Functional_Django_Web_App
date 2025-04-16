@@ -1,7 +1,7 @@
 $white: #ffffff;
 $black: #000000;
-$primary1: #6bb7be;
-$primary2: #f89646;
+$primary1: #f44336;
+$primary2: #f44336;
 $bgColor:#f9fafa;
 
 @mixin main-font {
@@ -84,8 +84,7 @@ body {
   }
 }
 
-h1,
-h2 {}
+/* Removed empty ruleset for h1 and h2 */
 
 /*header section*/
 .hero_area {
@@ -129,7 +128,8 @@ h2 {}
 
       &.active,
       &:hover {
-        .nav-link {}
+        color: #007bff; // Example style
+        text-decoration: underline; // Example style
       }
     }
   }

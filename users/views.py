@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, PasswordChangeForm, UserUpdateForm, ProfileUpdateForm
 from .models import User, Movie, Comic, Blog, Comment, Like
 
 def register(request):
@@ -170,3 +170,22 @@ def delete_comment(request, blog_id, comment_id):
 def contact(request):
     return render(request, 'contact.html')
 
+@login_required
+def profile_view(request):
+    return render(request, 'profile.html')
+
+@login_required
+def profile_update(request):
+    user = request.user
+    profile = user.profile
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=user)
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            return redirect('profile')
+    else:
+        u_form = UserUpdateForm(instance=user)
+        p_form = ProfileUpdateForm(instance=profile)
+    return render(request, 'profile_update.html', {'u_form': u_form, 'p_form': p_form})

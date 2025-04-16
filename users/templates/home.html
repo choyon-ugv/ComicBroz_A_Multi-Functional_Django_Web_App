@@ -8,7 +8,7 @@
   <!-- Mobile Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
   <!-- Site Metas -->
-  <link rel="icon" href="{% static 'edgecut/images/fevicon.png' %}" type="image/gif" />
+  <link rel="icon" href="{% static 'edgecut/images/png.png' %}" type="image/gif" />
   <meta name="keywords" content="" />
   <meta name="description" content="" />
   <meta name="author" content="" />
@@ -124,6 +124,7 @@
                     </div>
                   </div>
                   <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
                   <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
                   <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                 </div>
