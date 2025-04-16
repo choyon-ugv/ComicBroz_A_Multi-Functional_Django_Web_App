@@ -12,6 +12,46 @@
   <link href="{% static 'edgecut/css/font-awesome.min.css' %}" rel="stylesheet" />
   <link href="{% static 'edgecut/css/style.css' %}" rel="stylesheet" />
   <link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
+
+  <style>
+    .quote_btn-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .dropdown-toggle {
+      color: #333;
+      font-size: 1rem;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+    .dropdown-toggle:hover {
+      color: #007bff;
+    }
+    .dropdown-menu {
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      min-width: 200px;
+      z-index: 1000;
+    }
+    .dropdown-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+    }
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+    }
+    .form-inline .nav_search-btn {
+      background: transparent;
+      border: none;
+      color: #333;
+      font-size: 1.2rem;
+    }
+    .form-inline .nav_search-btn:hover {
+      color: #007bff;
+    }
+  </style>
 </head>
 <body class="sub_page">
   <div class="hero_area">
@@ -48,17 +88,31 @@
           </div>
           <div class="quote_btn-container">
             {% if user.is_authenticated %}
-              <a href="{% url 'logout' %}">
-                <span>
-                  Logout ({{ user.username }})
-                </span>
-                <i class="fa fa-user" aria-hidden="true"></i>
-              </a>
+              <div class="dropdown">
+                <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="profileDropdown">
+                  <div class="dropdown-item d-flex align-items-center">
+                    {% if user.profile_image %}
+                      <img src="{{ user.profile_image.url }}" alt="Profile" class="rounded-circle mr-2" style="width: 40px; height: 40px; object-fit: cover;">
+                    {% else %}
+                      <i class="fa fa-user-circle fa-2x mr-2" aria-hidden="true"></i>
+                    {% endif %}
+                    <div>
+                      <strong>{{ user.username }}</strong>
+                      <br>
+                      <small>{{ user.email }}</small>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+                  <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                </div>
+              </div>
             {% else %}
               <a href="{% url 'login_user' %}">
-                <span>
-                  Login
-                </span>
+                <span>Login</span>
                 <i class="fa fa-user" aria-hidden="true"></i>
               </a>
             {% endif %}
@@ -167,5 +221,13 @@
   <script src="{% static 'edgecut/js/bootstrap.js' %}"></script>
   <script src="{% static 'edgecut/js/custom.js' %}"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
+
+  <!-- Fallback script for dropdown -->
+  <script>
+    $(document).ready(function () {
+      // Ensure dropdown works with Bootstrap 4
+      $('#profileDropdown').dropdown();
+    });
+  </script>
 </body>
 </html>

@@ -84,7 +84,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('/static/edgecut/images/iron-man.png') no-repeat center center;
+            background: url('/static/edgecut/images/back-site.jpg') no-repeat center center;
             opacity: 0.1; /* Decreased opacity to make the image more transparent */
             z-index: 1;
         }
@@ -189,7 +189,44 @@
             }
         }
 
-    </style>
+        .quote_btn-container {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+        .dropdown-toggle {
+          color: #333;
+          font-size: 1rem;
+          transition: color 0.3s;
+          cursor: pointer;
+        }
+        .dropdown-toggle:hover {
+          color: #007bff;
+        }
+        .dropdown-menu {
+          border-radius: 10px;
+          border: none;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          min-width: 200px;
+          z-index: 1000;
+        }
+        .dropdown-item {
+          padding: 0.5rem 1rem;
+          font-size: 0.95rem;
+        }
+        .dropdown-item:hover {
+          background-color: #f8f9fa;
+        }
+        .form-inline .nav_search-btn {
+          background: transparent;
+          border: none;
+          color: #333;
+          font-size: 1.2rem;
+        }
+        .form-inline .nav_search-btn:hover {
+          color: #007bff;
+        }
+      </style>
 </head>
 <body>
 
@@ -203,10 +240,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link active" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Movies</a>
+                        <a class="nav-link" href="{% url 'movies' %}">Movies</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Reviews</a>
@@ -215,6 +252,45 @@
                         <a class="nav-link" href="#">About</a>
                     </li>
                 </ul>
+                <div class="quote_btn-container">
+                    {% if user.is_authenticated %}
+                      <div class="dropdown">
+                        <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="profileDropdown">
+                          <div class="dropdown-item d-flex align-items-center">
+                            {% if user.profile_image %}
+                              <img src="{{ user.profile_image.url }}" alt="Profile" class="rounded-circle mr-2" style="width: 40px; height: 40px; object-fit: cover;">
+                            {% else %}
+                              <i class="fa fa-user-circle fa-2x mr-2" aria-hidden="true"></i>
+                            {% endif %}
+                            <div>
+                              <strong>{{ user.username }}</strong>
+                              <br>
+                              <small>{{ user.email }}</small>
+                            </div>
+                          </div>
+                          <div class="dropdown-divider"></div>
+                          <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+                          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                      </div>
+                    {% else %}
+                      <a href="{% url 'login_user' %}">
+                        <span>Login</span>
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                      </a>
+                    {% endif %}
+                    <form class="form-inline">
+                      <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </nav>
+            </header>
             </div>
         </div>
     </nav>
@@ -254,5 +330,12 @@
     <!-- Bootstrap JS and Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <!-- Fallback script for dropdown -->
+  <script>
+    $(document).ready(function () {
+      // Ensure dropdown works with Bootstrap 4
+      $('#profileDropdown').dropdown();
+    });
+  </script>
 </body>
 </html>

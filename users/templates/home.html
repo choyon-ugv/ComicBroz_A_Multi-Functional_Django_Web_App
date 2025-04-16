@@ -27,20 +27,58 @@
   <link href="{% static 'edgecut/css/style.css' %}" rel="stylesheet" />
   <!-- responsive style -->
   <link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
+
+  <style>
+    .quote_btn-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .dropdown-toggle {
+      color: #333;
+      font-size: 1rem;
+      transition: color 0.3s;
+      cursor: pointer;
+    }
+    .dropdown-toggle:hover {
+      color: #007bff;
+    }
+    .dropdown-menu {
+      border-radius: 10px;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      min-width: 200px;
+      z-index: 1000;
+    }
+    .dropdown-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.95rem;
+    }
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+    }
+    .form-inline .nav_search-btn {
+      background: transparent;
+      border: none;
+      color: #333;
+      font-size: 1.2rem;
+    }
+    .form-inline .nav_search-btn:hover {
+      color: #007bff;
+    }
+  </style>
 </head>
 
 <body>
   <div class="hero_area">
-    <!-- header section strats -->
+    <!-- header section starts -->
     <header class="header_section long_section px-0">
-      <nav class="navbar navbar-expand-lg custom_nav-container ">
+      <nav class="navbar navbar-expand-lg custom_nav-container">
         <a class="navbar-brand" href="{% url 'home' %}">
-          <span>
-            Comic Bro'Z
-          </span>
+          <span>Comic Bro'Z</span>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class=""> </span>
+          <span class=""></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -68,17 +106,31 @@
           </div>
           <div class="quote_btn-container">
             {% if user.is_authenticated %}
-              <a href="{% url 'logout' %}">
-                <span>
-                  Logout ({{ user.username }})
-                </span>
-                <i class="fa fa-user" aria-hidden="true"></i>
-              </a>
+              <div class="dropdown">
+                <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow" aria-labelledby="profileDropdown">
+                  <div class="dropdown-item d-flex align-items-center">
+                    {% if user.profile_image %}
+                      <img src="{{ user.profile_image.url }}" alt="Profile" class="rounded-circle mr-2" style="width: 40px; height: 40px; object-fit: cover;">
+                    {% else %}
+                      <i class="fa fa-user-circle fa-2x mr-2" aria-hidden="true"></i>
+                    {% endif %}
+                    <div>
+                      <strong>{{ user.username }}</strong>
+                      <br>
+                      <small>{{ user.email }}</small>
+                    </div>
+                  </div>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+                  <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                </div>
+              </div>
             {% else %}
-              <a href="{% url 'login_user' %}">
-                <span>
-                  Login
-                </span>
+              <a href="{% url 'login' %}">
+                <span>Login</span>
                 <i class="fa fa-user" aria-hidden="true"></i>
               </a>
             {% endif %}
@@ -92,95 +144,87 @@
       </nav>
     </header>
     <!-- end header section -->
+
     <!-- slider section -->
     <section class="slider_section long_section">
       <div id="customCarousel" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <div class="container ">
+            <div class="container">
               <div class="row">
                 <div class="col-md-5">
                   <div class="detail-box">
                     <h1>
                       For All Your <br>
-                      Furniture Needs
+                      Comic Needs
                     </h1>
                     <p>
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus quidem maiores perspiciatis, illo maxime voluptatem a itaque suscipit.
+                      Explore the exciting world of comics with Comic Bro'Z. Find your favorite superhero stories and more!
                     </p>
                     <div class="btn-box">
-                      <a href="#" class="btn1">
-                        Contact Us
-                      </a>
-                      <a href="#" class="btn2">
-                        About Us
+                      <a href="{% url 'blogs' %}" class="btn1">
+                        READ NOW
                       </a>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-7">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="">
+                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="Comic Slider">
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="carousel-item">
-            <div class="container ">
+            <div class="container">
               <div class="row">
                 <div class="col-md-5">
                   <div class="detail-box">
                     <h1>
                       For All Your <br>
-                      Furniture Needs
+                      Comic Needs
                     </h1>
                     <p>
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus quidem maiores perspiciatis, illo maxime voluptatem a itaque suscipit.
+                      Dive into epic adventures with our vast collection of comics and graphic novels.
                     </p>
                     <div class="btn-box">
-                      <a href="#" class="btn1">
-                        Contact Us
-                      </a>
-                      <a href="#" class="btn2">
-                        About Us
+                      <a href="{% url 'blogs' %}" class="btn1">
+                        READ NOW
                       </a>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-7">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="">
+                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="Comic Slider">
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="carousel-item">
-            <div class="container ">
+            <div class="container">
               <div class="row">
                 <div class="col-md-5">
                   <div class="detail-box">
                     <h1>
                       For All Your <br>
-                      Furniture Needs
+                      Comic Needs
                     </h1>
                     <p>
-                      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus quidem maiores perspiciatis, illo maxime voluptatem a itaque suscipit.
+                      Join the Comic Bro'Z community and stay updated with the latest comic releases.
                     </p>
                     <div class="btn-box">
-                      <a href="#" class="btn1">
-                        Contact Us
-                      </a>
-                      <a href="#" class="btn2">
-                        About Us
+                      <a href="{% url 'blogs' %}" class="btn1">
+                        READ NOW
                       </a>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-7">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="">
+                    <img src="{% static 'edgecut/images/slider-img.png' %}" alt="Comic Slider">
                   </div>
                 </div>
               </div>
@@ -197,142 +241,42 @@
     <!-- end slider section -->
   </div>
 
-  <!-- furniture section -->
+  <!-- Comic section -->
   <section class="furniture_section layout_padding">
     <div class="container">
       <div class="heading_container">
-        <h2>
-          Our Furniture
-        </h2>
-        <p>
-          which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't an
-        </p>
+        <h2>Our Comics</h2>
+        <p>Discover our amazing collection of comics</p>
       </div>
       <div class="row">
+        {% for comic in comics %}
         <div class="col-md-6 col-lg-4">
           <div class="box">
             <div class="img-box">
-              <img src="{% static 'edgecut/images/f1.png' %}" alt="">
+              {% if comic.image %}
+                <img src="{{ comic.image.url }}" alt="{{ comic.title }}">
+              {% else %}
+                <img src="{% static 'edgecut/images/default.png' %}" alt="{{ comic.title }}">
+              {% endif %}
             </div>
             <div class="detail-box">
-              <h5>
-                brown Chair Design
-              </h5>
+              <h5>{{ comic.title }}</h5>
               <div class="price_box">
-                <h6 class="price_heading">
-                  <span>$</span> 100.00
-                </h6>
-                <a href="#">
-                  Buy Now
-                </a>
+                <h6 class="price_heading"><span>$</span> {{ comic.price }}</h6>
+                <a href="">Buy Now</a>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="box">
-            <div class="img-box">
-              <img src="{% static 'edgecut/images/f2.png' %}" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Double Bed Design
-              </h5>
-              <div class="price_box">
-                <h6 class="price_heading">
-                  <span>$</span> 200.00
-                </h6>
-                <a href="#">
-                  Buy Now
-                </a>
-              </div>
-            </div>
-          </div>
+        {% empty %}
+        <div class="col-12">
+          <p>No comics available at the moment.</p>
         </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="box">
-            <div class="img-box">
-              <img src="{% static 'edgecut/images/f3.png' %}" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                House Chair Design
-              </h5>
-              <div class="price_box">
-                <h6 class="price_heading">
-                  <span>$</span> 200.00
-                </h6>
-                <a href="#">
-                  Buy Now
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="box">
-            <div class="img-box">
-              <img src="{% static 'edgecut/images/f4.png' %}" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                brown Table Design
-              </h5>
-              <div class="price_box">
-                <h6 class="price_heading">
-                  <span>$</span> 100.00
-                </h6>
-                <a href="#">
-                  Buy Now
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="box">
-            <div class="img-box">
-              <img src="{% static 'edgecut/images/f5.png' %}" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Blue Chair Design
-              </h5>
-              <div class="price_box">
-                <h6 class="price_heading">
-                  <span>$</span> 200.00
-                </h6>
-                <a href="#">
-                  Buy Now
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4">
-          <div class="box">
-            <div class="img-box">
-              <img src="{% static 'edgecut/images/f6.png' %}" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Brown Table Design
-              </h5>
-              <div class="price_box">
-                <h6 class="price_heading">
-                  <span>$</span> 200.00
-                </h6>
-                <a href="#">
-                  Buy Now
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
-  <!-- end furniture section -->
+  <!-- end comic section -->
 
   <!-- about section -->
   <section class="about_section layout_padding long_section">
@@ -340,22 +284,18 @@
       <div class="row">
         <div class="col-md-6">
           <div class="img-box">
-            <img src="{% static 'edgecut/images/about-img.png' %}" alt="">
+            <img src="{% static 'edgecut/images/about-img.png' %}" alt="About Comic Bro'Z">
           </div>
         </div>
         <div class="col-md-6">
           <div class="detail-box">
             <div class="heading_container">
-              <h2>
-                About Us
-              </h2>
+              <h2>About Us</h2>
             </div>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti dolorem eum consequuntur ipsam repellat dolor soluta aliquid laborum, eius odit consectetur vel quasi in quidem, eveniet ab est corporis tempore.
+              Comic Bro'Z is your one-stop destination for all things comics. We bring you the best superhero stories, graphic novels, and more.
             </p>
-            <a href="#">
-              Read More
-            </a>
+            <a href="{% url 'about' %}">Read More</a>
           </div>
         </div>
       </div>
@@ -367,65 +307,27 @@
   <section class="blog_section layout_padding">
     <div class="container">
       <div class="heading_container">
-        <h2>
-          Latest Blog
-        </h2>
+        <h2>Latest Blog</h2>
       </div>
       <div class="row">
+        {% for blog in blogs %}
         <div class="col-md-6 col-lg-4 mx-auto">
           <div class="box">
             <div class="img-box">
-              <img src="{% static 'edgecut/images/b1.jpg' %}" alt="">
+              {% if blog.image %}
+                <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+              {% else %}
+                <img src="{% static 'edgecut/images/default-blog.jpg' %}" alt="{{ blog.title }}">
+              {% endif %}
             </div>
             <div class="detail-box">
-              <h5>
-                Look even slightly believable. If you are
-              </h5>
-              <p>
-                alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
-              </p>
-              <a href="#">
-                Read More
-              </a>
+              <h5>{{ blog.title }}</h5>
+              <p>{{ blog.content|truncatewords:20 }}</p>
+              <a href="{% url 'blog_detail' blog.id %}">Read More</a>
             </div>
           </div>
         </div>
-        <div class="col-md-6 col-lg-4 mx-auto">
-          <div class="box">
-            <div class="img-box">
-              <img src="{% static 'edgecut/images/b2.jpg' %}" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Anything embarrassing hidden in the middle
-              </h5>
-              <p>
-                alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
-              </p>
-              <a href="#">
-                Read More
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4 mx-auto">
-          <div class="box">
-            <div class="img-box">
-              <img src="{% static 'edgecut/images/b3.jpg' %}" alt="">
-            </div>
-            <div class="detail-box">
-              <h5>
-                Molestias magni natus dolores odio commodi. Quaerat!
-              </h5>
-              <p>
-                alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
-              </p>
-              <a href="#">
-                Read More
-              </a>
-            </div>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </section>
@@ -435,9 +337,7 @@
   <section class="client_section layout_padding-bottom">
     <div class="container">
       <div class="heading_container">
-        <h2>
-          Testimonial
-        </h2>
+        <h2>Testimonial</h2>
       </div>
       <div id="carouselExample2Controls" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
@@ -446,19 +346,15 @@
               <div class="col-md-11 col-lg-10 mx-auto">
                 <div class="box">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="" />
+                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="Testimonial" />
                   </div>
                   <div class="detail-box">
                     <div class="name">
                       <i class="fa fa-quote-left" aria-hidden="true"></i>
-                      <h6>
-                        Siaalya
-                      </h6>
+                      <h6>Siaalya</h6>
                     </div>
                     <p>
-                      It is a long established fact that a reader will be
-                      distracted by the readable cIt is a long established fact
-                      that a reader will be distracted by the readable c
+                      Comic Bro'Z has an amazing collection of comics! The website is easy to navigate, and I love the blog updates.
                     </p>
                   </div>
                 </div>
@@ -470,19 +366,15 @@
               <div class="col-md-11 col-lg-10 mx-auto">
                 <div class="box">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="" />
+                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="Testimonial" />
                   </div>
                   <div class="detail-box">
                     <div class="name">
                       <i class="fa fa-quote-left" aria-hidden="true"></i>
-                      <h6>
-                        Siaalya
-                      </h6>
+                      <h6>Siaalya</h6>
                     </div>
                     <p>
-                      It is a long established fact that a reader will be
-                      distracted by the readable cIt is a long established fact
-                      that a reader will be distracted by the readable c
+                      The best place for comic fans! I found rare editions and the community is fantastic.
                     </p>
                   </div>
                 </div>
@@ -494,19 +386,15 @@
               <div class="col-md-11 col-lg-10 mx-auto">
                 <div class="box">
                   <div class="img-box">
-                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="" />
+                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="Testimonial" />
                   </div>
                   <div class="detail-box">
                     <div class="name">
                       <i class="fa fa-quote-left" aria-hidden="true"></i>
-                      <h6>
-                        Siaalya
-                      </h6>
+                      <h6>Siaalya</h6>
                     </div>
                     <p>
-                      It is a long established fact that a reader will be
-                      distracted by the readable cIt is a long established fact
-                      that a reader will be distracted by the readable c
+                      I love the variety of comics and movies available. Comic Bro'Z is my go-to site!
                     </p>
                   </div>
                 </div>
@@ -536,27 +424,23 @@
         <div class="col-md-6">
           <div class="form_container">
             <div class="heading_container">
-              <h2>
-                Contact Us
-              </h2>
+              <h2>Contact Us</h2>
             </div>
-            <form action="">
+            <form action="{% url 'contact' %}">
               <div>
-                <input type="text" placeholder="Your Name" />
+                <input type="text" placeholder="Your Name" name="name" required />
               </div>
               <div>
-                <input type="text" placeholder="Phone Number" />
+                <input type="text" placeholder="Phone Number" name="phone" />
               </div>
               <div>
-                <input type="email" placeholder="Email" />
+                <input type="email" placeholder="Email" name="email" required />
               </div>
               <div>
-                <input type="text" class="message-box" placeholder="Message" />
+                <input type="text" class="message-box" placeholder="Message" name="message" required />
               </div>
               <div class="btn_box">
-                <button>
-                  SEND
-                </button>
+                <button type="submit">SEND</button>
               </div>
             </form>
           </div>
@@ -577,23 +461,17 @@
   <section class="info_section long_section">
     <div class="container">
       <div class="contact_nav">
-        <a href="#">
+        <a href="tel:+01123455678990">
           <i class="fa fa-phone" aria-hidden="true"></i>
-          <span>
-            Call : +01 123455678990
-          </span>
+          <span>Call : +01 123455678990</span>
         </a>
-        <a href="#">
+        <a href="mailto:demo@gmail.com">
           <i class="fa fa-envelope" aria-hidden="true"></i>
-          <span>
-            Email : demo@gmail.com
-          </span>
+          <span>Email : demo@gmail.com</span>
         </a>
         <a href="#">
           <i class="fa fa-map-marker" aria-hidden="true"></i>
-          <span>
-            Location
-          </span>
+          <span>Location</span>
         </a>
       </div>
 
@@ -601,55 +479,47 @@
         <div class="row">
           <div class="col-sm-6 col-md-4 col-lg-3">
             <div class="info_links">
-              <h4>
-                QUICK LINKS
-              </h4>
+              <h4>QUICK LINKS</h4>
               <div class="info_links_menu">
                 <a class="" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-                <a class="" href="#">About</a>
-                <a class="" href="#">Furniture</a>
-                <a class="" href="#">Blog</a>
-                <a class="" href="#">Contact Us</a>
+                <a class="" href="{% url 'about' %}">About</a>
+                <a class="" href="{% url 'comics' %}">Comics</a>
+                <a class="" href="{% url 'blogs' %}">Blog</a>
+                <a class="" href="{% url 'contact' %}">Contact Us</a>
               </div>
             </div>
           </div>
           <div class="col-sm-6 col-md-4 col-lg-3 mx-auto">
             <div class="info_post">
-              <h5>
-                INSTAGRAM FEEDS
-              </h5>
+              <h5>INSTAGRAM FEEDS</h5>
               <div class="post_box">
                 <div class="img-box">
-                  <img src="{% static 'edgecut/images/f1.png' %}" alt="">
+                  <img src="{% static 'edgecut/images/f1.png' %}" alt="Instagram Post">
                 </div>
                 <div class="img-box">
-                  <img src="{% static 'edgecut/images/f2.png' %}" alt="">
+                  <img src="{% static 'edgecut/images/f2.png' %}" alt="Instagram Post">
                 </div>
                 <div class="img-box">
-                  <img src="{% static 'edgecut/images/f3.png' %}" alt="">
+                  <img src="{% static 'edgecut/images/f3.png' %}" alt="Instagram Post">
                 </div>
                 <div class="img-box">
-                  <img src="{% static 'edgecut/images/f4.png' %}" alt="">
+                  <img src="{% static 'edgecut/images/f4.png' %}" alt="Instagram Post">
                 </div>
                 <div class="img-box">
-                  <img src="{% static 'edgecut/images/f5.png' %}" alt="">
+                  <img src="{% static 'edgecut/images/f5.png' %}" alt="Instagram Post">
                 </div>
                 <div class="img-box">
-                  <img src="{% static 'edgecut/images/f6.png' %}" alt="">
+                  <img src="{% static 'edgecut/images/f6.png' %}" alt="Instagram Post">
                 </div>
               </div>
             </div>
           </div>
           <div class="col-md-4">
             <div class="info_form">
-              <h4>
-                SIGN UP TO OUR NEWSLETTER
-              </h4>
+              <h4>SIGN UP TO OUR NEWSLETTER</h4>
               <form action="">
-                <input type="text" placeholder="Enter Your Email" />
-                <button type="submit">
-                  Subscribe
-                </button>
+                <input type="email" placeholder="Enter Your Email" name="email" required />
+                <button type="submit">Subscribe</button>
               </form>
               <div class="social_box">
                 <a href="#">
@@ -693,6 +563,13 @@
   <!-- Google Map -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
   <!-- End Google Map -->
+
+  <!-- Fallback script for dropdown -->
+  <script>
+    $(document).ready(function () {
+      // Ensure dropdown works with Bootstrap 4
+      $('#profileDropdown').dropdown();
+    });
+  </script>
 </body>
 </html>
-

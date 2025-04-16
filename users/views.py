@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import RegisterForm, LoginForm
 from .models import User, Movie, Comic, Blog, Comment, Like
@@ -19,6 +20,7 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
+
 
 def login(request):
     if request.method == 'POST':
@@ -39,15 +41,33 @@ def login(request):
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
+
 def logout(request):
     auth_logout(request)
     messages.success(request, 'Logged out successfully!')
     return redirect('login')
 
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('login')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = PasswordChangeForm(user=request.user)
+    return render(request, 'change_password.html', {'form': form})
+
 def home(request):
     if not request.user.is_authenticated:
         return redirect('login')
-    return render(request, 'home.html', {'username': request.user.username})
+    
+    blogs = Blog.objects.all()[:3]
+    comics = Comic.objects.all()[:6]
+    return render(request, 'home.html', {'username': request.user.username,'blogs': blogs, 'comics': comics})
 
 def movies(request):
     movies = Movie.objects.all()
@@ -56,13 +76,16 @@ def movies(request):
 def about(request):
     return render(request, 'about.html')
 
+
 def comic(request):
     comics = Comic.objects.all()
     return render(request, 'comics.html', {'comics': comics})
 
+
 def blog(request):
     blogs = Blog.objects.all()
     return render(request, 'blogs.html', {'blogs': blogs})
+
 
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
@@ -82,6 +105,7 @@ def blog_detail(request, blog_id):
     }
     return render(request, 'blog_details.html', context)
 
+@login_required
 def like_blog(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
     if request.method == 'POST' and request.user.is_authenticated:
@@ -90,6 +114,7 @@ def like_blog(request, blog_id):
             like.delete()
     return redirect('blog_detail', blog_id=blog_id)
 
+@login_required
 def add_comment(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
     if request.method == 'POST' and request.user.is_authenticated:

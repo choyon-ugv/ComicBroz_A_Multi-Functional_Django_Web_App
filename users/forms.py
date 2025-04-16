@@ -1,5 +1,6 @@
 from django import forms
 from .models import User
+from django.contrib.auth.forms import PasswordChangeForm as DjangoPasswordChangeForm
 from django.core.exceptions import ValidationError
 
 # registration form
@@ -40,3 +41,15 @@ class LoginForm(forms.Form):
             raise ValidationError("Incorrect password.")
 
         return cleaned_data
+    
+    
+class PasswordChangeForm(DjangoPasswordChangeForm):
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password1', 'new_password2']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['old_password'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
+        self.fields['new_password1'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
+        self.fields['new_password2'].widget = forms.PasswordInput(attrs={'class': 'form-control'})
