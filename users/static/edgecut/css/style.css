@@ -574,7 +574,7 @@ body {
 
 .blog_section .box .detail-box {
     padding: 25px;
-    color: #fff;
+    color: #383850;
 }
 
 .blog_section .box .detail-box h5 {
@@ -599,7 +599,7 @@ body {
 }
 
 .blog_section .box .detail-box a:hover {
-    background: #fff;
+    background: #383850;
     color: #ff4d6d;
     transform: scale(1.1);
 }
