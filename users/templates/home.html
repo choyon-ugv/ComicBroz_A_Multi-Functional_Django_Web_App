@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -20,6 +21,7 @@
     <link href="{% static 'edgecut/css/style.css' %}" rel="stylesheet" />
     <link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
 </head>
+
 <body>
     <!-- Parallax and Halftone -->
     <div class="parallax-bg"></div>
@@ -32,14 +34,17 @@
                 <a class="navbar-brand" href="{% url 'home' %}">
                     <span>Comic Bro'Z</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <span class=""></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
                         <ul class="navbar-nav">
                             <li class="nav-item active">
-                                <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
+                                <a class="nav-link" href="{% url 'home' %}">Home <span
+                                        class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'about' %}">About</a>
@@ -60,34 +65,37 @@
                     </div>
                     <div class="quote_btn-container">
                         {% if user.is_authenticated %}
-                            <div class="dropdown">
-                                <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="profileDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
-                                    <div class="dropdown-item d-flex align-items-center">
-                                        {% if user.profile.profile_image %}
-                                            <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="rounded-circle mr-2" style="width: 40px; height: 40px; object-fit: cover;">
-                                        {% else %}
-                                            <i class="fa fa-user-circle fa-2x mr-2" aria-hidden="true"></i>
-                                        {% endif %}
-                                        <div>
-                                            <strong>{{ user.username }}</strong>
-                                            <br>
-                                            <small>{{ user.email }}</small>
-                                        </div>
-                                    </div>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
-                                    <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
-                                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-                                </div>
-                            </div>
-                        {% else %}
-                            <a href="{% url 'login' %}">
-                                <span>Login</span>
-                                <i class="fa fa-user" aria-hidden="true"></i>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="profileDropdown"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
                             </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
+                                <div class="dropdown-item d-flex align-items-center">
+                                    {% if user.profile.profile_image %}
+                                    <img src="{{ user.profile.profile_image.url }}" alt="Profile"
+                                        class="rounded-circle mr-2"
+                                        style="width: 40px; height: 40px; object-fit: cover;">
+                                    {% else %}
+                                    <i class="fa fa-user-circle fa-2x mr-2" aria-hidden="true"></i>
+                                    {% endif %}
+                                    <div>
+                                        <strong>{{ user.username }}</strong>
+                                        <br>
+                                        <small>{{ user.email }}</small>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
+                                <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                            </div>
+                        </div>
+                        {% else %}
+                        <a href="{% url 'login' %}">
+                            <span>Login</span>
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                        </a>
                         {% endif %}
                         <form class="form-inline">
                             <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
@@ -125,32 +133,33 @@
             </div>
             <div class="row">
                 {% for comic in comics %}
-                    <div class="col-md-6 col-lg-4">
-                        <div class="box" data-aos="zoom-in">
-                            <div class="img-box">
-                                {% if comic.image %}
-                                    <img src="{{ comic.image.url }}" alt="{{ comic.title|default:'Comic' }}">
+                <div class="col-md-6 col-lg-4">
+                    <div class="box" data-aos="zoom-in">
+                        <div class="img-box">
+                            {% if comic.image %}
+                            <img src="{{ comic.image.url }}" alt="{{ comic.title|default:'Comic' }}">
+                            {% else %}
+                            <img src="{% static 'edgecut/images/default.png' %}"
+                                alt="{{ comic.title|default:'Comic' }}">
+                            {% endif %}
+                        </div>
+                        <div class="detail-box">
+                            <h5>{{ comic.title|default:"Untitled Comic" }}</h5>
+                            <div class="price_box">
+                                <h6 class="price_heading"><span>$</span> {{ comic.price|default:"0.00" }}</h6>
+                                {% if comic.id or comic.pk %}
+                                <a href="{% url 'comic_detail' comic.id|default:comic.pk %}">Buy Now</a>
                                 {% else %}
-                                    <img src="{% static 'edgecut/images/default.png' %}" alt="{{ comic.title|default:'Comic' }}">
+                                <a href="{% url 'comics' %}">View Comics</a>
                                 {% endif %}
-                            </div>
-                            <div class="detail-box">
-                                <h5>{{ comic.title|default:"Untitled Comic" }}</h5>
-                                <div class="price_box">
-                                    <h6 class="price_heading"><span>$</span> {{ comic.price|default:"0.00" }}</h6>
-                                    {% if comic.id or comic.pk %}
-                                        <a href="{% url 'comic_detail' comic.id|default:comic.pk %}">Buy Now</a>
-                                    {% else %}
-                                        <a href="{% url 'comics' %}">View Comics</a>
-                                    {% endif %}
-                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
                 {% empty %}
-                    <div class="col-12">
-                        <p>No comics available at the moment.</p>
-                    </div>
+                <div class="col-12">
+                    <p>No comics available at the moment.</p>
+                </div>
                 {% endfor %}
             </div>
         </div>
@@ -171,7 +180,8 @@
                             <h2>About Us</h2>
                         </div>
                         <p>
-                            Comic Bro'Z is your one-stop destination for all things comics. We bring you the best superhero stories, graphic novels, and more.
+                            Comic Bro'Z is your one-stop destination for all things comics. We bring you the best
+                            superhero stories, graphic novels, and more.
                         </p>
                         <a href="{% url 'about' %}">Read More</a>
                     </div>
@@ -188,22 +198,23 @@
             </div>
             <div class="row">
                 {% for blog in blogs %}
-                    <div class="col-md-6 col-lg-4 mx-auto">
-                        <div class="box" data-aos="zoom-in">
-                            <div class="img-box">
-                                {% if blog.image %}
-                                    <img src="{{ blog.image.url }}" alt="{{ blog.title|default:'Blog' }}">
-                                {% else %}
-                                    <img src="{% static 'edgecut/images/default-blog.jpg' %}" alt="{{ blog.title|default:'Blog' }}">
-                                {% endif %}
-                            </div>
-                            <div class="detail-box">
-                                <h5>{{ blog.title|default:"Untitled Blog" }}</h5>
-                                <p>{{ blog.content|truncatewords:20|default:"No content available." }}</p>
-                                <a href="{% url 'blog_detail' blog.id|default:blog.pk %}">Read More</a>
-                            </div>
+                <div class="col-md-6 col-lg-4 mx-auto">
+                    <div class="box" data-aos="zoom-in">
+                        <div class="img-box">
+                            {% if blog.image %}
+                            <img src="{{ blog.image.url }}" alt="{{ blog.title|default:'Blog' }}">
+                            {% else %}
+                            <img src="{% static 'edgecut/images/default-blog.jpg' %}"
+                                alt="{{ blog.title|default:'Blog' }}">
+                            {% endif %}
+                        </div>
+                        <div class="detail-box">
+                            <h5>{{ blog.title|default:"Untitled Blog" }}</h5>
+                            <p>{{ blog.content|truncatewords:20|default:"No content available." }}</p>
+                            <a href="{% url 'blog_detail' blog.id|default:blog.pk %}">Read More</a>
                         </div>
                     </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
@@ -218,59 +229,62 @@
             <div id="carouselExample2Controls" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     {% if testimonials %}
-                        {% for testimonial in testimonials %}
-                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                <div class="row">
-                                    <div class="col-md-11 col-lg-10 mx-auto">
-                                        <div class="box">
-                                            <div class="img-box">
-                                                <img src="{% static 'edgecut/images/'|add:testimonial.image|default:'edgecut/images/client.jpg' %}" alt="Testimonial" />
-                                            </div>
-                                            <div class="detail-box">
-                                                <div class="name">
-                                                    <i class="fa fa-quote-left" aria-hidden="true"></i>
-                                                    <h6>{{ testimonial.name|default:"Siaalya" }}</h6>
-                                                </div>
-                                                <p>{{ testimonial.text|default:"Comic Bro'Z has an amazing collection of comics!" }}</p>
-                                            </div>
-                                        </div>
+                    {% for testimonial in testimonials %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="row">
+                            <div class="col-md-11 col-lg-10 mx-auto">
+                                <div class="box">
+                                    <div class="img-box">
+                                        <img src="{% static 'edgecut/images/'|add:testimonial.image|default:'edgecut/images/client.jpg' %}"
+                                            alt="Testimonial" />
                                     </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <!-- Default Testimonial -->
-                        <div class="carousel-item active">
-                            <div class="row">
-                                <div class="col-md-11 col-lg-10 mx-auto">
-                                    <div class="box">
-                                        <div class="img-box">
-                                            <img src="{% static 'edgecut/images/client.jpg' %}" alt="Testimonial" />
+                                    <div class="detail-box">
+                                        <div class="name">
+                                            <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                            <h6>{{ testimonial.name|default:"Siaalya" }}</h6>
                                         </div>
-                                        <div class="detail-box">
-                                            <div class="name">
-                                                <i class="fa fa-quote-left" aria-hidden="true"></i>
-                                                <h6>Siaalya</h6>
-                                            </div>
-                                            <p>Comic Bro'Z has an amazing collection of comics! The website is easy to navigate, and I love the blog updates.</p>
-                                        </div>
+                                        <p>{{ testimonial.text|default:"Comic Bro'Z has an amazing collection of
+                                            comics!" }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <!-- Default Testimonial -->
+                    <div class="carousel-item active">
+                        <div class="row">
+                            <div class="col-md-11 col-lg-10 mx-auto">
+                                <div class="box">
+                                    <div class="img-box">
+                                        <img src="{% static 'edgecut/images/client.jpg' %}" alt="Testimonial" />
+                                    </div>
+                                    <div class="detail-box">
+                                        <div class="name">
+                                            <i class="fa fa-quote-left" aria-hidden="true"></i>
+                                            <h6>Siaalya</h6>
+                                        </div>
+                                        <p>Comic Bro'Z has an amazing collection of comics! The website is easy to
+                                            navigate, and I love the blog updates.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {% endif %}
                 </div>
                 {% if testimonials %}
-                    <div class="carousel_btn-container">
-                        <a class="carousel-control-prev" href="#carouselExample2Controls" role="button" data-slide="prev">
-                            <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExample2Controls" role="button" data-slide="next">
-                            <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
+                <div class="carousel_btn-container">
+                    <a class="carousel-control-prev" href="#carouselExample2Controls" role="button" data-slide="prev">
+                        <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExample2Controls" role="button" data-slide="next">
+                        <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
                 {% endif %}
             </div>
         </div>
@@ -296,7 +310,8 @@
                                 <input type="email" placeholder="Email" name="email" required />
                             </div>
                             <div>
-                                <input type="text" class="message-box" placeholder="Message" name="message" required maxlength="200" />
+                                <input type="text" class="message-box" placeholder="Message" name="message" required
+                                    maxlength="200" />
                                 <small id="messageCounter" class="form-text text-muted">0/200 characters</small>
                             </div>
                             <div class="btn_box">
@@ -351,12 +366,18 @@
                         <div class="info_post">
                             <h5>INSTAGRAM FEEDS</h5>
                             <div class="post_box">
-                                <div class="img-box"><img src="{% static 'edgecut/images/f1.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/f2.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/f3.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/f4.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/f5.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/f6.png' %}" alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/f1.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/f2.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/f3.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/f4.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/f5.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/f6.png' %}"
+                                        alt="Instagram Post"></div>
                             </div>
                         </div>
                     </div>
@@ -395,7 +416,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="{% static 'edgecut/js/custom.js' %}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
     <script>
         // Initialize AOS
         AOS.init({ duration: 1000, once: true });
@@ -412,7 +434,7 @@
         themeSelect.value = savedTheme;
         applyTheme(savedTheme);
 
-        themeSelect.addEventListener('change', function() {
+        themeSelect.addEventListener('change', function () {
             const theme = this.value;
             localStorage.setItem('theme', theme);
             applyTheme(theme);
@@ -476,10 +498,11 @@
         }
 
         // Contact Form Character Counter
-        document.querySelector('.message-box').addEventListener('input', function() {
+        document.querySelector('.message-box').addEventListener('input', function () {
             const count = this.value.length;
             document.getElementById('messageCounter').textContent = `${count}/200 characters`;
         });
     </script>
 </body>
+
 </html>

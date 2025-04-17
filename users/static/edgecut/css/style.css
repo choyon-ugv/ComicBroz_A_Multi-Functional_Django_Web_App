@@ -70,8 +70,6 @@ body {
 }
 
 .long_section {
-    margin-left: 45px;
-    margin-right: 45px;
     padding-left: 15px;
     padding-right: 15px;
 }
@@ -111,6 +109,7 @@ body {
     flex-direction: column;
     background: rgba(42, 42, 59, 0.9);
     backdrop-filter: blur(5px);
+    z-index: 1; /* Ensure hero_area is above parallax and halftone */
 }
 
 .sub_page .hero_area {
@@ -120,6 +119,7 @@ body {
 .header_section {
     background: #2a2a3b;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Ensure header is above all sections */
 }
 
 .header_section .container-fluid {
@@ -132,7 +132,7 @@ body {
 }
 
 .custom_nav-container {
-    z-index: 99999;
+    z-index: 1001; /* Above header but below dropdown */
     padding: 10px 0;
 }
 
@@ -244,9 +244,10 @@ body {
     margin-right: 5px;
 }
 
-/* Dropdown for Profile (Adapted for home.html) */
+/* Dropdown for Profile (Adapted for home.html and about.html) */
 .dropdown {
     position: relative;
+    z-index: 1002; /* Ensure dropdown container is above all sections */
 }
 
 .dropdown-toggle {
@@ -268,7 +269,7 @@ body {
     border: 2px solid #ff4d6d;
     border-radius: 8px;
     min-width: 200px;
-    z-index: 1000;
+    z-index: 1003 !important; /* Ensure dropdown is above everything */
     display: none;
 }
 
@@ -293,7 +294,6 @@ body {
     border-top: 1px solid #ff4d6d;
     margin: 5px 0;
 }
-
 
 /* Comic Slider */
 .comic-slider {
@@ -391,18 +391,24 @@ body {
     filter: drop-shadow(0 0 25px #ff4d6d) drop-shadow(0 0 60px #ffda79);
 }
 
-
 /* Animations */
 @keyframes fadeInSlide {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Animation for floating hero image */
 @keyframes floatHero {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
-
 
 /* Furniture Section (Comics) */
 .furniture_section {
@@ -481,9 +487,11 @@ body {
 
 /* About Section */
 .about_section {
+    position: relative;
+    height: 63vh;
     background: rgba(42, 42, 59, 0.9);
-    backdrop-filter: blur(5px);
-    padding: 60px 0;
+    padding: 165px 0;
+    z-index: 0;
 }
 
 .about_section .row {
@@ -492,20 +500,16 @@ body {
 
 .about_section .img-box img {
     border-radius: 10px;
-}
-
-.about_section .img-box img {
     height: auto;
     animation: floatHero 3s infinite ease-in-out;
     filter: drop-shadow(0 0 15px #ff4d6d) drop-shadow(0 0 20px #ffda79);
     transition: transform 0.3s ease;
 }
 
-.about_section .img-box img img:hover {
+.about_section .img-box img:hover {
     transform: scale(1.05);
     filter: drop-shadow(0 0 25px #ff4d6d) drop-shadow(0 0 60px #ffda79);
 }
-
 
 .about_section .detail-box p {
     margin-top: 10px;
