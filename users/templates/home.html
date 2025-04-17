@@ -25,13 +25,6 @@
     <div class="parallax-bg"></div>
     <div class="halftone-overlay"></div>
 
-    <!-- Theme Switcher -->
-    <select id="themeSelect" class="theme-switcher">
-        <option value="ironman">Iron Man</option>
-        <option value="spiderman">Spider-Man</option>
-        <option value="darkknight">Dark Knight</option>
-    </select>
-
     <div class="hero_area">
         <!-- Header Section -->
         <header class="header_section long_section px-0">
@@ -106,69 +99,20 @@
             </nav>
         </header>
 
-        <!-- Slider Section -->
-        <section class="slider_section long_section" data-aos="fade-up">
-            <div id="customCarousel" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    {% if carousel_slides %}
-                        {% for slide in carousel_slides %}
-                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <div class="detail-box">
-                                                <h1>{{ slide.title|default:"For All Your Comic Needs" }}</h1>
-                                                <p>{{ slide.description|default:"Explore the exciting world of comics with Comic Bro'Z." }}</p>
-                                                <div class="btn-box">
-                                                    <a href="{% url 'blogs' %}" class="btn1">READ NOW</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <div class="img-box">
-                                                <img src="{% static 'edgecut/images/'|add:slide.image|default:'edgecut/images/slider-img.png' %}" alt="Comic Slider">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <!-- Default Slide -->
-                        <div class="carousel-item active">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-5">
-                                        <div class="detail-box">
-                                            <h1>For All Your Comic Needs</h1>
-                                            <p>Explore the exciting world of comics with Comic Bro'Z. Find your favorite superhero stories and more!</p>
-                                            <div class="btn-box">
-                                                <a href="{% url 'blogs' %}" class="btn1">READ NOW</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-7">
-                                        <div class="img-box">
-                                            <img src="{% static 'edgecut/images/slider-img.png' %}" alt="Comic Slider">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
+        <section class="comic-slider">
+            <div class="comic-slide active">
+                <div class="content">
+                    <div class="text">
+                        <h1>Enter the Comic Verse</h1>
+                        <p>Discover stories that leap off the page! Dive into our latest adventures.</p>
+                        <a href="{% url 'blogs' %}" class="btn">Read Now</a>
+                    </div>
+                    <div class="hero-img">
+                        <img src="{% static 'edgecut/images/101.png' %}" alt="Superhero">
+                    </div>
                 </div>
-                {% if carousel_slides %}
-                    <ol class="carousel-indicators">
-                        {% for slide in carousel_slides %}
-                            <li data-target="#customCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
-                        {% endfor %}
-                    </ol>
-                {% else %}
-                    <ol class="carousel-indicators">
-                        <li data-target="#customCarousel" data-slide-to="0" class="active"></li>
-                    </ol>
-                {% endif %}
             </div>
+            <!-- Add more .comic-slide divs for multiple slides -->
         </section>
     </div>
 
@@ -218,7 +162,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="img-box">
-                        <img src="{% static 'edgecut/images/about-img.png' %}" alt="About Comic Bro'Z">
+                        <img src="{% static 'edgecut/images/201.png' %}" alt="About Comic Bro'Z">
                     </div>
                 </div>
                 <div class="col-md-6">
