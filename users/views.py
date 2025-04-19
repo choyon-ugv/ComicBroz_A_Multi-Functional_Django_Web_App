@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import RegisterForm, LoginForm, PasswordChangeForm, UserUpdateForm, ProfileUpdateForm
-from .models import User, Movie, Comic, Blog, Comment, Like
+from .models import User, Movie, Comic, Blog, Comment, Like, Profile, WatchHistory
 
 def register(request):
     if request.method == 'POST':
@@ -87,7 +88,123 @@ def comic(request):
 
 def comic_detail_view(request, pk):
     comic = get_object_or_404(Comic, pk=pk)
+    # Force fresh query to avoid caching
+    comic = Comic.objects.get(pk=pk)
     return render(request, 'comic_detail.html', {'comic': comic})
+
+@login_required
+def comic_purchase(request, pk):
+    comic = get_object_or_404(Comic, pk=pk)
+    if request.user in comic.purchased_by.all():
+        messages.warning(request, "You have already purchased this comic.")
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': "You have already purchased this comic."})
+    else:
+        comic.purchased_by.add(request.user)
+        messages.success(request, f"Successfully purchased {comic.title}!")
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': True, 'message': f"Successfully purchased {comic.title}!"})
+    return redirect('comic_detail', pk=pk)
+
+@login_required
+def comic_favorite(request, pk):
+    comic = get_object_or_404(Comic, pk=pk)
+    if request.method == 'POST':
+        if request.user in comic.favorited_by.all():
+            messages.warning(request, "This comic is already in your favorites.")
+            return JsonResponse({'success': False, 'message': "This comic is already in your favorites."})
+        else:
+            comic.favorited_by.add(request.user)
+            messages.success(request, f"Added {comic.title} to favorites!")
+            return JsonResponse({'success': True, 'message': f"Added {comic.title} to favorites!"})
+    return redirect('comic_detail', pk=pk)
+
+@login_required
+def comic_unfavorite(request, pk):
+    comic = get_object_or_404(Comic, pk=pk)
+    if request.method == 'POST':
+        if request.user not in comic.favorited_by.all():
+            messages.warning(request, "This comic is not in your favorites.")
+            return JsonResponse({'success': False, 'message': "This comic is not in your favorites."})
+        else:
+            comic.favorited_by.remove(request.user)
+            messages.success(request, f"Removed {comic.title} from favorites!")
+            return JsonResponse({'success': True, 'message': f"Removed {comic.title} from favorites!"})
+    return redirect('comic_detail', pk=pk)
+
+@login_required
+def comic_read(request, pk):
+    comic = get_object_or_404(Comic, pk=pk)
+    if request.user not in comic.purchased_by.all():
+        messages.error(request, "You must purchase this comic to read it.")
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': "You must purchase this comic to read it."})
+    else:
+        if request.user not in comic.read_by.all():
+            comic.read_by.add(request.user)
+            messages.success(request, f"You have read {comic.title}!")
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': True, 'message': f"You have read {comic.title}!"})
+        messages.info(request, f"Reading {comic.title}.")  # Placeholder
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': True, 'message': f"Reading {comic.title}."})
+    return redirect('comic_detail', pk=pk)
+
+@login_required
+def profile_view(request):
+    try:
+        profile = request.user.profile
+    except Profile.DoesNotExist:
+        profile = Profile.objects.create(user=request.user)
+
+    comics_purchased = request.user.purchased_comics.count()
+    comics_read = request.user.read_comics.count()
+    comics_favorited = request.user.favorited_comics.count()
+    # Annotate favorite comics with delays
+    favorite_comics = [
+        {'comic': comic, 'delay': index * 100}
+        for index, comic in enumerate(request.user.favorited_comics.order_by('-id')[:3])
+    ]
+
+    watch_history = WatchHistory.objects.filter(user=request.user).select_related('movie')
+    movies_watched = watch_history.count()
+    hours_streamed = sum(history.movie.runtime for history in watch_history) / 60 if watch_history else 0
+    recently_watched = watch_history.order_by('-watched_at').first()
+
+    blogs_written = request.user.blogs_written.count()
+    blogs_liked = Like.objects.filter(user=request.user).count()
+    comments_posted = Comment.objects.filter(user=request.user, user__isnull=False).count()
+
+    total_activity = comics_purchased + comics_read + comics_favorited + movies_watched + blogs_written + blogs_liked + comments_posted
+    max_activities = 100
+    progress = min(int((total_activity / max_activities) * 100), 100)
+
+    if progress <= 33:
+        level = "Sidekick"
+    elif progress <= 66:
+        level = "Hero"
+    else:
+        level = "Superhero"
+
+    profile.progress = progress
+    profile.level = level
+    profile.save()
+
+    context = {
+        'profile': profile,
+        'comics_purchased': comics_purchased,
+        'comics_read': comics_read,
+        'comics_favorited': comics_favorited,
+        'favorite_comics': favorite_comics,
+        'movies_watched': movies_watched,
+        'hours_streamed': round(hours_streamed, 1),
+        'recently_watched': recently_watched,
+        'blogs_written': blogs_written,
+        'blogs_liked': blogs_liked,
+        'comments_posted': comments_posted,
+    }
+    return render(request, 'profile.html', context)
+
 
 def blog(request):
     blogs = Blog.objects.all()
@@ -176,10 +293,6 @@ def delete_comment(request, blog_id, comment_id):
 
 def contact(request):
     return render(request, 'contact.html')
-
-@login_required
-def profile_view(request):
-    return render(request, 'profile.html')
 
 @login_required
 def profile_update(request):
