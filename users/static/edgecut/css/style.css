@@ -70,8 +70,8 @@ body {
 }
 
 .long_section {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 22px;
+    padding-right: 22px;
 }
 
 /* Heading Container */
@@ -133,7 +133,7 @@ body {
 
 .custom_nav-container {
     z-index: 1001; /* Above header but below dropdown */
-    padding: 10px 0;
+    padding: 30px;
 }
 
 .navbar-brand span {
@@ -147,7 +147,7 @@ body {
 .custom_nav-container .navbar-nav .nav-item .nav-link {
     padding: 5px 15px;
     margin: 10px 15px;
-    color: #fff !important;
+    color: #fff !important; /* Default white */
     font-family: "Poppins", sans-serif;
     font-weight: 600;
     text-align: center;
@@ -156,8 +156,29 @@ body {
 }
 
 .custom_nav-container .navbar-nav .nav-item .nav-link:hover {
-    color: #ff4d6d !important;
+    color: #ff4d6d !important; /* Red on hover */
     transform: scale(1.1);
+}
+
+.custom_nav-container .navbar-nav .nav-item.active .nav-link,
+.custom_nav-container .navbar-nav .nav-item .nav-link.active {
+    color: #ff4d6d !important; /* Red for active */
+    transform: scale(1.1); /* Matches hover effect */
+}
+
+.custom_nav-container .navbar-nav .nav-item .nav-link:focus {
+    color: #ff4d6d !important; /* Red on focus for accessibility */
+    outline: 2px solid #ff4d6d;
+    outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .custom_nav-container .navbar-nav .nav-item .nav-link {
+        padding: 8px 10px;
+        margin: 5px 0;
+        font-size: 0.9rem;
+    }
 }
 
 .custom_nav-container .navbar-toggler {

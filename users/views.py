@@ -6,6 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import RegisterForm, LoginForm, PasswordChangeForm, UserUpdateForm, ProfileUpdateForm
 from .models import User, Movie, Comic, Blog, Comment, Like, Profile, WatchHistory
+from django.utils import timezone
 
 def register(request):
     if request.method == 'POST':
@@ -232,25 +233,47 @@ def blog_detail(request, blog_id):
 @login_required
 def like_blog(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
-    if request.method == 'POST' and request.user.is_authenticated:
-        like, created = Like.objects.get_or_create(user=request.user, blog=blog)
-        if not created:
-            like.delete()
-    return redirect('blog_detail', blog_id=blog_id)
+    user = request.user
+
+    if request.method == 'POST':
+        liked = Like.objects.filter(blog=blog, user=user).exists()
+        if liked:
+            Like.objects.filter(blog=blog, user=user).delete()
+            liked = False
+        else:
+            Like.objects.create(blog=blog, user=user)
+            liked = True
+
+        likes_count = blog.likes.count()
+        return JsonResponse({
+            'success': True,
+            'liked': liked,
+            'likes_count': likes_count
+        })
+    return JsonResponse({'success': False, 'message': 'Invalid request'}, status=400)
 
 @login_required
 def add_comment(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
-    if request.method == 'POST' and request.user.is_authenticated:
+    if request.method == 'POST':
         content = request.POST.get('content')
         if content:
-            print(f"Commenting as: {request.user}, Authenticated: {request.user.is_authenticated}")
-            Comment.objects.create(
-                user=request.user,
+            comment = Comment.objects.create(
                 blog=blog,
-                content=content
+                user=request.user,
+                content=content,
+                created_at=timezone.now()
             )
-    return redirect('blog_detail', blog_id=blog_id)
+            return JsonResponse({
+                'success': True,
+                'comment_id': comment.id,
+                'content': comment.content,
+                'user_username': comment.user.username,
+                'created_at': comment.created_at.strftime('%B %d, %Y %H:%M'),
+                'comments_count': blog.comments.count()
+            })
+        return JsonResponse({'success': False, 'message': 'Comment cannot be empty'}, status=400)
+    return JsonResponse({'success': False, 'message': 'Invalid request'}, status=400)
 
 @login_required
 def edit_comment(request, blog_id, comment_id):

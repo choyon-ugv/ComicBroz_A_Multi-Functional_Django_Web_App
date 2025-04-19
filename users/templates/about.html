@@ -1,215 +1,32 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
 
-<head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="icon" href="{% static 'edgecut/images/png.png' %}" type="image/gif" />
-  <title>Comic Bro'Z</title>
-  <link rel="stylesheet" type="text/css" href="{% static 'edgecut/css/bootstrap.css' %}" />
-  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet" />
-  <link href="{% static 'edgecut/css/font-awesome.min.css' %}" rel="stylesheet" />
-  <link href="{% static 'edgecut/css/style.css' %}" rel="stylesheet" />
-  <link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
-</head>
+{% block title %}Comic Bro'Z - About{% endblock %}
 
-<body class="sub_page">
-  <!-- Parallax and Halftone -->
-  <div class="parallax-bg"></div>
-  <div class="halftone-overlay"></div>
+{% block body_class %}sub_page{% endblock %}
 
-
-  <div class="hero_area">
-    <!-- Header Section -->
-    <header class="header_section long_section px-0">
-      <nav class="navbar navbar-expand-lg custom_nav-container">
-        <a class="navbar-brand" href="{% url 'home' %}">
-          <span>Comic Bro'Z</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class=""></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
-            <ul class="navbar-nav">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'movies' %}">Movies</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'comics' %}">Comics</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'blogs' %}">Blog</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
-              </li>
-            </ul>
-          </div>
-          <div class="quote_btn-container">
-            {% if user.is_authenticated %}
-            <div class="dropdown">
-              <a class="dropdown-toggle text-decoration-none" href="#" role="button" id="profileDropdown"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-user-circle fa-lg" aria-hidden="true"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profileDropdown">
-                <div class="dropdown-item d-flex align-items-center">
-                  {% if user.profile.profile_image %}
-                  <img src="{{ user.profile.profile_image.url }}" alt="Profile" class="rounded-circle mr-2"
-                    style="width: 40px; height: 40px; object-fit: cover;">
-                  {% else %}
-                  <i class="fa fa-user-circle fa-2x mr-2" aria-hidden="true"></i>
-                  {% endif %}
-                  <div>
-                    <strong>{{ user.username }}</strong>
-                    <br>
-                    <small>{{ user.email }}</small>
-                  </div>
-                </div>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
-                <a class="dropdown-item" href="{% url 'change_password' %}">Change Password</a>
-                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-              </div>
-            </div>
-            {% else %}
-            <a href="{% url 'login' %}">
-              <span>Login</span>
-              <i class="fa fa-user" aria-hidden="true"></i>
-            </a>
-            {% endif %}
-            <form class="form-inline">
-              <button class="btn my-2 my-sm-0 nav_search-btn" type="submit">
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </button>
-            </form>
-          </div>
-        </div>
-      </nav>
-    </header>
-  </div>
-
-  <section class="about_section layout_padding long_section">
+{% block content %}
+<section class="about_section layout_padding long_section" data-aos="fade-up">
     <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="img-box">
-            <img src="{% static 'edgecut/images/201.png' %}" alt="">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2>About Us</h2>
-            </div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti dolorem eum consequuntur ipsam repellat
-              dolor soluta aliquid laborum, eius odit consectetur vel quasi in quidem, eveniet ab est corporis tempore.
-            </p>
-            <a href="">Read More</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="info_section long_section">
-    <div class="container">
-      <div class="contact_nav">
-        <a href=""><i class="fa fa-phone" aria-hidden="true"></i><span>Call : +01 123455678990</span></a>
-        <a href=""><i class="fa fa-envelope" aria-hidden="true"></i><span>Email : comicbroz@gmail.com</span></a>
-        <a href=""><i class="fa fa-map-marker" aria-hidden="true"></i><span>Location</span></a>
-      </div>
-      <div class="info_top">
         <div class="row">
-          <div class="col-sm-6 col-md-4 col-lg-3">
-            <div class="info_links">
-              <h4>QUICK LINKS</h4>
-              <div class="info_links_menu">
-                <a class="" href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a>
-                <a class="" href="{% url 'about' %}">About</a>
-                <a class="" href="">Comics</a>
-                <a class="" href="">Blog</a>
-                <a class="" href="">Contact Us</a>
-              </div>
+            <div class="col-md-6">
+                <div class="img-box">
+                    <img src="{% static 'edgecut/images/201.png' %}" alt="About Comic Bro'Z">
+                </div>
             </div>
-          </div>
-          <div class="col-sm-6 col-md-4 col-lg-3 mx-auto">
-            <div class="info_post">
-              <h5>INSTAGRAM FEEDS</h5>
-              <div class="post_box">
-                <div class="img-box"><img src="{% static 'edgecut/images/100.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/200.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/300.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/400.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/500.png' %}" alt=""></div>
-                <div class="img-box"><img src="{% static 'edgecut/images/600.png' %}" alt=""></div>
-              </div>
+            <div class="col-md-6">
+                <div class="detail-box">
+                    <div class="heading_container">
+                        <h2>About Us</h2>
+                    </div>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti dolorem eum consequuntur ipsam repellat
+                        dolor soluta aliquid laborum, eius odit consectetur vel quasi in quidem, eveniet ab est corporis tempore.
+                    </p>
+                    <a href="#">Read More</a>
+                </div>
             </div>
-          </div>
-          <div class="col-md-4">
-            <div class="info_form">
-              <h4>Read. Shop. Explore. The Comic World Awaits You!</h4>
-              <form action="">
-                <input type="text" placeholder="Enter Your Email" />
-                <button type="submit">Subscribe</button>
-              </form>
-              <div class="social_box">
-                <a href=""><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                <a href=""><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                <a href=""><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                <a href=""><i class="fa fa-instagram" aria-hidden="true"></i></a>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </section>
-
-  <footer class="footer_section">
-    <div class="container">
-      <p>© <span id="displayYear"></span> All Rights Reserved By <a href="https://html.design/">Bro'z Comic</a></p>
-    </div>
-  </footer>
-  <!-- footer section -->
-
-  <!-- jQuery -->
-  <script src="{% static 'edgecut/js/jquery-3.4.1.min.js' %}"></script>
-  <!-- bootstrap js -->
-  <script src="{% static 'edgecut/js/bootstrap.js' %}"></script>
-  <!-- custom js -->
-  <script src="{% static 'edgecut/js/custom.js' %}"></script>
-  <!-- Google Map -->
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
-  <!-- End Google Map -->
-  <!-- Fallback script for dropdown -->
-  <script>
-    $(document).ready(function () {
-      // Ensure dropdown works with Bootstrap 4
-      $('#profileDropdown').dropdown();
-    });
-
-     // Initialize AOS
-     AOS.init({ duration: 1000, once: true });
-
-     // Dropdown
-     $(document).ready(function () {
-         $('#profileDropdown').dropdown();
-         document.getElementById('displayYear').textContent = new Date().getFullYear();
-     });
-  </script>
-</body>
-
-</html>
+</section>
+{% endblock %}

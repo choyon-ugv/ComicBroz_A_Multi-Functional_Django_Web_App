@@ -324,22 +324,114 @@
   <script src="{% static 'edgecut/js/custom.js' %}"></script>
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
-  <script>
-    $(document).ready(function () {
-      // Edit comment modal
-      $('.edit-comment-btn').click(function () {
-        var commentId = $(this).data('comment-id');
-        var commentContent = $(this).data('comment-content');
-        $('#editCommentId').val(commentId);
-        $('#editCommentContent').val(commentContent);
-        $('#editCommentForm').attr('action', '{% url "edit_comment" blog.id 0 %}'.replace('0', commentId));
+    <script>
+      $(document).ready(function () {
+        // Handle Like Form Submission
+        $('.like-form').on('submit', function (e) {
+          e.preventDefault(); // Prevent default form submission
+    
+          var $form = $(this);
+          var url = $form.attr('action');
+          var likeButton = $form.find('button');
+          var likesCountElement = $('.blog-meta').find('i.fa-heart').parent();
+    
+          $.ajax({
+            type: 'POST',
+            url: url,
+            data: $form.serialize(),
+            success: function (response) {
+              if (response.success) {
+                // Update like count
+                likesCountElement.text(` ${response.likes_count} Likes`);
+    
+                // Toggle Like/Unlike button text and icon
+                if (response.liked) {
+                  likeButton.html('<i class="fa fa-heart"></i> Unlike');
+                } else {
+                  likeButton.html('<i class="fa fa-heart-o"></i> Like');
+                }
+              } else {
+                alert(response.message || 'An error occurred.');
+              }
+            },
+            error: function () {
+              alert('An error occurred while processing your request.');
+            },
+            headers: {
+              'X-CSRF-Token': $('[name=csrfmiddlewaretoken]').val() // Include CSRF token
+            }
+          });
+        });
+    
+        // Handle Comment Form Submission
+        $('.comment-form').on('submit', function (e) {
+          e.preventDefault(); // Prevent default form submission
+    
+          var $form = $(this);
+          var url = $form.attr('action');
+          var commentContent = $form.find('textarea[name=content]').val();
+          var commentsCountElement = $('.comments_box .card-title');
+    
+          $.ajax({
+            type: 'POST',
+            url: url,
+            data: $form.serialize(),
+            success: function (response) {
+              if (response.success) {
+                // Append new comment to the comments list
+                var newComment = `
+                  <div class="comment-item mb-4 pb-4 border-bottom" id="comment-${response.comment_id}">
+                    <div class="d-flex align-items-start">
+                      <div class="comment-avatar me-3">
+                        <i class="fa fa-user-circle fa-2x text-muted"></i>
+                      </div>
+                      <div class="comment-body flex-grow-1">
+                        <h5 class="mb-1">${response.user_username || 'Anonymous'}</h5>
+                        <p class="text-muted small mb-2">${response.created_at}</p>
+                        <p class="comment-content">${response.content}</p>
+                        <div class="comment-actions mt-2">
+                          <button class="btn btn-sm btn-outline-primary edit-comment-btn" data-toggle="modal"
+                            data-target="#editCommentModal" data-comment-id="${response.comment_id}"
+                            data-comment-content="${response.content}">Edit</button>
+                          <button class="btn btn-sm btn-outline-danger delete-comment-btn" data-toggle="modal"
+                            data-target="#deleteCommentModal" data-comment-id="${response.comment_id}">Delete</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `;
+                $('.comments_box .card-body').find('.comment-item:last').after(newComment);
+                $form.find('textarea[name=content]').val(''); // Clear textarea
+                commentsCountElement.text(`${response.comments_count} Comments`); // Update comment count
+              } else {
+                alert(response.message || 'An error occurred.');
+              }
+            },
+            error: function () {
+              alert('An error occurred while processing your request.');
+            },
+            headers: {
+              'X-CSRF-Token': $('[name=csrfmiddlewaretoken]').val() // Include CSRF token
+            }
+          });
+        });
+    
+        // Edit comment modal
+        $('.edit-comment-btn').click(function () {
+          var commentId = $(this).data('comment-id');
+          var commentContent = $(this).data('comment-content');
+          $('#editCommentId').val(commentId);
+          $('#editCommentContent').val(commentContent);
+          $('#editCommentForm').attr('action', '{% url "edit_comment" blog.id 0 %}'.replace('0', commentId));
+        });
+    
+        // Delete comment modal
+        $('.delete-comment-btn').click(function () {
+          var commentId = $(this).data('comment-id');
+          $('#deleteCommentId').val(commentId);
+          $('#deleteCommentForm').attr('action', '{% url "delete_comment" blog.id 0 %}'.replace('0', commentId));
+        });
       });
-
-      // Delete comment modal
-      $('.delete-comment-btn').click(function () {
-        var commentId = $(this).data('comment-id');
-        $('#deleteCommentId').val(commentId);
-        $('#deleteCommentForm').attr('action', '{% url "delete_comment" blog.id 0 %}'.replace('0', commentId));
-      });
-    });
-  </script>
+    </script>
+</body>
+</html>
