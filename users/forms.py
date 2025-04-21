@@ -60,6 +60,20 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'email']
 
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_image', 'favorite_quote', 'bio', 'level', 'progress']
+
+        widgets = {
+            'favorite_quote': forms.TextInput(attrs={'class': 'form-control'}),
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+            'level': forms.NumberInput(attrs={'class': 'form-control'}),
+            'progress': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
