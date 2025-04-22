@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render
 from users.models import User, Movie, Blog, Comic, Profile
 from users.forms import ProfileForm
+from django.contrib import messages
 
 def admin_dashboard(request):
     total_users = User.objects.count()
@@ -15,24 +16,34 @@ def admin_dashboard(request):
         'total_blog': total_blog,
         'total_comic': total_comic, 
     }
-    return render(request, 'index.html', context)
+    return render(request, 'admin_index.html', context)
+
+
 
 def profile_settings(request):
-    return render(request, 'profile_settings.html')
-
-
-def account_settings_view(request):
-    profile = get_object_or_404(Profile, user=request.user)
-    
+    profile = request.user.profile
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES, instance=profile)
+        username = request.POST.get('username')
+        email = request.POST.get('email')
         if form.is_valid():
-            form.save()
-            return redirect('Success')  # or show success message
+            # Update User model
+            user = request.user
+            user.username = username
+            user.email = email
+            try:
+                user.save()
+                form.save()
+                messages.success(request, 'Profile updated successfully.')
+                return redirect('profile_settings')
+            except Exception as e:
+                messages.error(request, f'Error updating profile: {str(e)}')
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = ProfileForm(instance=profile)
-
+    
     return render(request, 'profile_settings.html', {
         'form': form,
-        'profile': profile
+        'user': request.user
     })

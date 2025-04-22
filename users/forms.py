@@ -69,7 +69,7 @@ class ProfileForm(forms.ModelForm):
         widgets = {
             'favorite_quote': forms.TextInput(attrs={'class': 'form-control'}),
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
-            'level': forms.NumberInput(attrs={'class': 'form-control'}),
+            'level': forms.TextInput(attrs={'class': 'form-control'}),
             'progress': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
