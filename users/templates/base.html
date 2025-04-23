@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -21,6 +22,7 @@
     <link href="{% static 'edgecut/css/responsive.css' %}" rel="stylesheet" />
     {% block extra_css %}{% endblock %}
 </head>
+
 <body class="{% block body_class %}{% endblock %}">
     <!-- Parallax and Halftone -->
     <div class="parallax-bg"></div>
@@ -70,8 +72,7 @@
                             <div class="dropdown-item d-flex align-items-center">
                                 {% if user.profile.profile_image %}
                                 <img src="{{ user.profile.profile_image.url }}" alt="Profile"
-                                    class="rounded-circle mr-2"
-                                    style="width: 40px; height: 40px; object-fit: cover;">
+                                    class="rounded-circle mr-2" style="width: 40px; height: 40px; object-fit: cover;">
                                 {% else %}
                                 <i class="fa fa-user-circle fa-2x mr-2" aria-hidden="true"></i>
                                 {% endif %}
@@ -142,12 +143,18 @@
                         <div class="info_post">
                             <h5>INSTAGRAM FEEDS</h5>
                             <div class="post_box">
-                                <div class="img-box"><img src="{% static 'edgecut/images/100.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/200.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/300.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/400.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/500.png' %}" alt="Instagram Post"></div>
-                                <div class="img-box"><img src="{% static 'edgecut/images/600.png' %}" alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/100.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/200.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/300.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/400.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/500.png' %}"
+                                        alt="Instagram Post"></div>
+                                <div class="img-box"><img src="{% static 'edgecut/images/600.png' %}"
+                                        alt="Instagram Post"></div>
                             </div>
                         </div>
                     </div>
@@ -186,7 +193,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="{% static 'edgecut/js/custom.js' %}"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script>
     <script>
         // Initialize AOS
         AOS.init({ duration: 1000, once: true });
@@ -278,4 +286,5 @@
     </script>
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>
