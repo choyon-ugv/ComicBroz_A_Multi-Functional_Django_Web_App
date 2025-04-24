@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.http import JsonResponse
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 
@@ -47,22 +47,6 @@ def admin_change_password(request):
     else:
         form = PasswordChangeForm(user=request.user)
     return render(request, 'admin_change_password.html', {'form': form})
-
-@login_required(login_url='admin_login')
-def admin_dashboard(request):
-    total_users = User.objects.count()
-    total_movies = Movie.objects.count()
-    total_blog = Blog.objects.count()
-    total_comic = Comic.objects.count()
-    
-    context ={
-        'total_users': total_users,
-        'total_movies': total_movies,
-        'total_blog': total_blog,
-        'total_comic': total_comic, 
-    }
-    return render(request, 'custom_admin/admin_index.html', context)
-
 
 @login_required
 def profile_settings(request):
@@ -102,6 +86,7 @@ def profile_list(request):
     return render(request, 'profile_list.html', context)
 
 
+@login_required
 def profile_datatable_view(request):
     # Get DataTables parameters
     draw = int(request.POST.get('draw', 1))
@@ -118,7 +103,7 @@ def profile_datatable_view(request):
         order_field = f'-{order_field}'
 
     # Build queryset
-    queryset = Profile.objects.select_related('user').all()
+    queryset = Profile.objects.filter(user__is_superuser = False, user__is_staff = False)
     if search_value:
         queryset = queryset.filter(
             Q(user__username__icontains=search_value) |
@@ -139,6 +124,7 @@ def profile_datatable_view(request):
     for index, profile in enumerate(page_obj, start=start + 1):
         view_url = reverse('profile_view', args=[profile.pk])
         edit_url = reverse('profile_edit', args=[profile.pk])
+        delete_url = reverse('profile_delete', args=[profile.pk])
         data.append({
             'id': index,
             'username': profile.user.username,
@@ -149,13 +135,14 @@ def profile_datatable_view(request):
             'action': (
                 f'<a href="{view_url}" class="btn btn-sm btn-info">View</a> '
                 f'<a href="{edit_url}" class="btn btn-sm btn-warning">Edit</a>'
+                f'<a href="{delete_url}" class="btn btn-sm btn-danger m-1">Delete</a>'
             )
         })
 
     # Response
     return JsonResponse({
         'draw': draw,
-        'recordsTotal': Profile.objects.count(),
+        'recordsTotal': Profile.objects.filter(user__is_superuser=False, user__is_staff=False).count(),
         'recordsFiltered': paginator.count,
         'data': data
     })
@@ -165,8 +152,34 @@ class ProfileView(DetailView):
     model = Profile
     template_name = 'profile_view.html'
 
+
 class ProfileEditView(UpdateView):
     model = Profile
     fields = ['bio', 'level', 'progress', 'profile_image']
     template_name = 'profile_edit.html'
-    success_url = reverse_lazy('myapp:profile_list')
+    success_url = reverse_lazy('profile_list')
+
+
+class ProfileDeleteView(DeleteView):
+    model = Profile
+    template_name = 'profile_confirm_delete.html'
+    success_url = reverse_lazy('profile_list')
+
+
+
+
+# admin dashboard customize
+@login_required(login_url='admin_login')
+def admin_dashboard(request):
+    total_users = User.objects.count()
+    total_movies = Movie.objects.count()
+    total_blog = Blog.objects.count()
+    total_comic = Comic.objects.count()
+    
+    context ={
+        'total_users': total_users,
+        'total_movies': total_movies,
+        'total_blog': total_blog,
+        'total_comic': total_comic, 
+    }
+    return render(request, 'custom_admin/admin_index.html', context)
