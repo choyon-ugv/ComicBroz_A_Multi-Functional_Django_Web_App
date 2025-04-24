@@ -169,13 +169,22 @@ class ProfileDeleteView(DeleteView):
 # Blogs
 
 def blog_list(request):
-    blog = object.get.all()
+    blogs = Blog.objects.all().select_related('author')
+    print(f"Number of blogs fetched: {blogs.count()}")  # Debug output
     context = {
-        'blog' : blog
+        'blogs' : blogs
     }
     return render(request, 'blog/blog_list.html', context)
 
+# Comics
 
+def comic_list(request):
+    comics = Comic.objects.all()
+
+    context = {
+        'comics' : comics
+    }
+    return render(request, 'comic/comic_list.html', context)
 
 
 
