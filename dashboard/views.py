@@ -72,7 +72,7 @@ def profile_settings(request):
     else:
         form = ProfileForm(instance=profile)
     
-    return render(request, 'profile_settings.html', {
+    return render(request, 'profile/profile_settings.html', {
         'form': form,
         'user': request.user
     })
@@ -83,7 +83,7 @@ def profile_list(request):
     context = {
         'profiles' : profiles
     }
-    return render(request, 'profile_list.html', context)
+    return render(request, 'profile/profile_list.html', context)
 
 
 @login_required
@@ -150,20 +150,32 @@ def profile_datatable_view(request):
 
 class ProfileView(DetailView):
     model = Profile
-    template_name = 'profile_view.html'
+    template_name = 'profile/profile_view.html'
 
 
 class ProfileEditView(UpdateView):
     model = Profile
     fields = ['bio', 'level', 'progress', 'profile_image']
-    template_name = 'profile_edit.html'
+    template_name = 'profile/profile_edit.html'
     success_url = reverse_lazy('profile_list')
 
 
 class ProfileDeleteView(DeleteView):
     model = Profile
-    template_name = 'profile_confirm_delete.html'
+    template_name = 'profile/profile_confirm_delete.html'
     success_url = reverse_lazy('profile_list')
+
+
+# Blogs
+
+def blog_list(request):
+    blog = object.get.all()
+    context = {
+        'blog' : blog
+    }
+    return render(request, 'blog/blog_list.html', context)
+
+
 
 
 

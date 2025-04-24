@@ -1,0 +1,71 @@
+{% extends 'custom_base.html' %}
+{% load static %}
+
+{% block title %}
+Blog List | Comic Bro'Z
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title">Blog List</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive text-nowrap">
+            <table id="blogTable" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Content Preview</th>
+                        <th>Author</th>
+                        <th>Image</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for blog in blogs %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ blog.title }}</td>
+                        <td>{{ blog.content|truncatewords:10 }}</td>
+                        <td>{{ blog.author.username }}</td>
+                        <td>
+                            {% if blog.image %}
+                                <img src="{{ blog.image.url }}" alt="blog-img" width="50">
+                            {% else %}
+                                No Image
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'blog_detail' blog.id %}" class="btn btn-sm btn-info">View</a>
+                            <a href="{% url 'blog_edit' blog.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- DataTables Scripts (if not already included in base) -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#blogTable').DataTable({
+            responsive: true,
+            pageLength: 10,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search blogs..."
+            }
+        });
+    });
+</script>
+{% endblock %}

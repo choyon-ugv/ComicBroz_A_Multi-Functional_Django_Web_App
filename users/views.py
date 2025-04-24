@@ -31,7 +31,7 @@ def login(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
-            if user is not None and not (user.is_staff or user.is_superuser):
+            if user is not None or (user.is_staff or user.is_superuser):
                 auth_login(request, user)
                 messages.success(request, 'Login successful!')
                 # Redirect to 'next' parameter if present, else home

@@ -138,49 +138,9 @@
               </li>
             </ul>
           </li>
-          <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
-              <div data-i18n="Authentications">Authentications</div>
-            </a>
-            <ul class="menu-sub">
-              <li class="menu-item">
-                <a href="auth-login-basic.html" class="menu-link" target="_blank">
-                  <div data-i18n="Basic">Login</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="auth-register-basic.html" class="menu-link" target="_blank">
-                  <div data-i18n="Basic">Register</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
-                  <div data-i18n="Basic">Forgot Password</div>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li class="menu-item">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-              <i class="menu-icon tf-icons bx bx-cube-alt"></i>
-              <div data-i18n="Misc">Misc</div>
-            </a>
-            <ul class="menu-sub">
-              <li class="menu-item">
-                <a href="pages-misc-error.html" class="menu-link">
-                  <div data-i18n="Error">Error</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="pages-misc-under-maintenance.html" class="menu-link">
-                  <div data-i18n="Under Maintenance">Under Maintenance</div>
-                </a>
-              </li>
-            </ul>
-          </li>
+
           <!-- Components -->
-          <li class="menu-header small text-uppercase"><span class="menu-header-text">Components</span></li>
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Comics</span></li>
           <!-- Cards -->
           <li class="menu-item">
             <a href="cards-basic.html" class="menu-link">
@@ -410,12 +370,6 @@
             <!-- /Search -->
 
             <ul class="navbar-nav flex-row align-items-center ms-auto">
-              <!-- Place this tag where you want the button to render. -->
-              <li class="nav-item lh-1 me-3">
-                <a class="github-button" href="https://github.com/themeselection/sneat-html-admin-template-free"
-                  data-icon="octicon-star" data-size="large" data-show-count="true"
-                  aria-label="Star themeselection/sneat-html-admin-template-free on GitHub">Star</a>
-              </li>
 
               <!-- User -->
               <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -445,7 +399,7 @@
                     <div class="dropdown-divider"></div>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{% url 'profile_settings' %}">
                       <i class="bx bx-user me-2"></i>
                       <span class="align-middle">My Profile</span>
                     </a>
@@ -483,18 +437,16 @@
                   <div class="d-flex align-items-end row">
                     <div class="col-sm-7">
                       <div class="card-body">
-                        <h5 class="card-title text-primary">Congratulations John! 🎉</h5>
+                        <h5 class="card-title text-primary">Congratulations  {{ user.username }}🎉</h5>
                         <p class="mb-4">
-                          You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in
+                          You have done <span class="fw-bold">{{user.profile.progress}}</span> % progress today. Check your new challenges in
                           your profile.
                         </p>
-
-                        <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
                       </div>
                     </div>
                     <div class="col-sm-5 text-center text-sm-left">
                       <div class="card-body pb-0 px-0 px-md-4">
-                        <img src="{% static 'assets/img/illustrations/man-with-laptop-light.png' %}" height="140"
+                        <img src="{% static 'assets/img/illustrations/Untitled.png' %}" height="140"
                           alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png"
                           data-app-light-img="illustrations/man-with-laptop-light.png" />
                       </div>
