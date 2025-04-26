@@ -7,6 +7,7 @@ from users.forms import ProfileForm, PasswordChangeForm
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
+from django.db.models import Count
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.generic import DetailView, UpdateView, DeleteView
@@ -206,10 +207,18 @@ def blog_delete(request, pk ):
 # Comics
 
 def comic_list(request):
-    comics = Comic.objects.all()
+    comics = Comic.objects.annotate(
+        read_count=Count('read_by'),
+        favorite_count=Count('favorited_by')
+    )
+
+    max_read = comics.order_by('-read_count').first()
+    max_favorite = comics.order_by('-favorite_count').first()
 
     context = {
-        'comics' : comics
+        'comics': comics,
+        'max_read_id': max_read.id if max_read else None,
+        'max_favorite_id': max_favorite.id if max_favorite else None,
     }
     return render(request, 'comic/comic_list.html', context)
 

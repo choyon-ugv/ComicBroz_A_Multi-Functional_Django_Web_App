@@ -50,9 +50,9 @@ Blog List | Comic Bro'Z
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{% url 'blog_detail' blog.pk %}" class="btn btn-sm btn-info">View</a>
-                                <a href="{% url 'blog_edit' blog.pk %}" class="btn btn-sm btn-warning">Edit</a>
-                                <a href="{% url 'blog_delete' blog.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                                <a href="{% url 'admin_blog_detail' blog.pk %}" class="btn btn-sm btn-info">View</a>
+                                <a href="{% url 'admin_blog_edit' blog.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{% url 'admin_blog_delete' blog.pk %}" class="btn btn-sm btn-danger">Delete</a>
                             </td>
                         </tr>
                         {% endfor %}

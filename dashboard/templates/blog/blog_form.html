@@ -5,7 +5,7 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <!-- Header Section -->
     <div class="editor-header">
-        <h1>Edit Comic Post</h1>
+        <h1>EDIT BLOG</h1>
         <a href="{% url 'blog_detail' form.instance.id %}" class="back-button">
             <span>Back to Post</span>
             <i class="bx bx-chevron-right"></i>
@@ -73,14 +73,14 @@
 
                 <!-- Author (Read-Only) -->
                 <div class="form-section">
-                    <label>Author</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-teal bg-opacity-10 text-teal">
-                            <i class="bx bx-user"></i>
-                        </span>
-                        <input type="text" class="form-control" value="{{ blog.author.username }}" readonly>
-                    </div>
-                </div>
+                  <label>Author</label>
+                  <div class="input-group">
+                      <span class="input-group-text bg-teal bg-opacity-10 text-teal">
+                          <i class="bx bx-user"></i>
+                      </span>
+                      <input type="text" class="form-control" value="{{ form.instance.author.username|default:request.user.username }}" readonly>
+                  </div>
+              </div>
             </div>
 
             <!-- Right Section: Content -->
@@ -136,7 +136,6 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     }
 
-
     .editor-header {
         display: flex;
         justify-content: space-between;
@@ -158,11 +157,6 @@
         text-decoration: none;
         font-weight: 600;
         font-size: 1rem;
-        transition: color 0.3s ease;
-    }
-
-    .back-button:hover {
-        color: var(--teal);
     }
 
     .back-button i {
@@ -200,7 +194,6 @@
         border-radius: 8px;
         font-size: 1rem;
         font-family: 'Poppins', sans-serif;
-        transition: border 0.3s ease, box-shadow 0.3s ease;
         background: #f8fafc;
     }
 
@@ -220,7 +213,10 @@
     .input-group .form-control[readonly] {
         background: #f1f5f9;
         border-color: var(--border);
-        color: var(--text);
+    }
+
+    .input-group .author-field {
+        color: var(--text) !important;
     }
 
     .input-group-text {
@@ -266,11 +262,6 @@
         border-radius: 8px;
         border: 1px solid var(--border);
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease;
-    }
-
-    .image-preview img:hover {
-        transform: scale(1.01);
     }
 
     .btn-remove-image {
@@ -286,12 +277,6 @@
         gap: 0.5rem;
         padding: 0.5rem 1rem;
         border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .btn-remove-image:hover {
-        background: var(--danger);
-        color: #fff;
     }
 
     .upload-area {
@@ -301,12 +286,6 @@
         text-align: center;
         cursor: pointer;
         background: #f8fafc;
-        transition: all 0.3s ease;
-    }
-
-    .upload-area:hover {
-        border-color: var(--teal);
-        background: rgba(13, 148, 136, 0.05);
     }
 
     .upload-content i {
@@ -353,12 +332,6 @@
         border-radius: 8px;
         cursor: pointer;
         color: var(--text-light);
-        transition: all 0.3s ease;
-    }
-
-    .editor-tools button:hover {
-        background: var(--teal);
-        color: #fff;
     }
 
     .editor-stats {
@@ -386,13 +359,6 @@
         font-weight: 600;
         font-size: 1rem;
         cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .btn-cancel:hover {
-        border-color: var(--danger);
-        color: var(--danger);
-        background: rgba(220, 38, 38, 0.05);
     }
 
     .btn-save {
@@ -404,13 +370,6 @@
         font-weight: 600;
         font-size: 1rem;
         cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .btn-save:hover {
-        background: #0b8276;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
     }
 
     /* Alert Styling */
@@ -501,32 +460,6 @@
         function preventDefaults(e) {
             e.preventDefault();
             e.stopPropagation();
-        }
-
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropZone.addEventListener(eventName, highlight, false);
-        });
-
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropZone.addEventListener(eventName, unhighlight, false);
-        });
-
-        function highlight() {
-            dropZone.style.borderColor = 'var(--teal)';
-            dropZone.style.background = 'rgba(13, 148, 136, 0.05)';
-        }
-
-        function unhighlight() {
-            dropZone.style.borderColor = 'var(--border)';
-            dropZone.style.background = '#f8fafc';
-        }
-
-        dropZone.addEventListener('drop', handleDrop, false);
-
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            handleFiles(files);
         }
 
         dropZone.addEventListener('click', () => fileInput.click());

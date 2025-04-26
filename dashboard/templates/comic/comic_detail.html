@@ -1,80 +1,146 @@
 {% extends 'custom_base.html' %}
-{% block title %}{{ comic.title }} - Comic Detail{% endblock %}
+{% block title %}{{ comic.title }} | Comic Details{% endblock %}
 
 {% block content %}
-<div class="comic-detail-container">
-    <!-- Main Layout -->
-    <div class="comic-layout">
-        <!-- Left Section: Comic Cover -->
-        <div class="comic-cover">
-            {% if comic.image %}
-            <img src="{{ comic.image.url }}" alt="{{ comic.title }} Cover" class="comic-image">
-            {% else %}
-            <div class="no-image-placeholder">
-                <i class="bx bx-image-alt"></i>
-                <p>No Cover Available</p>
+<div class="container-xl flex-grow-1 py-5">
+    <!-- Comic Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold comic-title">{{ comic.title }}</h1>
+        <div class="d-flex justify-content-center align-items-center gap-3 mt-3">
+            <div class="d-flex align-items-center">
+                <span class="avatar avatar-sm me-2">
+                    <span class="avatar-initial rounded-circle bg-teal text-white">
+                        {{ comic.author.username|first|upper }}
+                    </span>
+                </span>
+                <span class="comic-text">{{ comic.author.username }}</span>
+            </div>
+            <span class="text-muted comic-text">
+                <i class="bx bx-calendar me-1"></i>
+                {{ comic.created_at|date:"F j, Y" }}
+            </span>
+            {% if comic.updated_at != comic.created_at %}
+            <span class="text-muted comic-text">
+                <i class="bx bx-edit me-1"></i>
+                Updated {{ comic.updated_at|timesince }} ago
+            </span>
+            {% endif %}
+            <span class="text-muted comic-text">
+                <i class="bx bx-cart me-1"></i>
+                {{ comic.purchased_by.count }} Purchased
+            </span>
+            <span class="text-muted comic-text">
+                <i class="bx bx-star me-1"></i>
+                {{ comic.favorited_by.count }} Favorited
+            </span>
+            <span class="text-muted comic-text">
+                <i class="bx bx-book-open me-1"></i>
+                {{ comic.read_by.count }} Read
+            </span>
+        </div>
+    </div>
+
+    <!-- Comic Image -->
+    {% if comic.image %}
+    <div class="mb-5">
+        <img src="{{ comic.image.url }}" alt="Cover image for {{ comic.title }}"
+             class="img-fluid rounded-3 shadow-sm w-100 comic-image"
+             style="max-height: 500px; object-fit: cover;">
+    </div>
+    {% endif %}
+
+    <!-- Comic Content -->
+    <div class="card shadow-sm mb-5 comic-card">
+        <div class="card-body p-5">
+            <div class="comic-content mb-4">
+                <h5>Description</h5>
+                <p>{{ comic.description|default:"No description available."|linebreaks }}</p>
+
+                <h5>Price</h5>
+                <p><strong>${{ comic.price }}</strong></p>
+
+                <h5>User Interactions</h5>
+                <div class="mb-3">
+                    <strong>Purchased By:</strong>
+                    {% if comic.purchased_by.all %}
+                    <ul class="list-unstyled d-flex flex-wrap gap-2 mt-2">
+                        {% for user in comic.purchased_by.all %}
+                        <li>
+                            <a href="" class="badge badge-user bg-teal bg-opacity-10 fw-normal px-3 py-2">
+                                {{ user.username }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">None</p>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <strong>Favorited By:</strong>
+                    {% if comic.favorited_by.all %}
+                    <ul class="list-unstyled d-flex flex-wrap gap-2 mt-2">
+                        {% for user in comic.favorited_by.all %}
+                        <li>
+                            <a href="" class="badge badge-user bg-teal bg-opacity-10 fw-normal px-3 py-2">
+                                {{ user.username }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">None</p>
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <strong>Read By:</strong>
+                    {% if comic.read_by.all %}
+                    <ul class="list-unstyled d-flex flex-wrap gap-2 mt-2">
+                        {% for user in comic.read_by.all %}
+                        <li>
+                            <a href="" class="badge badge-user bg-teal bg-opacity-10 fw-normal px-3 py-2">
+                                {{ user.username }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted">None</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Badges for Special Comics -->
+            <div class="mb-4">
+                {% if comic.read_by.count > 50 %}
+                <span class="badge bg-success me-2">🔥 Most Read</span>
+                {% endif %}
+                {% if comic.favorited_by.count > 30 %}
+                <span class="badge bg-warning text-dark">⭐ Top Favorite</span>
+                {% endif %}
+            </div>
+
+            <!-- Tags -->
+            {% if comic.tags.all %}
+            <div class="d-flex flex-wrap gap-2">
+                {% for tag in comic.tags.all %}
+                <span class="badge bg-teal bg-opacity-10 text-teal fw-normal px-3 py-2">
+                    {{ tag.name }}
+                </span>
+                {% endfor %}
             </div>
             {% endif %}
         </div>
+    </div>
 
-        <!-- Right Section: Details Sidebar -->
-        <div class="comic-details">
-            <h1>{{ comic.title }}</h1>
-
-            <!-- Book Information -->
-            <div class="detail-section">
-                <h3>Book Information</h3>
-                <p><strong>Cover Date:</strong> Mar 1963</p>
-                <p><strong>Read Date:</strong> {{ comic.created_at|date:"M d, Y" }}</p>
-                <p><strong>Publisher:</strong> Marvel Unlimited</p>
-                <p><strong>Price:</strong> {{ comic.price }} BDT</p>
-            </div>
-
-            <!-- Description -->
-            <div class="detail-section">
-                <h3>Description</h3>
-                <p>{{ comic.description|default:"No description available." }}</p>
-            </div>
-
-            <!-- Credits -->
-            <div class="detail-section">
-                <h3>Credits</h3>
-                <p><strong>Author:</strong> {{ comic.author.username }}</p>
-                <p><strong>Artist:</strong> Steve Ditko</p>
-                <p><strong>Editor:</strong> John Dee</p>
-            </div>
-
-            <!-- Review Ratings -->
-            <div class="detail-section">
-                <h3>Review Ratings</h3>
-                <p><strong>Story:</strong> <span class="stars">★★★★★</span></p>
-                <p><strong>Art:</strong> <span class="stars">★★★★★</span></p>
-                <p><strong>Character Development:</strong> <span class="stars">★★★★★</span></p>
-                <p><strong>Originality and Continuity:</strong> <span class="stars">★★★★★</span></p>
-                <p><strong>Overall:</strong> <span class="stars">★★★★★</span></p>
-            </div>
-
-            <!-- Story Referenced -->
-            <div class="detail-section">
-                <h3>Story Referenced</h3>
-                <p>Amazing Fantasy #15 Page 1</p>
-            </div>
-
-            <!-- Referenced In -->
-            <div class="detail-section">
-                <h3>Referenced In</h3>
-                <p>Amazing Spider-Man #15</p>
-            </div>
-
-            <!-- Back Button -->
-            <div class="back-button">
-                <a href="{% url 'comic_list' %}" class="btn-back">Back</a>
-            </div>
-        </div>
+    <!-- Action Buttons -->
+    <div class="d-flex justify-content-start mb-5">
+        <a href="{% url 'comic_list' %}" class="btn btn-teal px-4 py-2">
+            <i class="bx bx-arrow-back me-2"></i>Back to Comics
+        </a>
     </div>
 </div>
 
-<!-- Custom CSS -->
 <style>
     :root {
         --teal: #0d9488;
@@ -83,7 +149,7 @@
         --text-light: #6b7280;
         --border: #e5e7eb;
         --background: #fff;
-        --sidebar-bg: #4A1E21; /* Maroon from the image */
+        --maroon: #4A1E21; /* From the Spider-Man image sidebar */
     }
 
     body {
@@ -91,142 +157,98 @@
         font-family: 'Poppins', sans-serif;
     }
 
-    .comic-detail-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 2rem 1rem;
-        background: var(--background);
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    .comic-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
-    .comic-layout {
-        display: flex;
-        gap: 2rem;
-        flex-wrap: wrap;
+    .comic-text {
+        font-size: 1rem;
+        color: var(--text);
     }
 
-    /* Left Section: Comic Cover */
-    .comic-cover {
-        flex: 1;
-        min-width: 300px;
-        text-align: center;
+    .text-muted {
+        color: var(--text-light) !important;
     }
 
     .comic-image {
-        max-width: 400px;
-        width: 100%;
         border: 5px solid #000;
-        border-radius: 8px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
     }
 
-    .comic-image:hover {
-        transform: scale(1.02);
-    }
-
-    .no-image-placeholder {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 400px;
-        background: #f1f5f9;
-        border: 2px dashed var(--border);
-        border-radius: 8px;
-        color: var(--text-light);
-    }
-
-    .no-image-placeholder i {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-
-    /* Right Section: Details Sidebar */
-    .comic-details {
-        flex: 1;
-        min-width: 300px;
-        background: var(--sidebar-bg);
-        color: #fff;
-        padding: 2rem;
+    .comic-card {
+        border: none;
         border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        background: var(--background);
     }
 
-    .comic-details h1 {
-        font-size: 2.25rem;
-        font-weight: 700;
-        margin-bottom: 1.5rem;
-        color: #fff;
+    .comic-content {
+        font-size: 1.125rem;
+        line-height: 1.75;
+        color: #333;
     }
 
-    .detail-section {
-        margin-bottom: 2rem;
-    }
-
-    .detail-section h3 {
+    .comic-content h5 {
         font-size: 1.25rem;
         font-weight: 600;
         margin-bottom: 1rem;
-        color: #fff;
-        border-bottom: 2px solid var(--orange);
-        padding-bottom: 0.5rem;
+        color: var(--text);
     }
 
-    .detail-section p {
+    .comic-content p {
+        margin-bottom: 1.5rem;
+    }
+
+    .avatar-sm {
+        width: 2.5rem;
+        height: 2.5rem;
+        line-height: 2.5rem;
         font-size: 1rem;
-        margin: 0.5rem 0;
-        color: #e5e7eb;
     }
 
-    .detail-section p strong {
-        color: #fff;
+    .bg-teal {
+        background-color: var(--teal) !important;
     }
 
-    .stars {
-        color: var(--orange);
-        font-size: 1.1rem;
+    .text-teal {
+        color: var(--teal) !important;
     }
 
-    /* Back Button */
-    .back-button {
-        margin-top: 2rem;
+    .bg-maroon {
+        background-color: var(--maroon) !important;
     }
 
-    .btn-back {
-        display: inline-block;
-        padding: 0.75rem 2rem;
-        background: var(--teal);
-        color: #fff;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
+    .btn-teal {
+        background-color: var(--teal);
+        color: #fff !important;
+        border: none;
     }
 
-    .btn-back:hover {
-        background: #0b8276;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+    .badge-user {
+        color: #fff !important;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa !important;
     }
 
     /* Responsive Adjustments */
     @media (max-width: 768px) {
-        .comic-layout {
-            flex-direction: column;
+        .comic-title {
+            font-size: 2rem;
         }
 
-        .comic-details {
-            padding: 1.5rem;
+        .comic-text {
+            font-size: 0.9rem;
         }
 
-        .comic-details h1 {
-            font-size: 1.75rem;
-        }
-
-        .comic-image {
-            max-width: 100%;
+        .comic-content {
+            font-size: 1rem;
         }
     }
 </style>
