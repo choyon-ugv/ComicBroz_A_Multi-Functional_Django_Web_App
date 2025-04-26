@@ -136,25 +136,17 @@
           </li>
 
           <li class="menu-header small text-uppercase">
-            <span class="menu-header-text">Users</span>
+            <span class="menu-header-text">Account Settings</span>
           </li>
-          <li class="menu-item {% if 'account-settings' in request.path %}active open{% endif %}">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <li class="menu-item">
+            <a href="{% url 'profile_settings' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-dock-top"></i>
-              <div data-i18n="Account Settings">Profile Settings</div>
+              <div data-i18n="Account Settings">Profile</div>
             </a>
-            <ul class="menu-sub">
-              <li class="menu-item {% if 'account' in request.path %}active{% endif %}">
-                <a href="{% url 'profile_settings' %}" class="menu-link">
-                  <div data-i18n="Account">Profile</div>
-                </a>
-              </li>
-              <li class="menu-item">
-                <a href="{% url 'profile_list' %}" class="menu-link">
-                  <div data-i18n="Notifications">User Profile List</div>
-                </a>
-              </li>
-            </ul>
+            <a href="{% url 'profile_list' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-group"></i>
+              <div data-i18n="Account Settings">Users</div>
+            </a>
           </li>
 
           <!-- Components -->
@@ -175,8 +167,8 @@
               <div data-i18n="Basic">Comics</div>
             </a>
           </li>
-          
-  
+
+
           <!-- Forms & Tables -->
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Forms & Tables</span></li>
           <!-- Forms -->

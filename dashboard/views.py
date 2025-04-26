@@ -11,6 +11,7 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.generic import DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from .forms import BlogForm, ComicForm
 
 
 def admin_login(request):
@@ -176,6 +177,32 @@ def blog_list(request):
     }
     return render(request, 'blog/blog_list.html', context)
 
+
+def blog_detail(request, pk):
+    blog = get_object_or_404(Blog, pk=pk)
+    context = {
+        'blog' : blog
+    }
+    return render(request, 'blog/blog_detail.html', context)
+
+def blog_edit(request, pk):
+    blog = get_object_or_404(Blog, pk=pk)
+    if request.method == "POST":
+        form = BlogForm(request.POST, request.FILES, instance=blog)
+        if form.is_valid():
+            form.save()
+            return redirect('blog_list')
+    else:
+        form = BlogForm(instance=blog)
+    return render(request, 'blog/blog_form.html', {'form':form})
+
+def blog_delete(request, pk ):
+    blog = get_object_or_404(Blog, pk=pk)
+    if request.method == "POST":
+        blog.delete()
+        return redirect('blog_list')
+    return render(request, 'blog/blog_delete.html', {'blog': blog})
+
 # Comics
 
 def comic_list(request):
@@ -185,6 +212,32 @@ def comic_list(request):
         'comics' : comics
     }
     return render(request, 'comic/comic_list.html', context)
+
+def comic_detail(request, pk):
+    comic = get_object_or_404(Comic, pk=pk)
+    context = {
+        'comic' : comic
+    }
+    return render(request, 'comic/comic_detail.html', context)
+
+
+def comic_edit(request, pk):
+    comic = get_object_or_404(Comic, pk=pk)
+    if request.method == 'POST':
+        form = ComicForm(request.POST, request.FILES, instance=comic)
+        if form.is_valid():
+            form.save()
+            return redirect('comic_list')
+    else:
+        form = ComicForm(instance=comic)
+    return render(request, 'comic/comic_edit.html', {'form': form, 'comic': comic})
+
+def comic_delete(request, pk):
+    comic = get_object_or_404(Comic, pk=pk)
+    if request.method == 'POST':
+        comic.delete()
+        return redirect('comic_list')
+    return render(request, 'comic/comic_delete.html', {'comic': comic})
 
 
 

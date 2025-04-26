@@ -1,0 +1,233 @@
+{% extends 'custom_base.html' %}
+{% block title %}{{ comic.title }} - Comic Detail{% endblock %}
+
+{% block content %}
+<div class="comic-detail-container">
+    <!-- Main Layout -->
+    <div class="comic-layout">
+        <!-- Left Section: Comic Cover -->
+        <div class="comic-cover">
+            {% if comic.image %}
+            <img src="{{ comic.image.url }}" alt="{{ comic.title }} Cover" class="comic-image">
+            {% else %}
+            <div class="no-image-placeholder">
+                <i class="bx bx-image-alt"></i>
+                <p>No Cover Available</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Section: Details Sidebar -->
+        <div class="comic-details">
+            <h1>{{ comic.title }}</h1>
+
+            <!-- Book Information -->
+            <div class="detail-section">
+                <h3>Book Information</h3>
+                <p><strong>Cover Date:</strong> Mar 1963</p>
+                <p><strong>Read Date:</strong> {{ comic.created_at|date:"M d, Y" }}</p>
+                <p><strong>Publisher:</strong> Marvel Unlimited</p>
+                <p><strong>Price:</strong> {{ comic.price }} BDT</p>
+            </div>
+
+            <!-- Description -->
+            <div class="detail-section">
+                <h3>Description</h3>
+                <p>{{ comic.description|default:"No description available." }}</p>
+            </div>
+
+            <!-- Credits -->
+            <div class="detail-section">
+                <h3>Credits</h3>
+                <p><strong>Author:</strong> {{ comic.author.username }}</p>
+                <p><strong>Artist:</strong> Steve Ditko</p>
+                <p><strong>Editor:</strong> John Dee</p>
+            </div>
+
+            <!-- Review Ratings -->
+            <div class="detail-section">
+                <h3>Review Ratings</h3>
+                <p><strong>Story:</strong> <span class="stars">★★★★★</span></p>
+                <p><strong>Art:</strong> <span class="stars">★★★★★</span></p>
+                <p><strong>Character Development:</strong> <span class="stars">★★★★★</span></p>
+                <p><strong>Originality and Continuity:</strong> <span class="stars">★★★★★</span></p>
+                <p><strong>Overall:</strong> <span class="stars">★★★★★</span></p>
+            </div>
+
+            <!-- Story Referenced -->
+            <div class="detail-section">
+                <h3>Story Referenced</h3>
+                <p>Amazing Fantasy #15 Page 1</p>
+            </div>
+
+            <!-- Referenced In -->
+            <div class="detail-section">
+                <h3>Referenced In</h3>
+                <p>Amazing Spider-Man #15</p>
+            </div>
+
+            <!-- Back Button -->
+            <div class="back-button">
+                <a href="{% url 'comic_list' %}" class="btn-back">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+    :root {
+        --teal: #0d9488;
+        --orange: #f97316;
+        --text: #1f2937;
+        --text-light: #6b7280;
+        --border: #e5e7eb;
+        --background: #fff;
+        --sidebar-bg: #4A1E21; /* Maroon from the image */
+    }
+
+    body {
+        background: #f9fafb;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .comic-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+        background: var(--background);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .comic-layout {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    /* Left Section: Comic Cover */
+    .comic-cover {
+        flex: 1;
+        min-width: 300px;
+        text-align: center;
+    }
+
+    .comic-image {
+        max-width: 400px;
+        width: 100%;
+        border: 5px solid #000;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+
+    .comic-image:hover {
+        transform: scale(1.02);
+    }
+
+    .no-image-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 400px;
+        background: #f1f5f9;
+        border: 2px dashed var(--border);
+        border-radius: 8px;
+        color: var(--text-light);
+    }
+
+    .no-image-placeholder i {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Right Section: Details Sidebar */
+    .comic-details {
+        flex: 1;
+        min-width: 300px;
+        background: var(--sidebar-bg);
+        color: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .comic-details h1 {
+        font-size: 2.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: #fff;
+    }
+
+    .detail-section {
+        margin-bottom: 2rem;
+    }
+
+    .detail-section h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #fff;
+        border-bottom: 2px solid var(--orange);
+        padding-bottom: 0.5rem;
+    }
+
+    .detail-section p {
+        font-size: 1rem;
+        margin: 0.5rem 0;
+        color: #e5e7eb;
+    }
+
+    .detail-section p strong {
+        color: #fff;
+    }
+
+    .stars {
+        color: var(--orange);
+        font-size: 1.1rem;
+    }
+
+    /* Back Button */
+    .back-button {
+        margin-top: 2rem;
+    }
+
+    .btn-back {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        background: var(--teal);
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background: #0b8276;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .comic-layout {
+            flex-direction: column;
+        }
+
+        .comic-details {
+            padding: 1.5rem;
+        }
+
+        .comic-details h1 {
+            font-size: 1.75rem;
+        }
+
+        .comic-image {
+            max-width: 100%;
+        }
+    }
+</style>
+{% endblock %}
