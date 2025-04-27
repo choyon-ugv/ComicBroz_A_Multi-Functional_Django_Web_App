@@ -83,7 +83,8 @@ def profile_settings(request):
 def profile_list(request):
     profiles = Profile.objects.filter(user__is_superuser = False, user__is_staff = False)
     context = {
-        'profiles' : profiles
+        'profiles' : profiles,
+        'active_menu': 'profile',
     }
     return render(request, 'profile/profile_list.html', context)
 
@@ -153,6 +154,7 @@ def profile_datatable_view(request):
 class ProfileView(DetailView):
     model = Profile
     template_name = 'profile/profile_view.html'
+    
 
 
 class ProfileEditView(UpdateView):
@@ -174,7 +176,8 @@ def blog_list(request):
     blogs = Blog.objects.all().select_related('author')
     print(f"Number of blogs fetched: {blogs.count()}")  # Debug output
     context = {
-        'blogs' : blogs
+        'blogs' : blogs,
+        'active_menu': 'profile',
     }
     return render(request, 'blog/blog_list.html', context)
 
@@ -182,7 +185,8 @@ def blog_list(request):
 def blog_detail(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
     context = {
-        'blog' : blog
+        'blog' : blog,
+        'active_menu': 'profile',
     }
     return render(request, 'blog/blog_detail.html', context)
 
@@ -203,6 +207,18 @@ def blog_delete(request, pk ):
         blog.delete()
         return redirect('blog_list')
     return render(request, 'blog/blog_delete.html', {'blog': blog})
+
+
+def add_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()  # Save the new blog
+            return redirect('blog_list')  # Redirect to the blog list page
+    else:
+        form = BlogForm()
+    
+    return render(request, 'blog/add_blog.html', {'form': form})
 
 # Comics
 

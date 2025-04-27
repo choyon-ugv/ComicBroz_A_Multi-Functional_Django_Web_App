@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import admin_login, admin_logout, admin_change_password, admin_dashboard, profile_settings, profile_list, profile_datatable_view, ProfileView, ProfileEditView, ProfileDeleteView, blog_list, blog_detail, blog_edit, blog_delete, comic_list, comic_detail, comic_edit, comic_delete, like_list, edit_like, delete_like, comment_list, comment_view, comment_edit, comment_delete
+from .views import admin_login, admin_logout, admin_change_password, admin_dashboard, profile_settings, profile_list, profile_datatable_view, ProfileView, ProfileEditView, ProfileDeleteView, blog_list, blog_detail, blog_edit, blog_delete, comic_list, comic_detail, comic_edit, comic_delete, like_list, edit_like, delete_like, comment_list, comment_view, comment_edit, comment_delete, add_blog
 
 urlpatterns = [
     path('', admin_dashboard, name='admin_dashboard'),
@@ -16,6 +16,7 @@ urlpatterns = [
     path('admin_blog/<int:pk>/', blog_detail, name = 'admin_blog_detail'),
     path('admin_blog/<int:pk>/edit/', blog_edit, name='admin_blog_edit'),
     path('admin_blog/<int:pk>/delete/', blog_delete, name='admin_blog_delete'),
+    path('add_blog/', add_blog, name='add_blog'),
     path('comic_list/', comic_list, name='comic_list',),
     path('admin_comic/<int:pk>/', comic_detail, name='admin_comic_detail'),
     path('admin_comic/<int:pk>/edit/', comic_edit, name='admin_comic_edit'),

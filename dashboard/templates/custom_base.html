@@ -136,7 +136,7 @@
               <div data-i18n="Account Settings">Profile</div>
             </a>
           </li>
-          <li class="menu-item {% if request.resolver_match.url_name == 'profile_list' %}active{% endif %}">
+          <li class="menu-item {% if request.resolver_match.url_name in 'profile_list,profile_view,profile_edit,profile_delete,add_profile' %}active{% endif %}">
             <a href="{% url 'profile_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-group"></i>
               <div data-i18n="Account Settings">Users</div>
@@ -147,7 +147,7 @@
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Blogs & Comics</span></li>
 
           <!-- Blogs -->
-          <li class="menu-item {% if request.resolver_match.url_name == 'blog_list' %}active{% endif %}">
+          <li class="menu-item {% if request.resolver_match.url_name in 'blog_list,admin_blog_detail,admin_blog_edit,admin_blog_delete,add_blog' %}active{% endif %}">
             <a href="{% url 'blog_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-collection"></i>
               <div data-i18n="Basic">Blogs</div>
@@ -155,7 +155,7 @@
           </li>
 
           <!-- Comics -->
-          <li class="menu-item {% if request.resolver_match.url_name == 'comic_list' %}active{% endif %}">
+          <li class="menu-item {% if request.resolver_match.url_name in 'comic_list,admin_comic_detail,admin_comic_edit,admin_comic_delete,add_comic' %}active{% endif %}">
             <a href="{% url 'comic_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-collection"></i>
               <div data-i18n="Basic">Comics</div>
@@ -165,14 +165,14 @@
           <!-- Forms & Tables -->
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Likes & Comments</span></li>
           <!-- Tables -->
-          <li class="menu-item {% if request.path == '/likes/' %}active{% endif %}">
+          <li class="menu-item {% if request.resolver_match.url_name in 'like_list,like_detail,edit_like,delete_like,add_like' %}active{% endif %}">
             <a href="{% url 'like_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-like"></i>
               <div data-i18n="Tables">Likes</div>
             </a>
           </li>
 
-          <li class="menu-item {% if request.path == '/comments/' %}active{% endif %}">
+          <li class="menu-item {% if request.resolver_match.url_name in 'comment_list,comment_detail,comment_view,comment_edit,comment_delete, add_comment' %}active{% endif %}">
             <a href="{% url 'comment_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-comment"></i>
               <div data-i18n="Tables">Comments</div>
