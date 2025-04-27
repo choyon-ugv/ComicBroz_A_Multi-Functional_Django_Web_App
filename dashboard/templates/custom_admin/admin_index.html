@@ -152,14 +152,14 @@
           <li class="menu-header small text-uppercase"><span class="menu-header-text">Likes & Comments</span></li>
           <!-- Tables -->
           <li class="menu-item">
-            <a href="tables-basic.html" class="menu-link">
+            <a href="{% url 'like_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-like"></i>
               <div data-i18n="Tables">Likes</div>
             </a>
           </li>
 
           <li class="menu-item">
-            <a href="tables-basic.html" class="menu-link">
+            <a href="{% url 'comment_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-comment"></i>
               <div data-i18n="Tables">Comments</div>
             </a>

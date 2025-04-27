@@ -2,8 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from users.models import User, Movie, Blog, Comic, Profile
-from users.forms import ProfileForm, PasswordChangeForm
+from users.models import User, Movie, Blog, Comic, Profile, Like, Comment
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
@@ -12,7 +11,8 @@ from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views.generic import DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import BlogForm, ComicForm
+from .forms import BlogForm, ComicForm, CommentForm
+from users.forms import PasswordChangeForm, ProfileForm
 
 
 def admin_login(request):
@@ -249,7 +249,98 @@ def comic_delete(request, pk):
     return render(request, 'comic/comic_delete.html', {'comic': comic})
 
 
+# Like
 
+def like_list(request):
+    likes = Like.objects.all()
+    context = {
+        'likes' : likes
+    }
+    return render(request, 'like/like_list.html', context)
+
+
+def edit_like(request, like_id):
+    like = get_object_or_404(Like, id=like_id)
+    blogs = Blog.objects.all() 
+
+    if request.method == 'POST':
+
+        user = request.user
+        blog_id = request.POST.get('blog')
+        blog = Blog.objects.get(id=blog_id)
+        
+
+        if Like.objects.filter(user=user, blog=blog).exists():
+
+            return render(request, 'like/edit_like.html', {
+                'like': like,
+                'blogs': blogs,
+                'error_message': 'You have already liked this blog.'
+            })
+
+        like.blog = blog
+        like.save()
+
+        return redirect('like_list') 
+
+    return render(request, 'like/edit_like.html', {'like': like, 'blogs': blogs})
+
+
+def delete_like(request, like_id):
+    like = get_object_or_404(Like, id=like_id)
+    
+    if request.method == 'POST':
+        like.delete()  
+        return redirect('like_list')
+    
+    return render(request, 'like/delete_like.html', {'like': like})
+        
+
+
+# Comment
+
+def comment_list(request):
+    comments = Comment.objects.all()
+    context = {
+        'comments' : comments
+    }
+    return render(request, 'comment/comment_list.html', context)
+
+
+def comment_view(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    context = {
+        'comment':comment
+    }
+    return render(request, 'comment/comment_view.html', context)
+
+
+def comment_edit(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+
+    if request.method =="POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('comment_list')
+    else:
+        form = CommentForm(instance=comment)
+
+    context = {
+        'form': form,
+        'comment': comment
+    }
+    return render(request, 'comment/comment_edit.html', context)
+
+def comment_delete(request, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    if request.method =="POST":
+        comment.delete()
+        return redirect('comment_list')
+    context = {
+        'comment' : comment
+    }
+    return render(request, 'comment/delete_comment.html', context)
 
 # admin dashboard customize
 @login_required(login_url='admin_login')
