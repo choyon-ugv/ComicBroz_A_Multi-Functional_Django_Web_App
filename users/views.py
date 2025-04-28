@@ -13,8 +13,8 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = User.objects.create_user(
-                email=form.cleaned_data['email'],
                 username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'],
                 password=form.cleaned_data['password']
             )
             messages.success(request, 'Registration successful! Please login.')
@@ -23,7 +23,6 @@ def register(request):
         form = RegisterForm()
     return render(request, 'register.html', {'form': form})
 
-
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -31,19 +30,22 @@ def login(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
-            if user is not None or (user.is_staff or user.is_superuser):
+            if user is not None:
                 auth_login(request, user)
                 messages.success(request, 'Login successful!')
-                # Redirect to 'next' parameter if present, else home
-                next_url = request.GET.get('next', 'home')
-                return redirect(next_url)
+                
+                # Redirect based on user type
+                if user.is_staff or user.is_superuser:
+                    return redirect('admin_dashboard')  # You can create this url
+                else:
+                    return redirect('home')  # You can create this url
             else:
                 messages.error(request, 'Invalid credentials')
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
 
-
+@login_required
 def logout(request):
     auth_logout(request)
     messages.success(request, 'Logged out successfully!')
@@ -54,14 +56,16 @@ def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Your password was successfully updated!')
+            user = form.save()
+            messages.success(request, 'Your password was successfully updated! Please login again.')
+            auth_logout(request)
             return redirect('login')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
         form = PasswordChangeForm(user=request.user)
     return render(request, 'change_password.html', {'form': form})
+
 
 def home(request):
     if not request.user.is_authenticated:

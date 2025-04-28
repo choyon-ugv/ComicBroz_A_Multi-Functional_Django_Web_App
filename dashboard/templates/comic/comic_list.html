@@ -16,9 +16,9 @@ Comic List | Comic Bro'Z
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Comic List</h5>
-            <a href="" class="btn btn-primary btn-sm float-end">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addBlogModal">
                 <i class="fas fa-plus me-1"></i> Add New Comic
-            </a>
+                </a>
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap">
@@ -49,23 +49,26 @@ Comic List | Comic Bro'Z
                             <td>{{ comic.favorited_by.count }}</td>
                             <td>
                                 {% if comic.id == max_read_id %}
-                                    <span class="badge bg-success">Most Read</span>
+                                <span class="badge bg-success">Most Read</span>
                                 {% endif %}
                                 {% if comic.id == max_favorite_id %}
-                                    <span class="badge bg-warning text-dark">Top Favorite</span>
+                                <span class="badge bg-warning text-dark">Top Favorite</span>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if comic.image %}
-                                    <img src="{{ comic.image.url }}" alt="comic-img" width="50">
+                                <img src="{{ comic.image.url }}" alt="comic-img" width="50">
                                 {% else %}
-                                    No Image
+                                No Image
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{% url 'admin_comic_detail' comic.pk %}" class="btn btn-sm btn-info mb-1">View</a>
-                                <a href="{% url 'admin_comic_edit' comic.pk %}" class="btn btn-sm btn-warning mb-1">Edit</a>
-                                <a href="{% url 'admin_comic_delete' comic.pk %}" class="btn btn-sm btn-danger mb-1">Delete</a>
+                                <a href="{% url 'admin_comic_detail' comic.pk %}"
+                                    class="btn btn-sm btn-info mb-1">View</a>
+                                <a href="{% url 'admin_comic_edit' comic.pk %}"
+                                    class="btn btn-sm btn-warning mb-1">Edit</a>
+                                <a href="{% url 'admin_comic_delete' comic.pk %}"
+                                    class="btn btn-sm btn-danger mb-1">Delete</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -75,6 +78,52 @@ Comic List | Comic Bro'Z
         </div>
     </div>
 </div>
+
+<!-- Modal for Add New Blog -->
+<div class="modal fade" id="addBlogModal" tabindex="-1" aria-labelledby="addBlogModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addBlogModalLabel">Add New Comic</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Comic Form -->
+                <form method="post" enctype="multipart/form-data" action="{% url 'admin_comic_add' %}">
+                    {% csrf_token %}
+
+                    <div class="form-group mb-3">
+                        <label for="id_title">Title</label>
+                        <input type="text" name="title" class="form-control" id="id_title"
+                            value="{{ form.title.value|default:'' }}">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_description">Description</label>
+                        <textarea name="description" class="form-control"
+                            id="id_description">{{ form.content.value|default:'' }}</textarea>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_price">Price</label>
+                        <input type="text" name="price" class="form-control" id="id_price"
+                            value="{{ form.title.value|default:'' }}">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="id_image">Image</label>
+                        <input type="file" name="image" class="form-control" id="id_image">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save Blog</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 
 {% block extra_js %}

@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from users.models import User, Movie, Blog, Comic, Profile, Like, Comment
+from .decorators import admin_required
+from users.models import  User, Movie, Blog, Comic, Profile, Like, Comment
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
@@ -12,7 +13,7 @@ from django.http import JsonResponse
 from django.views.generic import DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .forms import BlogForm, ComicForm, CommentForm
-from users.forms import PasswordChangeForm, ProfileForm
+from users.forms import PasswordChangeForm, ProfileForm, RegisterForm
 
 
 def admin_login(request):
@@ -23,32 +24,32 @@ def admin_login(request):
         user = authenticate(request, email=email, password=password)
 
         if user is not None and (user.is_staff or user.is_superuser):
-            login(request, user)
+            auth_login(request, user)
             return redirect('admin_dashboard')
         else:
             messages.error(request, "Invalid credentials or not authorized.")
 
-    return render(request, 'custom_admin/admin_login.html', )
-
+    return render(request, 'custom_admin/admin_login.html', {})
 
 @login_required(login_url='admin_login')
 def admin_logout(request):
-    logout(request)
+    auth_logout(request)
     return redirect('admin_login')
 
-@login_required
+@login_required(login_url='admin_login')
 def admin_change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('login')
+            messages.success(request, 'Your password was successfully updated! Please login again.')
+            auth_logout(request)
+            return redirect('admin_login')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
         form = PasswordChangeForm(user=request.user)
-    return render(request, 'admin_change_password.html', {'form': form})
+    return render(request, 'custom_admin/admin_change_password.html', {'form': form})
 
 @login_required
 def profile_settings(request):
@@ -172,6 +173,20 @@ class ProfileDeleteView(DeleteView):
 
 # Blogs
 
+def add_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            blog = form.save(commit=False)  # Don't save yet
+            blog.author = request.user  # Set the author as the logged-in user
+            blog.save()  # Now save it
+            return redirect('blog_list')  # Redirect after saving
+    else:
+        form = BlogForm()
+
+    return render(request, 'add_blog.html', {'form': form})
+
 def blog_list(request):
     blogs = Blog.objects.all().select_related('author')
     print(f"Number of blogs fetched: {blogs.count()}")  # Debug output
@@ -209,18 +224,21 @@ def blog_delete(request, pk ):
     return render(request, 'blog/blog_delete.html', {'blog': blog})
 
 
-def add_blog(request):
-    if request.method == 'POST':
-        form = BlogForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()  # Save the new blog
-            return redirect('blog_list')  # Redirect to the blog list page
-    else:
-        form = BlogForm()
-    
-    return render(request, 'blog/add_blog.html', {'form': form})
-
 # Comics
+
+def add_comic(request):
+    if request.method == 'POST':
+        form = ComicForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            comic = form.save(commit=False)  # Don't save yet
+            comic.save()  # Now save it
+            return redirect('comic_list')  # Redirect after saving
+    else:
+        form = ComicForm()
+
+    return render(request, 'add_comic.html', {'form': form})
+
 
 def comic_list(request):
     comics = Comic.objects.annotate(
@@ -360,6 +378,7 @@ def comment_delete(request, comment_id):
 
 # admin dashboard customize
 @login_required(login_url='admin_login')
+@admin_required
 def admin_dashboard(request):
     total_users = User.objects.count()
     total_movies = Movie.objects.count()

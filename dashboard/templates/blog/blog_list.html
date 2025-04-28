@@ -12,15 +12,15 @@ Blog List | Comic Bro'Z
 <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
 {% endblock %}
 
-
 {% block content %}
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Blog List</h5>
-            <a href="" class="btn btn-primary btn-sm float-end">
+            <!-- Add New Blog Button that triggers the modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addBlogModal">
                 <i class="fas fa-plus me-1"></i> Add New Blog
-            </a>
+            </button>
         </div>
         <div class="card-body">
             <div class="table-responsive text-nowrap">
@@ -61,29 +61,69 @@ Blog List | Comic Bro'Z
             </div>
         </div>
     </div>
-    {% endblock %}
+</div>
 
-    {% block extra_js %}
-    <!-- jQuery (ensure it's not duplicated in custom_base.html) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- DataTables JS -->
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
-    <!-- DataTables Responsive JS -->
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
-    <!-- DataTables Initialization -->
+<!-- Modal for Add New Blog -->
+<div class="modal fade" id="addBlogModal" tabindex="-1" aria-labelledby="addBlogModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addBlogModalLabel">Add New Blog</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Blog Form -->
+          <form method="post" enctype="multipart/form-data" action="{% url 'admin_blog_add' %}">
+              {% csrf_token %}
+              
+              <div class="form-group mb-3">
+                  <label for="id_title">Title</label>
+                  <input type="text" name="title" class="form-control" id="id_title" value="{{ form.title.value|default:'' }}">
+              </div>
+              
+              <div class="form-group mb-3">
+                  <label for="id_content">Content</label>
+                  <textarea name="content" class="form-control" id="id_content">{{ form.content.value|default:'' }}</textarea>
+              </div>
+              
+              <div class="form-group mb-3">
+                  <label for="id_image">Image</label>
+                  <input type="file" name="image" class="form-control" id="id_image">
+              </div>
+  
+              <button type="submit" class="btn btn-primary">Save Blog</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+{% endblock %}
 
-    <script>
-        $(document).ready(function () {
-            $('#blogTable').DataTable({
-                responsive: true,
-                pageLength: 10,
-                language: {
-                    search: "_INPUT_",
-                    searchPlaceholder: "Search blogs..."
-                }
-            });
+{% block extra_js %}
+<!-- jQuery (ensure it's not duplicated in custom_base.html) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+<!-- Bootstrap JS (Popper is required for Modals) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+<!-- DataTables Initialization -->
+<script>
+    $(document).ready(function () {
+        $('#blogTable').DataTable({
+            responsive: true,
+            pageLength: 10,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Search blogs..."
+            }
         });
-    </script>
-    {% endblock %}
+    });
+</script>
+{% endblock %}
