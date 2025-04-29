@@ -11,6 +11,13 @@
         <div class="heading_container">
             <h2>Latest Blog</h2>
         </div>
+        {% if user.is_authenticated %}
+        <div class="text-right mb-4">
+            <a href="{% url 'create_blog' %}" class="btn btn-primary" style="background: #ffda79; color: #2a2a3b; border: 2px solid #ff4d6d; font-family: 'Bangers', cursive; transition: transform 0.3s, background 0.3s;">
+                Write a Blog
+            </a>
+        </div>
+        {% endif %}
         <div class="row">
             {% for blog in blogs %}
             <div class="col-md-6 col-lg-4 mx-auto">

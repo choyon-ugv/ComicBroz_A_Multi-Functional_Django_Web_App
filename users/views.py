@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from .forms import RegisterForm, LoginForm, PasswordChangeForm, UserUpdateForm, ProfileUpdateForm
 from .models import User, Movie, Comic, Blog, Comment, Like, Profile, WatchHistory
 from django.utils import timezone
+from dashboard.forms import BlogForm
 
 def register(request):
     if request.method == 'POST':
@@ -215,6 +216,21 @@ def blog(request):
     blogs = Blog.objects.all().order_by('-created')
     return render(request, 'blogs.html', {'blogs': blogs})
 
+@login_required
+def create_blog(request):
+    if request.method == 'POST':
+        form = BlogForm(request.POST, request.FILES)
+        if form.is_valid():
+            blog = form.save(commit=False)
+            blog.author = request.user
+            blog.save()
+            messages.success(request, 'Your blog has been posted successfully!')
+            return redirect('blogs')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = BlogForm()
+    return render(request, 'create_blog.html', {'form': form})
 
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Blog, id=blog_id)
