@@ -46,16 +46,36 @@
       animation: slideIn 0.5s ease-out forwards;
     }
 
-    .top-comic-item, .activity-item {
+    .top-comic-item,
+    .activity-item {
       opacity: 0;
       animation: fadeIn 0.5s ease-out forwards;
     }
 
-    .top-comic-item:nth-child(1), .activity-item:nth-child(1) { animation-delay: 0.1s; }
-    .top-comic-item:nth-child(2), .activity-item:nth-child(2) { animation-delay: 0.2s; }
-    .top-comic-item:nth-child(3), .activity-item:nth-child(3) { animation-delay: 0.3s; }
-    .top-comic-item:nth-child(4), .activity-item:nth-child(4) { animation-delay: 0.4s; }
-    .top-comic-item:nth-child(5), .activity-item:nth-child(5) { animation-delay: 0.5s; }
+    .top-comic-item:nth-child(1),
+    .activity-item:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .top-comic-item:nth-child(2),
+    .activity-item:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .top-comic-item:nth-child(3),
+    .activity-item:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    .top-comic-item:nth-child(4),
+    .activity-item:nth-child(4) {
+      animation-delay: 0.4s;
+    }
+
+    .top-comic-item:nth-child(5),
+    .activity-item:nth-child(5) {
+      animation-delay: 0.5s;
+    }
 
     .superhero-gif {
       transition: transform 0.3s ease;
@@ -179,6 +199,15 @@
             <a href="{% url 'comic_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-collection"></i>
               <div data-i18n="Basic">Comics</div>
+            </a>
+          </li>
+
+          <!-- Cards -->
+          <li
+            class="menu-item {% if request.resolver_match.url_name in 'card_list,admin_card_detail,admin_card_edit,admin_caed_delete,add_card' %}active{% endif %}">
+            <a href="{% url 'admin_character_card' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-collection"></i>
+              <div data-i18n="Basic">Cards</div>
             </a>
           </li>
 
@@ -382,35 +411,35 @@
                   <div class="card-body">
                     <ul class="p-0 m-0">
                       {% for comic in comics|slice:":5" %}
-                        <li class="d-flex mb-3 top-comic-item">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-star"></i></span>
+                      <li class="d-flex mb-3 top-comic-item">
+                        <div class="avatar flex-shrink-0 me-3">
+                          <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-star"></i></span>
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                          <div class="me-2">
+                            <h6 class="mb-0">{{ comic.title }}</h6>
+                            <small class="text-muted">Purchase: {{ comic.likes.count }}</small>
                           </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">{{ comic.title }}</h6>
-                              <small class="text-muted">Purchase: {{ comic.likes.count }}</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">{{ comic.comments.count }} Favorite</small>
-                            </div>
+                          <div class="user-progress">
+                            <small class="fw-semibold">{{ comic.comments.count }} Favorite</small>
                           </div>
-                        </li>
+                        </div>
+                      </li>
                       {% empty %}
-                        <li class="d-flex mb-3 top-comic-item">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-star"></i></span>
+                      <li class="d-flex mb-3 top-comic-item">
+                        <div class="avatar flex-shrink-0 me-3">
+                          <span class="avatar-initial rounded bg-label-primary"><i class="bx bx-star"></i></span>
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                          <div class="me-2">
+                            <h6 class="mb-0">Sample Comic 1</h6>
+                            <small class="text-muted">Likes: 120</small>
                           </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">Sample Comic 1</h6>
-                              <small class="text-muted">Likes: 120</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="fw-semibold">45 Comments</small>
-                            </div>
+                          <div class="user-progress">
+                            <small class="fw-semibold">45 Comments</small>
                           </div>
-                        </li>
+                        </div>
+                      </li>
                       {% endfor %}
                     </ul>
                   </div>
@@ -557,49 +586,50 @@
                   <div class="card-body">
                     <ul class="p-0 m-0">
                       {% for activity in recent_activities %}
-                        <li class="d-flex mb-3 activity-item">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-{{ activity.type|lower }}"><i class="bx bx-{{ activity.type|lower }}"></i></span>
+                      <li class="d-flex mb-3 activity-item">
+                        <div class="avatar flex-shrink-0 me-3">
+                          <span class="avatar-initial rounded bg-label-{{ activity.type|lower }}"><i
+                              class="bx bx-{{ activity.type|lower }}"></i></span>
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                          <div class="me-2">
+                            <h6 class="mb-0">{{ activity.user.username }} {{ activity.action }}</h6>
+                            <small class="text-muted">{{ activity.content_title }}</small>
                           </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">{{ activity.user.username }} {{ activity.action }}</h6>
-                              <small class="text-muted">{{ activity.content_title }}</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="text-muted">{{ activity.created_at|timesince }} ago</small>
-                            </div>
+                          <div class="user-progress">
+                            <small class="text-muted">{{ activity.created_at|timesince }} ago</small>
                           </div>
-                        </li>
+                        </div>
+                      </li>
                       {% empty %}
-                        <li class="d-flex mb-3 activity-item">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-like"><i class="bx bx-like"></i></span>
+                      <li class="d-flex mb-3 activity-item">
+                        <div class="avatar flex-shrink-0 me-3">
+                          <span class="avatar-initial rounded bg-label-like"><i class="bx bx-like"></i></span>
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                          <div class="me-2">
+                            <h6 class="mb-0">User1 liked</h6>
+                            <small class="text-muted">Comic 1</small>
                           </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">User1 liked</h6>
-                              <small class="text-muted">Comic 1</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="text-muted">2 hours ago</small>
-                            </div>
+                          <div class="user-progress">
+                            <small class="text-muted">2 hours ago</small>
                           </div>
-                        </li>
-                        <li class="d-flex mb-3 activity-item">
-                          <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-comment"><i class="bx bx-comment"></i></span>
+                        </div>
+                      </li>
+                      <li class="d-flex mb-3 activity-item">
+                        <div class="avatar flex-shrink-0 me-3">
+                          <span class="avatar-initial rounded bg-label-comment"><i class="bx bx-comment"></i></span>
+                        </div>
+                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                          <div class="me-2">
+                            <h6 class="mb-0">User2 commented</h6>
+                            <small class="text-muted">Blog 1</small>
                           </div>
-                          <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                              <h6 class="mb-0">User2 commented</h6>
-                              <small class="text-muted">Blog 1</small>
-                            </div>
-                            <div class="user-progress">
-                              <small class="text-muted">1 hour ago</small>
-                            </div>
+                          <div class="user-progress">
+                            <small class="text-muted">1 hour ago</small>
                           </div>
-                        </li>
+                        </div>
+                      </li>
                       {% endfor %}
                     </ul>
                   </div>
@@ -639,13 +669,14 @@
                   <div class="card-body">
                     <div class="row">
                       <div class="col-6 mb-3">
-                        <img src="https://i.pinimg.com/originals/b4/2b/d3/b42bd32095c5f04ef10cc9876a4859aa.gif" alt="Spider-Man GIF"
-                          class="img-fluid superhero-gif" style="border-radius: 8px;" />
+                        <img src="https://i.pinimg.com/originals/b4/2b/d3/b42bd32095c5f04ef10cc9876a4859aa.gif"
+                          alt="Spider-Man GIF" class="img-fluid superhero-gif" style="border-radius: 8px;" />
                         <p class="text-center mt-2">Spider-Man</p>
                       </div>
                       <div class="col-6 mb-3">
-                        <img src="https://media1.giphy.com/media/dBsJwo17cbYvs8vqfx/giphy.gif?cid=6c09b952dlrn4f93k3v8j72pfmrw7z67yp47ozxtr4eostpw&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g" alt="Iron Man GIF"
-                          class="img-fluid superhero-gif" style="border-radius: 8px;" />
+                        <img
+                          src="https://media1.giphy.com/media/dBsJwo17cbYvs8vqfx/giphy.gif?cid=6c09b952dlrn4f93k3v8j72pfmrw7z67yp47ozxtr4eostpw&ep=v1_internal_gif_by_id&rid=giphy.gif&ct=g"
+                          alt="Iron Man GIF" class="img-fluid superhero-gif" style="border-radius: 8px;" />
                         <p class="text-center mt-2">Iron Man</p>
                       </div>
                       <div class="col-6 mb-3">
@@ -654,8 +685,8 @@
                         <p class="text-center mt-2">Captain America</p>
                       </div>
                       <div class="col-6 mb-3">
-                        <img src="https://i.pinimg.com/originals/da/b9/83/dab983f67fc28e4e477a6117e3371be8.gif" alt="Thor GIF"
-                          class="img-fluid superhero-gif" style="border-radius: 8px;" />
+                        <img src="https://i.pinimg.com/originals/da/b9/83/dab983f67fc28e4e477a6117e3371be8.gif"
+                          alt="Thor GIF" class="img-fluid superhero-gif" style="border-radius: 8px;" />
                         <p class="text-center mt-2">Thor</p>
                       </div>
                     </div>
@@ -699,218 +730,218 @@
       const comicData = [
         {% for comic in comics %}
           {
-            title: "{{ comic.title }}",
-            purchased: {{ comic.purchased_by.count }},
-            favorited: {{ comic.favorited_by.count }}
-          }{% if not forloop.last %},{% endif %}
-        {% empty %}
-          { title: "Comic 1", likes: 120, comments: 45 },
-          { title: "Comic 2", likes: 80, comments: 30 },
-          { title: "Comic 3", likes: 150, comments: 60 }
-        {% endfor %}
+        title: "{{ comic.title }}",
+        purchased: {{ comic.purchased_by.count }},
+      favorited: {{ comic.favorited_by.count }}
+          }{% if not forloop.last %}, {% endif %}
+    {% empty %}
+    { title: "Comic 1", likes: 120, comments: 45 },
+    { title: "Comic 2", likes: 80, comments: 30 },
+    { title: "Comic 3", likes: 150, comments: 60 }
+    {% endfor %}
       ];
 
-      const comicOptions = {
-        chart: {
-          type: 'bar',
-          height: 350
+    const comicOptions = {
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '55%',
+          endingShape: 'rounded'
+        }
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        show: true,
+        width: 2,
+        colors: ['transparent']
+      },
+      series: [
+        {
+          name: 'Likes',
+          data: comicData.map(item => item.likes)
         },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: '55%',
-            endingShape: 'rounded'
+        {
+          name: 'Comments',
+          data: comicData.map(item => item.comments)
+        }
+      ],
+      xaxis: {
+        categories: comicData.map(item => item.title),
+        labels: {
+          rotate: -45
+        }
+      },
+      yaxis: {
+        title: {
+          text: 'Count'
+        }
+      },
+      fill: {
+        opacity: 1
+      },
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val + " interactions";
           }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        stroke: {
-          show: true,
-          width: 2,
-          colors: ['transparent']
-        },
-        series: [
-          {
-            name: 'Likes',
-            data: comicData.map(item => item.likes)
+        }
+      },
+      colors: ['#696cff', '#03c3ec']
+    };
+
+    const comicChart = new ApexCharts(document.querySelector("#comicEngagementChart"), comicOptions);
+    comicChart.render();
+
+    // Blog Engagement Chart
+    const blogData = [
+      {% for blog in blogs %}
+    {
+      title: "{{ blog.title }}",
+        likes: { { blog.likes.count } }
+      comments: { { blog.comments.count } }
+    } {% if not forloop.last %}, {% endif %}
+    {% empty %}
+    { title: "Blog 1", likes: 50 },
+    { title: "Blog 2", likes: 30 },
+    { title: "Blog 3", likes: 20 }
+    {% endfor %}
+      ];
+
+    const blogOptions = {
+      chart: {
+        type: 'pie',
+        height: 300
+      },
+      series: blogData.map(item => item.likes),
+      labels: blogData.map(item => item.title),
+      colors: ['#696cff', '#03c3ec', '#ff3e1d', '#71dd37', '#ffab00'],
+      responsive: [{
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
           },
-          {
-            name: 'Comments',
-            data: comicData.map(item => item.comments)
-          }
-        ],
-        xaxis: {
-          categories: comicData.map(item => item.title),
-          labels: {
-            rotate: -45
-          }
-        },
-        yaxis: {
-          title: {
-            text: 'Count'
-          }
-        },
-        fill: {
-          opacity: 1
-        },
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return val + " interactions";
-            }
-          }
-        },
-        colors: ['#696cff', '#03c3ec']
-      };
-
-      const comicChart = new ApexCharts(document.querySelector("#comicEngagementChart"), comicOptions);
-      comicChart.render();
-
-      // Blog Engagement Chart
-      const blogData = [
-        {% for blog in blogs %}
-          {
-            title: "{{ blog.title }}",
-            likes: {{ blog.likes.count }}
-            comments: {{ blog.comments.count }}
-          }{% if not forloop.last %},{% endif %}
-        {% empty %}
-          { title: "Blog 1", likes: 50 },
-          { title: "Blog 2", likes: 30 },
-          { title: "Blog 3", likes: 20 }
-        {% endfor %}
-      ];
-
-      const blogOptions = {
-        chart: {
-          type: 'pie',
-          height: 300
-        },
-        series: blogData.map(item => item.likes),
-        labels: blogData.map(item => item.title),
-        colors: ['#696cff', '#03c3ec', '#ff3e1d', '#71dd37', '#ffab00'],
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }],
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return val + " likes";
-            }
+          legend: {
+            position: 'bottom'
           }
         }
-      };
+      }],
+      tooltip: {
+        y: {
+          formatter: function (val) {
+            return val + " likes";
+          }
+        }
+      }
+    };
 
-      const blogChart = new ApexCharts(document.querySelector("#blogEngagementChart"), blogOptions);
-      blogChart.render();
+    const blogChart = new ApexCharts(document.querySelector("#blogEngagementChart"), blogOptions);
+    blogChart.render();
 
-      // Content Distribution Chart
-      const contentDistributionOptions = {
-        chart: {
-          type: 'donut',
-          height: 300
-        },
-        series: [{{ total_comic }}, {{ total_blog }}],
-        labels: ['Comics', 'Blogs'],
-        colors: ['#696cff', '#03c3ec'],
+    // Content Distribution Chart
+    const contentDistributionOptions = {
+      chart: {
+        type: 'donut',
+        height: 300
+      },
+      series: [{{ total_comic }}, {{ total_blog }}],
+    labels: ['Comics', 'Blogs'],
+      colors: ['#696cff', '#03c3ec'],
         dataLabels: {
-          enabled: true
+      enabled: true
+    },
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200
         },
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: 'bottom'
-            }
-          }
-        }],
-        tooltip: {
-          y: {
-            formatter: function (val) {
-              return val + " items";
-            }
-          }
+        legend: {
+          position: 'bottom'
         }
+      }
+    }],
+      tooltip: {
+      y: {
+        formatter: function (val) {
+          return val + " items";
+        }
+      }
+    }
       };
 
-      const contentDistributionChart = new ApexCharts(document.querySelector("#contentDistributionChart"), contentDistributionOptions);
-      contentDistributionChart.render();
+    const contentDistributionChart = new ApexCharts(document.querySelector("#contentDistributionChart"), contentDistributionOptions);
+    contentDistributionChart.render();
 
-      // Content Growth Chart
-      const contentGrowthData = {
-        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        comics: [
-          {% for month in comic_growth %}
-            {{ month.count }}{% if not forloop.last %},{% endif %}
-          {% empty %}
-            10, 15, 20, 25, 30, 35
-          {% endfor %}
+    // Content Growth Chart
+    const contentGrowthData = {
+      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      comics: [
+        {% for month in comic_growth %}
+    { { month.count } } {% if not forloop.last %}, {% endif %}
+    {% empty %}
+    10, 15, 20, 25, 30, 35
+    {% endfor %}
         ],
-        blogs: [
-          {% for month in blog_growth %}
-            {{ month.count }}{% if not forloop.last %},{% endif %}
-          {% empty %}
-            5, 8, 12, 15, 18, 20
-          {% endfor %}
+    blogs: [
+      {% for month in blog_growth %}
+    { { month.count } } {% if not forloop.last %}, {% endif %}
+    {% empty %}
+    5, 8, 12, 15, 18, 20
+    {% endfor %}
         ]
       };
 
-      const contentGrowthOptions = {
-        chart: {
-          type: 'line',
-          height: 350
+    const contentGrowthOptions = {
+      chart: {
+        type: 'line',
+        height: 350
+      },
+      series: [
+        {
+          name: 'Comics',
+          data: contentGrowthData.comics
         },
-        series: [
-          {
-            name: 'Comics',
-            data: contentGrowthData.comics
-          },
-          {
-            name: 'Blogs',
-            data: contentGrowthData.blogs
-          }
-        ],
-        xaxis: {
-          categories: contentGrowthData.months
+        {
+          name: 'Blogs',
+          data: contentGrowthData.blogs
+        }
+      ],
+      xaxis: {
+        categories: contentGrowthData.months
+      },
+      yaxis: {
+        title: {
+          text: 'Content Count'
+        }
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      dataLabels: {
+        enabled: false
+      },
+      colors: ['#696cff', '#03c3ec'],
+      tooltip: {
+        x: {
+          show: true
         },
-        yaxis: {
-          title: {
-            text: 'Content Count'
-          }
-        },
-        stroke: {
-          curve: 'smooth'
-        },
-        dataLabels: {
-          enabled: false
-        },
-        colors: ['#696cff', '#03c3ec'],
-        tooltip: {
-          x: {
-            show: true
-          },
-          y: {
-            formatter: function (val) {
-              return val + " items";
-            }
+        y: {
+          formatter: function (val) {
+            return val + " items";
           }
         }
-      };
+      }
+    };
 
-      const contentGrowthChart = new ApexCharts(document.querySelector("#contentGrowthChart"), contentGrowthOptions);
-      contentGrowthChart.render();
+    const contentGrowthChart = new ApexCharts(document.querySelector("#contentGrowthChart"), contentGrowthOptions);
+    contentGrowthChart.render();
     });
   </script>
 

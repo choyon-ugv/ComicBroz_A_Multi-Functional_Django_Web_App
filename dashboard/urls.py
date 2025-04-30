@@ -31,6 +31,6 @@ urlpatterns = [
     path('comments/<int:comment_id>/view/', comment_view, name='comment_view'),
     path('comments/<int:comment_id>/edit/', comment_edit, name='comment_edit'),
     path('comments/<int:comment_id>/delete/',comment_delete, name='comment_delete'),
-    path('character_card', character_card_list, name='character_card'),
+    path('admin_character_card', character_card_list, name='admin_character_card'),
 
 ]

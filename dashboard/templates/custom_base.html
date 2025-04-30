@@ -164,7 +164,7 @@
 
           <!-- Cards -->
           <li class="menu-item {% if request.resolver_match.url_name in 'card_list,admin_card_detail,admin_card_edit,admin_caed_delete,add_card' %}active{% endif %}">
-            <a href="{% url 'character_card' %}" class="menu-link">
+            <a href="{% url 'admin_character_card' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-collection"></i>
               <div data-i18n="Basic">Cards</div>
             </a>
