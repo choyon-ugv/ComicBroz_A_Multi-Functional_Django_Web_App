@@ -142,6 +142,7 @@ class Testimonial(models.Model):
 
 class CharacterCard(models.Model):
     name = models.CharField(max_length=100)  # Character's name (e.g., "Super-Bro")
+    title = models.CharField(max_length=100)  # Character's title (e.g., "The Amazing")
     debut_year = models.IntegerField()  # Debut year (e.g., 2023)
     special_powers = models.IntegerField()  # Special powers score (out of 50)
     cunning = models.IntegerField()  # Cunning score (out of 50)

@@ -13,11 +13,11 @@
 
     .section-title {
         font-family: 'Bangers', cursive;
-        font-size: 60px;
+        font-size: 2.5rem;
         color: #ffda79;
-        text-shadow: 5px 5px 0 #ff4d6d;
+        text-shadow: 2px 3px 0 #ff4d6d;
         text-align: center;
-        margin-bottom: 60px;
+        margin-bottom: 106px;
         letter-spacing: 2px;
     }
 
@@ -239,6 +239,7 @@
                         {% endif %}
                         <div class="name-starburst">{{ character.name }}</div>
                         <div class="card-overlay">
+                            <div class="stat"><span class="stat-label">Title:</span> {{ character.title }}</div>
                             <div class="stat"><span class="stat-label">Debut Year:</span> {{ character.debut_year }}</div>
                             <div class="stat"><span class="stat-label">Special Powers:</span> {{ character.special_powers }}/50</div>
                             <div class="stat"><span class="stat-label">Cunning:</span> {{ character.cunning }}/50</div>
