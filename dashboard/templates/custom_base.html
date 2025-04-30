@@ -144,7 +144,7 @@
           </li>
 
           <!-- Components -->
-          <li class="menu-header small text-uppercase"><span class="menu-header-text">Blogs & Comics</span></li>
+          <li class="menu-header small text-uppercase"><span class="menu-header-text">Blogs & Comics & Cards</span></li>
 
           <!-- Blogs -->
           <li class="menu-item {% if request.resolver_match.url_name in 'blog_list,admin_blog_detail,admin_blog_edit,admin_blog_delete,add_blog' %}active{% endif %}">
@@ -159,6 +159,14 @@
             <a href="{% url 'comic_list' %}" class="menu-link">
               <i class="menu-icon tf-icons bx bx-collection"></i>
               <div data-i18n="Basic">Comics</div>
+            </a>
+          </li>
+
+          <!-- Cards -->
+          <li class="menu-item {% if request.resolver_match.url_name in 'card_list,admin_card_detail,admin_card_edit,admin_caed_delete,add_card' %}active{% endif %}">
+            <a href="{% url 'character_card' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-collection"></i>
+              <div data-i18n="Basic">Cards</div>
             </a>
           </li>
 

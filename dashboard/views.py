@@ -14,6 +14,7 @@ from django.views.generic import DetailView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .forms import BlogForm, ComicForm, CommentForm
 from users.forms import PasswordChangeForm, ProfileForm, RegisterForm
+from users.models import CharacterCard
 
 
 def admin_login(request):
@@ -392,3 +393,9 @@ def admin_dashboard(request):
         'total_comic': total_comic, 
     }
     return render(request, 'custom_admin/admin_index.html', context)
+
+
+
+def character_card_list(request):
+    characters = CharacterCard.objects.all()
+    return render(request, 'card/card_list.html', {'character_cards': characters})

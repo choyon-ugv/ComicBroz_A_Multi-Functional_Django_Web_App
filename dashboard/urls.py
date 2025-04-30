@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import admin_login, admin_logout, admin_change_password, admin_dashboard, profile_settings, profile_list, profile_datatable_view, ProfileView, ProfileEditView, ProfileDeleteView, blog_list, blog_detail, blog_edit, blog_delete, comic_list, comic_detail, comic_edit, comic_delete, like_list, edit_like, delete_like, comment_list, comment_view, comment_edit, comment_delete, add_blog, add_comic
+from .views import admin_login, admin_logout, admin_change_password, admin_dashboard, profile_settings, profile_list, profile_datatable_view, ProfileView, ProfileEditView, ProfileDeleteView, blog_list, blog_detail, blog_edit, blog_delete, comic_list, comic_detail, comic_edit, comic_delete, like_list, edit_like, delete_like, comment_list, comment_view, comment_edit, comment_delete, add_blog, add_comic, character_card_list
+
 
 urlpatterns = [
     path('', admin_dashboard, name='admin_dashboard'),
@@ -30,4 +31,6 @@ urlpatterns = [
     path('comments/<int:comment_id>/view/', comment_view, name='comment_view'),
     path('comments/<int:comment_id>/edit/', comment_edit, name='comment_edit'),
     path('comments/<int:comment_id>/delete/',comment_delete, name='comment_delete'),
+    path('character_card', character_card_list, name='character_card'),
+
 ]
