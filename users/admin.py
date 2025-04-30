@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Movie, Comic, Blog, Like, Comment, Profile
+from .models import User, Movie, Comic, Blog, Like, Comment, Profile, Testimonial, CharacterCard
 
 admin.site.register(User)
 admin.site.register(Movie)
@@ -12,3 +12,5 @@ class BlogAdmin(admin.ModelAdmin):
 admin.site.register(Like)
 admin.site.register(Comment)
 admin.site.register(Profile)
+admin.site.register(Testimonial)
+admin.site.register(CharacterCard)

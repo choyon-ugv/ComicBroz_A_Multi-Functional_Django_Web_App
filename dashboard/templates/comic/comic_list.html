@@ -33,7 +33,6 @@ Comic List | Comic Bro'Z
                             <th>Read</th>
                             <th>Favorited</th>
                             <th>Badges</th>
-                            <th>Image</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -41,7 +40,7 @@ Comic List | Comic Bro'Z
                         {% for comic in comics %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ comic.title }}</td>
+                            <td>{{ comic.title|truncatewords:2 }}</td>
                             <td>{{ comic.description|truncatewords:2 }}</td>
                             <td>${{ comic.price }}</td>
                             <td>{{ comic.purchased_by.count }}</td>
@@ -53,13 +52,6 @@ Comic List | Comic Bro'Z
                                 {% endif %}
                                 {% if comic.id == max_favorite_id %}
                                 <span class="badge bg-warning text-dark">Top Favorite</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if comic.image %}
-                                <img src="{{ comic.image.url }}" alt="comic-img" width="50">
-                                {% else %}
-                                No Image
                                 {% endif %}
                             </td>
                             <td>

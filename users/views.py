@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from .forms import RegisterForm, LoginForm, PasswordChangeForm, UserUpdateForm, ProfileUpdateForm
-from .models import User, Movie, Comic, Blog, Comment, Like, Profile, WatchHistory
+from .models import User, Movie, Comic, Blog, Comment, Like, Profile, WatchHistory, Testimonial, CharacterCard
 from django.utils import timezone
 from dashboard.forms import BlogForm
 
@@ -74,7 +74,14 @@ def home(request):
     
     blogs = Blog.objects.all()[:3]
     comics = Comic.objects.all()[:6]
-    return render(request, 'home.html', {'username': request.user.username,'blogs': blogs, 'comics': comics})
+    testimonials = Testimonial.objects.all()
+    print("Testimonials:", list(testimonials))  # For debugging
+    return render(request, 'home.html', {
+        'username': request.user.username,
+        'blogs': blogs,
+        'comics': comics,
+        'testimonials': testimonials  # Fixed typo
+    })
 
 def movies(request):
     movies = Movie.objects.all()
@@ -352,3 +359,8 @@ def profile_update(request):
         u_form = UserUpdateForm(instance=user)
         p_form = ProfileUpdateForm(instance=profile)
     return render(request, 'profile_update.html', {'u_form': u_form, 'p_form': p_form})
+
+
+def card_list(request):
+    characters = CharacterCard.objects.all()
+    return render(request, 'characters_card_list.html', {'characters': characters})

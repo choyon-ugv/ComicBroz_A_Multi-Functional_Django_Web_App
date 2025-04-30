@@ -127,3 +127,29 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
+    
+
+class Testimonial(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    content = models.TextField()
+    image = models.ImageField(upload_to='testimonials/', default='default.jpg')
+    role = models.CharField(max_length=100, default="Reader")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Testimonial by {self.author}"
+    
+
+class CharacterCard(models.Model):
+    name = models.CharField(max_length=100)  # Character's name (e.g., "Super-Bro")
+    debut_year = models.IntegerField()  # Debut year (e.g., 2023)
+    special_powers = models.IntegerField()  # Special powers score (out of 50)
+    cunning = models.IntegerField()  # Cunning score (out of 50)
+    strength = models.IntegerField()  # Strength score (out of 50)
+    technology = models.IntegerField()  # Technology score (out of 50)
+    fact_file = models.TextField()  # Fact file description
+    image = models.ImageField(upload_to='CharacterCard/', default="200.png", blank=True, null=True)  # URL to character image (optional)
+    back_content = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.name

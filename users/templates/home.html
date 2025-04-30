@@ -3,6 +3,11 @@
 
 {% block title %}Comic Bro'Z - Home{% endblock %}
 
+{% block meta %}
+<meta name="description" content="Comic Bro'Z - Your one-stop destination for superhero comics and graphic novels.">
+<meta name="keywords" content="comics, superhero, graphic novels, Comic Bro'Z">
+{% endblock %}
+
 {% block content %}
 <div class="hero_area">
     <section class="comic-slider">
@@ -11,10 +16,10 @@
                 <div class="text">
                     <h1>Enter the Comic Verse</h1>
                     <p>Discover stories that leap off the page! Dive into our latest adventures.</p>
-                    <a href="{% url 'blogs' %}" class="btn">Read Now</a>
+                    <a href="{% url 'comics' %}" class="btn">Buy Now</a>
                 </div>
                 <div class="hero-img">
-                    <img src="{% static 'edgecut/images/101.png' %}" alt="Superhero">
+                    <img src="{% static 'edgecut/images/101.png' %}" alt="Superhero illustration">
                 </div>
             </div>
         </div>
@@ -67,19 +72,19 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="img-box">
-                    <img src="{% static 'edgecut/images/201.png' %}" alt="About Comic Bro'Z">
+                    <img src="{% static 'edgecut/images/201.png' %}" alt="About Comic Bro'Z illustration">
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="detail-box">
                     <div class="heading_container">
-                        <h2>About Us</h2>
+                        <h2>Character Cards</h2>
                     </div>
                     <p>
                         Comic Bro'Z is your one-stop destination for all things comics. We bring you the best
                         superhero stories, graphic novels, and more.
                     </p>
-                    <a href="{% url 'about' %}">Read More</a>
+                    <a href="{% url 'character_card' %}">Watch Now</a>
                 </div>
             </div>
         </div>
@@ -115,76 +120,10 @@
     </div>
 </section>
 
-<!-- Client Section -->
-<section class="client_section layout_padding-bottom" data-aos="fade-up">
-    <div class="container">
-        <div class="heading_container">
-            <h2>Testimonial</h2>
-        </div>
-        <div id="carouselExample2Controls" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                {% if testimonials %}
-                {% for testimonial in testimonials %}
-                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    <div class="row">
-                        <div class="col-md-11 col-lg-10 mx-auto">
-                            <div class="box">
-                                <div class="img-box">
-                                    <img src="{% static 'edgecut/images/'|add:testimonial.image|default:'edgecut/images/client.jpg' %}"
-                                        alt="Testimonial" />
-                                </div>
-                                <div class="detail-box">
-                                    <div class="name">
-                                        <i class="fa fa-quote-left" aria-hidden="true"></i>
-                                        <h6>{{ testimonial.name|default:"Siaalya" }}</h6>
-                                    </div>
-                                    <p>{{ testimonial.text|default:"Comic Bro'Z has an amazing collection of comics!" }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-                {% else %}
-                <div class="carousel-item active">
-                    <div class="row">
-                        <div class="col-md-11 col-lg-10 mx-auto">
-                            <div class="box">
-                                <div class="img-box">
-                                    <img src="{% static 'edgecut/images/client.jpg' %}" alt="Testimonial" />
-                                </div>
-                                <div class="detail-box">
-                                    <div class="name">
-                                        <i class="fa fa-quote-left" aria-hidden="true"></i>
-                                        <h6>Siaalya</h6>
-                                    </div>
-                                    <p>Comic Bro'Z has an amazing collection of comics! The website is easy to
-                                        navigate, and I love the blog updates.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-            {% if testimonials %}
-            <div class="carousel_btn-container">
-                <a class="carousel-control-prev" href="#carouselExample2Controls" role="button" data-slide="prev">
-                    <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExample2Controls" role="button" data-slide="next">
-                    <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-</section>
+
 
 <!-- Contact Section -->
-<section class="contact_section long_section" data-aos="fade-up">
+<section class="contact_section layout_padding long_section" data-aos="fade-up">
     <div class="container">
         <div class="row">
             <div class="col-md-6">
@@ -192,7 +131,8 @@
                     <div class="heading_container">
                         <h2>Contact Us</h2>
                     </div>
-                    <form action="{% url 'contact' %}">
+                    <form action="{% url 'contact' %}" method="post">
+                        {% csrf_token %}
                         <div>
                             <input type="text" placeholder="Your Name" name="name" required />
                         </div>
@@ -203,8 +143,7 @@
                             <input type="email" placeholder="Email" name="email" required />
                         </div>
                         <div>
-                            <input type="text" class="message-box" placeholder="Message" name="message" required
-                                maxlength="200" />
+                            <input type="text" class="message-box" placeholder="Message" name="message" required maxlength="200" />
                             <small id="messageCounter" class="form-text text-muted">0/200 characters</small>
                         </div>
                         <div class="btn_box">
@@ -216,7 +155,7 @@
             <div class="col-md-6">
                 <div class="map_container">
                     <div class="map">
-                        <div id="googleMap"></div>
+                        <img src="https://assets.dochipo.com/editor/animations/contact-us/f38f563a-53fc-4527-a085-eeb2dba0c84f.gif" alt="Animated contact illustration" style="width:100%; height:auto;">
                     </div>
                 </div>
             </div>
