@@ -26,7 +26,7 @@ class RegisterForm(forms.ModelForm):
 class LoginForm(forms.Form):
     email = forms.EmailField(label='Email')
     password = forms.CharField(widget=forms.PasswordInput, label='Password')
-    conform_password = forms.CharField(widget=forms.PasswordInput, label='Confirm Password')
+    # conform_password = forms.CharField(widget=forms.PasswordInput, label='Confirm Password')
 
     def clean(self):
         cleaned_data = super().clean()

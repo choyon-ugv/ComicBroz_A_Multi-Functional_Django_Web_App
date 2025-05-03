@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -8,6 +9,10 @@ from .forms import RegisterForm, LoginForm, PasswordChangeForm, UserUpdateForm, 
 from .models import User, Movie, Comic, Blog, Comment, Like, Profile, WatchHistory, Testimonial, CharacterCard
 from django.utils import timezone
 from dashboard.forms import BlogForm
+import stripe
+from payments.models import Order
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def register(request):
     if request.method == 'POST':
@@ -99,25 +104,65 @@ def comic(request):
     comics = Comic.objects.all()
     return render(request, 'comics.html', {'comics': comics})
 
-def comic_detail_view(request, pk):
-    comic = get_object_or_404(Comic, pk=pk)
-    # Force fresh query to avoid caching
-    comic = Comic.objects.get(pk=pk)
-    return render(request, 'comic_detail.html', {'comic': comic})
+def comic_detail(request, pk):
+    comic = get_object_or_404(Comic, id=pk)
+    return render(request, 'comic_detail.html', {
+        'comic': comic,
+        'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
+    })
+
+# Set Stripe API key
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+# Domain for success/cancel URLs
+YOUR_DOMAIN = 'http://127.0.0.1:8000'  # Update to production domain later
 
 @login_required
 def comic_purchase(request, pk):
     comic = get_object_or_404(Comic, pk=pk)
-    if request.user in comic.purchased_by.all():
-        messages.warning(request, "You have already purchased this comic.")
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'success': False, 'message': "You have already purchased this comic."})
-    else:
-        comic.purchased_by.add(request.user)
-        messages.success(request, f"Successfully purchased {comic.title}!")
-        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-            return JsonResponse({'success': True, 'message': f"Successfully purchased {comic.title}!"})
+    if request.method == 'POST':
+        try:
+            # Create an order (pending payment)
+            order = Order.objects.create(
+                user=request.user,
+                comic=comic,
+                amount=comic.price
+            )
+
+            # Create Stripe Checkout Session
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=[{
+                    'price_data': {
+                        'currency': 'usd',
+                        'product_data': {
+                            'name': comic.title,
+                            'description': comic.description[:200] or 'No description',
+                        },
+                        'unit_amount': int(comic.price * 100),  # Stripe expects cents
+                    },
+                    'quantity': 1,
+                }],
+                mode='payment',
+                success_url=YOUR_DOMAIN + f'/comics/success/{order.id}/',
+                cancel_url=YOUR_DOMAIN + f'/comics/{pk}/',
+                metadata={'order_id': order.id}
+            )
+            order.stripe_payment_intent = session.payment_intent
+            order.save()
+            return JsonResponse({'id': session.id})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
     return redirect('comic_detail', pk=pk)
+
+@login_required
+def payment_success(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    if order.has_paid:
+        return render(request, 'success.html', {'order': order})
+    return redirect('comic_detail', pk=order.comic.pk)
+
+
 
 @login_required
 def comic_favorite(request, pk):
@@ -364,3 +409,5 @@ def profile_update(request):
 def card_list(request):
     characters = CharacterCard.objects.all()
     return render(request, 'characters_card_list.html', {'characters': characters})
+
+

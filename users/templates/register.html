@@ -1,147 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join The Avengers - Comic Bro'z</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for eye icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+
+        .split-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .image-side {
+            flex: 1;
+            background: url('https://4kwallpapers.com/images/wallpapers/iron-man-marvel-superheroes-amoled-pitch-black-minimal-art-2880x1800-6293.png') no-repeat center center;
+            background-size: cover;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
         }
 
-        .register-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 400px;
-            animation: fadeIn 0.5s ease-in-out;
+        .image-side::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        form {
+        .image-content {
+            position: relative;
+            z-index: 1;
+            color: white;
             text-align: center;
-            /* Center form content */
+            padding: 20px;
+            max-width: 80%;
         }
 
-        form p {
+        .image-content h2 {
+            font-family: 'Bangers', cursive;
+            font-size: 3rem;
+            letter-spacing: 3px;
             margin-bottom: 1rem;
-            text-align: left;
-            /* Keep labels and inputs left-aligned within centered form */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        form p label {
-            display: block;
-            font-weight: 500;
+        .image-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0px;
+            background-color: white;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .form-header h2 {
+            font-family: 'Bangers', cursive;
+            color: #d32f2f;
+            letter-spacing: 2px;
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .token-badge {
+            background-color: #ffc107;
             color: #333;
-            margin-bottom: 0.25rem;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
-        form p input {
-            width: 100%;
-            max-width: 300px;
-            /* Restrict input width for centering */
-            margin: 0 auto;
-            /* Center inputs */
-            padding: 0.75rem;
-            border: 1px solid #ced4da;
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-control {
             border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            transition: all 0.3s;
+            padding-right: 40px;
         }
 
-        form p input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-            outline: none;
+        .form-control:focus {
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 0.25rem rgba(211, 47, 47, 0.25);
         }
 
-        .btn-primary {
-            background-color: #667eea;
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 42px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s;
+            background: none;
             border: none;
-            border-radius: 8px;
-            padding: 0.75rem;
-            width: 100%;
-            max-width: 300px;
-            /* Match input width */
-            margin: 0 auto;
-            /* Center button */
-            font-weight: 600;
-            transition: background-color 0.3s ease;
+            padding: 0;
         }
 
-        .btn-primary:hover {
-            background-color: #5a6cd3;
+        .password-toggle:hover {
+            color: #d32f2f;
+            transform: scale(1.1);
+        }
+
+        .btn-register {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-weight: bold;
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-register:hover {
+            background-color: #b71c1c;
+            transform: translateY(-2px);
+        }
+
+        .terms-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .terms-check input {
+            margin-right: 10px;
         }
 
         .login-link {
-            color: #667eea;
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #d32f2f;
             text-decoration: none;
             font-weight: 500;
         }
 
-        .login-link:hover {
+        .login-link a:hover {
             text-decoration: underline;
         }
 
-        .errorlist {
-            color: #dc3545;
-            font-size: 0.875rem;
-            list-style: none;
-            padding: 0;
-            margin: 0.25rem 0 0 0;
-            text-align: left;
-            /* Align errors with inputs */
+        @media (max-width: 992px) {
+            .split-container {
+                flex-direction: column;
+            }
+            
+            .image-side {
+                min-height: 300px;
+            }
+            
+            .form-side {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .image-content h2 {
+                font-size: 2rem;
+            }
+            
+            .form-header h2 {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
-
 <body>
-    <!-- Display success/error messages -->
-    {% if messages %}
-    <div class="mb-3">
-        {% for message in messages %}
-        <div class="alert alert-{% if message.tags == 'success' %}success{% else %}danger{% endif %} alert-dismissible"
-            role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div class="split-container">
+        <div class="image-side">
+            <div class="image-content">
+                <h2>Assemble With Us</h2>
+                <p>Join Earth's Mightiest Heroes in the ultimate comic experience</p>
+            </div>
         </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    <div class="register-card">
-        <h2 class="text-center mb-4">Register</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-        <p class="text-center mt-3">
-            Already have an account? <a href="{% url 'login' %}" class="login-link">Login</a>
-        </p>
+        
+        <div class="form-side">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Join The Avengers</h2>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{% url 'home' %}">
+                    <div class="form-group">
+                        <label for="id_username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="id_username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="id_email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="id_password" name="password" required>
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="id_confirm_password" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="id_confirm_password" name="confirm_password" required>
+                        <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                            <i class="far fa-eye"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="terms-check">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I accept the Terms and Conditions</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-register">Register</button>
+                </form>
+                
+                <div class="login-link">
+                    Already have an account? <a href="{% url 'login' %}">Login</a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Bootstrap JS (Optional) -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const togglePassword = document.getElementById('togglePassword');
+            const password = document.getElementById('id_password');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const confirmPassword = document.getElementById('id_confirm_password');
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                
+                // Toggle eye icon
+                this.innerHTML = type === 'password' ? 
+                    '<i class="far fa-eye"></i>' : 
+                    '<i class="far fa-eye-slash"></i>';
+            });
+            
+            // Toggle confirm password visibility
+            toggleConfirmPassword.addEventListener('click', function() {
+                const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPassword.setAttribute('type', type);
+                
+                // Toggle eye icon
+                this.innerHTML = type === 'password' ? 
+                    '<i class="far fa-eye"></i>' : 
+                    '<i class="far fa-eye-slash"></i>';
+            });
+        });
+    </script>
 </body>
-
 </html>
