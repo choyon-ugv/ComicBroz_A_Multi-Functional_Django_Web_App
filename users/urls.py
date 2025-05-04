@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import register, login, logout, home, movies, about, blog, contact, like_blog, add_comment, blog_detail, edit_comment, delete_comment, change_password, profile_view, profile_update,  create_blog, card_list, comic, comic_purchase, comic_favorite, comic_unfavorite, comic_read, payment_success, comic_detail
+from .views import register, login, logout, home, movies, about, blog, contact, like_blog, add_comment, blog_detail, edit_comment, delete_comment, change_password, profile_view, profile_update,  create_blog, card_list, comic, comic_purchase, comic_favorite, comic_unfavorite, comic_read, payment_success, comic_detail, success_page
 
 urlpatterns = [
     path('register/', register, name='register'),
@@ -13,10 +13,11 @@ urlpatterns = [
     path('comics/', comic, name='comics'),
     path('comics/<int:pk>/', comic_detail, name='comic_detail'),
     path('comics/<int:pk>/purchase/', comic_purchase, name='comic_purchase'),
+    path('comics/success/<int:order_id>/', payment_success, name='payment_success'),
     path('comics/<int:pk>/favorite/', comic_favorite, name='comic_favorite'),
     path('comics/<int:pk>/unfavorite/', comic_unfavorite, name='comic_unfavorite'),
     path('comics/<int:pk>/read/', comic_read, name='comic_read'),
-    path('comics/success/<int:order_id>/', payment_success, name='payment_success'),
+    path('comics/success-page/<int:order_id>/', success_page, name='success_page'),
     path('contact/', contact, name='contact'),
     path('blogs/', blog, name='blogs'),
     path('blogs/create/', create_blog, name='create_blog'),

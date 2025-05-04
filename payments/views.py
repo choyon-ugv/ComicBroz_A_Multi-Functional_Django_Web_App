@@ -9,25 +9,32 @@ from users.models import Comic
 def stripe_webhook(request):
     payload = request.body
     sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+    event = None
 
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
+            payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
         )
-    except ValueError:
+    except ValueError as e:
+        print("Webhook ValueError:", str(e))
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError:
+    except stripe.error.SignatureVerificationError as e:
+        print("Webhook SignatureVerificationError:", str(e))
         return HttpResponse(status=400)
 
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
         order_id = session['metadata']['order_id']
-        order = Order.objects.get(id=order_id)
-        order.has_paid = True
-        order.save()
-        # Add user to comic's purchased_by
-        comic = order.comic
-        comic.purchased_by.add(order.user)
+        try:
+            order = Order.objects.get(id=order_id)
+            order.has_paid = True
+            order.save()
+            print(f"Order {order_id} updated: has_paid={order.has_paid}")
+            # Optionally add user to purchased_by
+            comic = order.comic
+            comic.purchased_by.add(order.user)
+        except Order.DoesNotExist:
+            print(f"Order {order_id} not found")
+            return HttpResponse(status=404)
 
     return HttpResponse(status=200)

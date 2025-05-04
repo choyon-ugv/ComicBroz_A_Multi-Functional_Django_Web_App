@@ -111,10 +111,7 @@ def comic_detail(request, pk):
         'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY
     })
 
-# Set Stripe API key
 stripe.api_key = settings.STRIPE_SECRET_KEY
-
-# Domain for success/cancel URLs
 YOUR_DOMAIN = 'http://127.0.0.1:8000'  # Update to production domain later
 
 @login_required
@@ -122,47 +119,63 @@ def comic_purchase(request, pk):
     comic = get_object_or_404(Comic, pk=pk)
     if request.method == 'POST':
         try:
-            # Create an order (pending payment)
+            if not comic.price or comic.price <= 0:
+                return JsonResponse({'error': 'Invalid comic price'}, status=400)
+
             order = Order.objects.create(
                 user=request.user,
                 comic=comic,
                 amount=comic.price
             )
 
-            # Create Stripe Checkout Session
+            image_url = None
+            if comic.image and comic.image.url:
+                image_url = request.build_absolute_uri(comic.image.url)
+
             session = stripe.checkout.Session.create(
                 payment_method_types=['card'],
                 line_items=[{
                     'price_data': {
                         'currency': 'usd',
                         'product_data': {
-                            'name': comic.title,
-                            'description': comic.description[:200] or 'No description',
+                            'name': comic.title or 'Untitled Comic',
+                            'description': (comic.description[:200] if comic.description else 'No description'),
+                            'images': [image_url] if image_url else [],
                         },
-                        'unit_amount': int(comic.price * 100),  # Stripe expects cents
+                        'unit_amount': int(comic.price * 100),
                     },
                     'quantity': 1,
                 }],
                 mode='payment',
-                success_url=YOUR_DOMAIN + f'/comics/success/{order.id}/',
+                success_url=YOUR_DOMAIN + f'/comics/success-page/{order.id}/',  # Match with success_page URL
                 cancel_url=YOUR_DOMAIN + f'/comics/{pk}/',
-                metadata={'order_id': order.id}
+                metadata={'order_id': str(order.id)}  # Ensure order_id is a string
             )
+
+            print("Success URL:", YOUR_DOMAIN + f'/comics/success-page/{order.id}/')
             order.stripe_payment_intent = session.payment_intent
             order.save()
             return JsonResponse({'id': session.id})
+
+        except stripe.error.StripeError as e:
+            order.delete()
+            return JsonResponse({'error': f'Stripe error: {str(e)}'}, status=400)
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+            order.delete()
+            return JsonResponse({'error': f'Server error: {str(e)}'}, status=400)
     return redirect('comic_detail', pk=pk)
 
 @login_required
 def payment_success(request, order_id):
     order = get_object_or_404(Order, id=order_id, user=request.user)
+    print("Order has_paid:", order.has_paid)  # Debug
     if order.has_paid:
-        return render(request, 'success.html', {'order': order})
+        return redirect('success_page', order_id=order.id)
     return redirect('comic_detail', pk=order.comic.pk)
 
-
+def success_page(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'success.html', {'order': order})
 
 @login_required
 def comic_favorite(request, pk):
