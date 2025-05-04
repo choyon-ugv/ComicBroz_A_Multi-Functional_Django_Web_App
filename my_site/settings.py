@@ -160,3 +160,18 @@ LOGIN_URL = '/users/login/'
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
+
+
+import environ
+env = environ.Env()
+environ.Env.read_env()
+
+DEBUG = env.bool("DEBUG", default=False)
+SECRET_KEY = env("SECRET_KEY")
+ALLOWED_HOSTS = ['.onrender.com']
+
+# Static files
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
