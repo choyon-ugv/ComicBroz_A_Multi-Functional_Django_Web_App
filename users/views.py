@@ -147,12 +147,13 @@ def comic_purchase(request, pk):
                     'quantity': 1,
                 }],
                 mode='payment',
-                success_url=YOUR_DOMAIN + f'/comics/success-page/{order.id}/',  # Match with success_page URL
+                success_url=YOUR_DOMAIN + f'/comics/success/{order.id}/',
                 cancel_url=YOUR_DOMAIN + f'/comics/{pk}/',
-                metadata={'order_id': str(order.id)}  # Ensure order_id is a string
+                metadata={'order_id': str(order.id)}
             )
 
-            print("Success URL:", YOUR_DOMAIN + f'/comics/success-page/{order.id}/')
+            print("Stripe Session ID:", session.id)  # Debug
+            print("Success URL:", session.success_url)  # Debug
             order.stripe_payment_intent = session.payment_intent
             order.save()
             return JsonResponse({'id': session.id})
@@ -171,10 +172,14 @@ def payment_success(request, order_id):
     print("Order has_paid:", order.has_paid)  # Debug
     if order.has_paid:
         return redirect('success_page', order_id=order.id)
-    return redirect('comic_detail', pk=order.comic.pk)
+    else:
+        # Render a page to inform the user that payment is pending
+        return render(request, 'payment_pending.html', {'order': order})
 
 def success_page(request, order_id):
     order = get_object_or_404(Order, id=order_id)
+    if not order.has_paid:
+        return redirect('comic_detail', pk=order.comic.pk)
     return render(request, 'success.html', {'order': order})
 
 @login_required

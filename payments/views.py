@@ -3,7 +3,6 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from payments.models import Order
-from users.models import Comic
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -29,12 +28,11 @@ def stripe_webhook(request):
             order = Order.objects.get(id=order_id)
             order.has_paid = True
             order.save()
-            print(f"Order {order_id} updated: has_paid={order.has_paid}")
-            # Optionally add user to purchased_by
+            print(f"Webhook: Order {order_id} updated: has_paid={order.has_paid}")
             comic = order.comic
             comic.purchased_by.add(order.user)
         except Order.DoesNotExist:
-            print(f"Order {order_id} not found")
+            print(f"Webhook: Order {order_id} not found")
             return HttpResponse(status=404)
 
     return HttpResponse(status=200)
